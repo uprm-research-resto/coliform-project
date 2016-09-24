@@ -2,10 +2,12 @@ import serial
 import os
 import glob
 import sys
+import time
 from matplotlib.pylab import *
 from mpl_toolkits.axes_grid1 import host_subplot
 import matplotlib.animation as animation
 from shutil import copyfile
+import RPi.GPIO as GPIO
 
 class ArduCAM():
     def TakePicture(path, port, filename):
@@ -20,11 +22,8 @@ class ArduCAM():
             next(ser)
             b = ser.read_until(b'\xff\xd9')
             target.write(b)
-            #print(ser.readline())
             for i in b:
                 d+= hex(i)
-    ##          print(d)
-    ##          print('0xff0xd9' in d)
             target.close()
         except AttributeError:
             pass
@@ -67,15 +66,15 @@ class OneWire():
             result.append(port)
         return result
 
-    def SaveToCsv(fileinput,fileoutput,filepath,length):
+    def SaveToCsv(fileinput,fileoutput,filepath,y_amount):
         if os.path.isfile(os.path.join(filepath,fileoutput)):
             os.remove(os.path.join(filepath,fileoutput))
         tempfile = 'UnformattedData.txt'
         copyfile(fileinput,tempfile)
         fi = open(os.path.join(filepath, fileoutput),'a+')
         fi.write('Time(s),')
-        for i in range(0,length):
-            if i+1 != length:
+        for i in range(0,y_amount):
+            if i+1 != y_amount:
                 fi.write('TemperatureSensor{}'.format(i+1)+',')
             else:
                 fi.write('TemperatureSensor{}'.format(i+1)+'\n')
@@ -87,61 +86,118 @@ class OneWire():
                 out = x+','+y_all + '\n'
                 fi.write(out)
 
-def tempPlot(textfile,length):
-    #Source File
-    tf = textfile
-    # Setup figure and subplots
-    f = figure(num = 0, figsize = (12, 8))#, dpi = 100)
-    f.suptitle("Temperature Plot", fontsize=12)
-    a = subplot2grid((1, 1), (0, 0))
+    def getTempList():
+        temperature_raw = []
+        temperaturesstr = []
+        ids = OneWire.getOneWireID()
+        for id in ids:
+            tempvalue = '{:.3f}'.format(OneWire.getTemp(id)/float(1000))
+            temperature_raw.append(tempvalue)
+            temperaturesstr.append(tempvalue + ' C')
+        temperature_degrees_string = '\n'.join(temperaturesstr)
+        return (temperature_degrees_string, temperature_raw)
 
-    # Set titles of subplots
-    a.set_title('Temperature vs Time')
+class Heater():
+    def startHeater(pin, frequency):
+        global HEATPWM
+        GPIO.setmode(GPIO.BOARD)
+        HEAT = pin
+        GPIO.setup(HEAT,GPIO.OUT)
+        HEATPWM = GPIO.PWM(HEAT, frequency)
+        HEATPWM.start(frequency)
 
-    # Turn on grids
-    a.grid(True)
+    def HeaterPID(targetvalue, currentvalue):
+        if targetvalue > currentvalue:
+            HEATPWM.ChangeDutyCycle(100)
+        elif targetvalue < currentvalue:
+            HEATPWM.ChangeDutyCycle(0)
+        else:
+            HEATPWM.ChangeDutyCycle(0)
 
-    # set label names
-    a.set_xlabel("t(s)")
-    a.set_ylabel("Temperature(C)")
+    def stopHeater():
+        HEATPWM.stop()
+        GPIO.cleanup()
 
-    #set y limits
-    a.set_ylim(20,50)
+class Pump():
+    def startPump(pin, frequency):
+        GPIO.setmode(GPIO.BOARD)
+        PUMP = pin
+        GPIO.setup(PUMP,GPIO.OUT)
+        global PUMPPWM
+        PUMPPWM = GPIO.PWM(PUMP, 100)
+        PUMPPWM.start(float(frequency))
 
-    #Data Placeholders
-    dph = zeros(0)
+    def stopPump():
+        PUMPPWM.stop()
+        GPIO.cleanup()
 
-    # set plots
-    plots = {}
-    lph1 = []
-    lph2 = []
-    for i in range(0,length):
-        plots['plt{}'.format(i)], = a.plot(dph,dph, label="Sensor{}".format(i+1))
-        lph1.append(plots['plt{}'.format(i)])
-        lph2.append(plots['plt{}'.format(i)].get_label())
-        #set legends
-    a.legend(lph1, lph2)
+    def setPumpIntensity(frequency):
+        PUMPPWM.ChangeDutyCycle(float(frequency))
 
-    #Setup animation function
-    def updateData(self):
-        pullData = open(tf,"r").read()
-        dataList = pullData.split('\n')
+class MultiPlot():
+    def GeneratePlotDataFile(textfile, y_values, start_time):
+        tf = textfile
+        f = open(tf, 'a+')
+        plottemp = ','.join(y_values)
+        elapsed_time = str(int(time.time() - start_time))
+        f.write(plottemp + '-' + elapsed_time + '\n')
+        f.close()
 
-        # Setup Lists
-        xList = []
-        for i in range(0,length):
-            plots['yList{}'.format(i)] = []
+    def Plot(textfile,y_amount):
+        #Source File
+        tf = textfile
+        # Setup figure and subplots
+        f = figure(num = 0, figsize = (12, 8))#, dpi = 100)
+        f.suptitle("Temperature Plot", fontsize=12)
+        a = subplot2grid((1, 1), (0, 0))
 
-        for eachLine in dataList:
-            if len(eachLine) > 1:
-                y_all, x = eachLine.split('-')
-                xList.append(int(x))
-                y = y_all.split(',')
-                for i in range(0,len(y)):
-                    plots['yList{}'.format(i)].append(int(round(float(y[i]),0)))
-        for i in range(0,length):
-            plots['plt{}'.format(i)].set_data(xList,plots['yList{}'.format(i)])
-            plots['plt{}'.format(i)].axes.relim()
-            plots['plt{}'.format(i)].axes.autoscale_view(True,True,True)
-    ani = animation.FuncAnimation(f, updateData, interval=500)
-    plt.show()
+        # Set titles of subplots
+        a.set_title('Temperature vs Time')
+
+        # Turn on grids
+        a.grid(True)
+
+        # set label names
+        a.set_xlabel("t(s)")
+        a.set_ylabel("Temperature(C)")
+
+        #set y limits
+        a.set_ylim(0,50)
+
+        #Data Placeholders
+        dph = zeros(0)
+
+        # set plots
+        plots = {}
+        lph1 = []
+        lph2 = []
+        for i in range(0,y_amount):
+            plots['plt{}'.format(i)], = a.plot(dph,dph, label="Sensor{}".format(i+1))
+            lph1.append(plots['plt{}'.format(i)])
+            lph2.append(plots['plt{}'.format(i)].get_label())
+            #set legends
+        a.legend(lph1, lph2)
+
+        #Setup animation function
+        def updateData(self):
+            pullData = open(tf,"r").read()
+            dataList = pullData.split('\n')
+
+            # Setup Lists
+            xList = []
+            for i in range(0,y_amount):
+                plots['yList{}'.format(i)] = []
+
+            for eachLine in dataList:
+                if len(eachLine) > 1:
+                    y_all, x = eachLine.split('-')
+                    xList.append(int(x))
+                    y = y_all.split(',')
+                    for i in range(0,len(y)):
+                        plots['yList{}'.format(i)].append(int(round(float(y[i]),0)))
+            for i in range(0,y_amount):
+                plots['plt{}'.format(i)].set_data(xList,plots['yList{}'.format(i)])
+                plots['plt{}'.format(i)].axes.relim()
+                plots['plt{}'.format(i)].axes.autoscale_view(True,True,True)
+        ani = animation.FuncAnimation(f, updateData, interval=1000)
+        plt.show()
