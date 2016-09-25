@@ -2,7 +2,7 @@ Coliform Project
 =================
 Python module for the UPRM BioMEMS Research Laboratory water quality project.
 Written for Raspberry Pi(RPi) in Python 3.
-PyPI Library link:https://pypi.python.org/pypi/Coliform
+Download page: https://pypi.python.org/pypi/Coliform
 
 Table of contents
 =================
@@ -17,7 +17,7 @@ Table of contents
     * [ArduCAM](#arducam)
     * [GPIO](#gpio)
     * [GUI](#gui)
-  * [Dependency](#dependency)
+  * [Contact](#contact)
 
 Installation
 =================
@@ -26,6 +26,7 @@ In Raspberry Pi, or Linux Type the following into terminal:
 sudo pip install Coliform
 ```
 If you are running the code on Linux, Windows or Mac PC, for testing or other purposes, you need to run the following code in terminal, or CMD depending on your OS:
+
 Linux/Mac:
 ```bash
 sudo pip install Coliform
@@ -42,9 +43,10 @@ Alternatively, you can download the python wheel package from [Coliform PyPI](ht
 
 Requirements
 =================
-```python
+* [pyserial](https://github.com/pyserial/pyserial)
+* [Pillow](https://github.com/python-pillow/Pillow)
+* [matplotlib](https://github.com/matplotlib/matplotlib)
 
-```
 Changelog
 =================
 * Version 0.1
@@ -60,3 +62,9 @@ Changelog
 * Version 0.2.1
   - Minor Update:
     - Transfered Project GUI into Coliform module
+
+Usage
+=================
+```python
+
+```
