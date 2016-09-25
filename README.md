@@ -50,7 +50,7 @@ Requirements
 * [pyserial](https://github.com/pyserial/pyserial)
 * [Pillow](https://github.com/python-pillow/Pillow)
 * [matplotlib](https://github.com/matplotlib/matplotlib)
-* [RPi.GPIO](https://pypi.python.org/pypi/RPi.GPIO) or [fakeRPiGPIO](https://github.com/ArmlessJohn404/fakeRPiGPIO) (when not running on RPi)
+* [RPi.GPIO](https://pypi.python.org/pypi/RPi.GPIO) (when running on RPi) or [fakeRPiGPIO](https://github.com/ArmlessJohn404/fakeRPiGPIO) (when not running on RPi)
 
 Changelog
 =================
