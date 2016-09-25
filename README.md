@@ -2,6 +2,7 @@ Coliform Project
 =================
 Python module for the UPRM BioMEMS Research Laboratory water quality project.
 Written for Raspberry Pi(RPi) in Python 3.
+PyPI Library link:https://pypi.python.org/pypi/Coliform
 
 Table of contents
 =================
@@ -36,6 +37,8 @@ python -m pip install fakeRPiGPIO
 python -m pip install Coliform
 ```
 The reason is you need [fakeRPiGPIO](https://github.com/ArmlessJohn404/fakeRPiGPIO) module in order to "emulate" the [RPi.GPIO](https://pypi.python.org/pypi/RPi.GPIO) module of the Raspberry Pi.
+
+Alternatively, you can download the python wheel package from [Coliform PyPI](https://pypi.python.org/pypi/Coliform) and python source from [fakeRPiGPIO PyPI](https://pypi.python.org/pypi/fakeRPiGPIO)
 
 Requirements
 =================
