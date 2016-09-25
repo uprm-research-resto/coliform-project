@@ -3,8 +3,9 @@ test-warnings: false
 strictness: veryhigh
 max-line-length: 120
 uses:
-  - Coliform
-  - fakeRPiGPIO
+  - django
+  - celery
+  - flask
 autodetect: true
 requirements:
   - deps/core.txt
