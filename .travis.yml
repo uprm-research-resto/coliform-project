@@ -9,6 +9,6 @@ python:
   - "pypy"
 # command to install dependencies
 install:
-  - pip install Coliform
+  - pip3 install Coliform
 # command to run tests
 script: nosetests
