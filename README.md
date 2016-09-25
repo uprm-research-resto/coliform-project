@@ -1,5 +1,4 @@
-Coliform Project [![Build Status](https://travis-ci.org/Regendor/coliform-project.svg?branch=master)](https://travis-ci.org/Regendor/coliform-project)
-================
+#Coliform Project [![Build Status](https://travis-ci.org/Regendor/coliform-project.svg?branch=master)](https://travis-ci.org/Regendor/coliform-project)
 Python module for the UPRM BioMEMS Research Laboratory water quality project.
 
 Written for Raspberry Pi(RPi) in Python 3.
@@ -8,14 +7,15 @@ Download page: [![PyPI Version](https://img.shields.io/pypi/v/coliform.svg)](htt
 
 
 
-Table of contents
-=================
+#Table of contents
+
 * [Coliform Project](#coliform-project)
   * [Table of contents](#table-of-contents)
   * [Installation](#installation)
   * [Requirements](#requirements)
   * [Changelog](#changelog)
   * [Usage](#usage)
+    * [Imports](#imports)
     * [OneWire](#onewire)
     * [MultiPlot](#multiplot)
     * [ArduCAM](#arducam)
@@ -23,11 +23,13 @@ Table of contents
     * [GUI](#gui)
   * [Contact](#contact)
 
-Installation
-=================
+#Installation
+
+Before installing, you need to make sure you have [pip](https://pip.pypa.io/en/stable/installing/) installed, as it is required in order to install this module.
+
 In Raspberry Pi, or Linux Type the following into terminal:
 ```bash
-sudo pip install Coliform
+sudo pip3 install Coliform
 ```
 If you are running the code on Linux, Windows or Mac PC, for testing or other purposes, you need to run the following code in terminal, or CMD depending on your OS:
 
@@ -45,15 +47,13 @@ The reason is you need [fakeRPiGPIO](https://github.com/ArmlessJohn404/fakeRPiGP
 
 Alternatively, you can download the python wheel package from [Coliform PyPI](https://pypi.python.org/pypi/Coliform) and python source from [fakeRPiGPIO PyPI](https://pypi.python.org/pypi/fakeRPiGPIO)
 
-Requirements
-============
+#Requirements
 * [pyserial](https://github.com/pyserial/pyserial)
 * [Pillow](https://github.com/python-pillow/Pillow)
 * [matplotlib](https://github.com/matplotlib/matplotlib)
 * [RPi.GPIO](https://pypi.python.org/pypi/RPi.GPIO) (when running on RPi) or [fakeRPiGPIO](https://github.com/ArmlessJohn404/fakeRPiGPIO) (when not running on RPi)
 
-Changelog
-=========
+#Changelog
 * Version 0.1
   - Initial Build 
 * Version 0.1.1
@@ -68,10 +68,16 @@ Changelog
   - Minor Update:
     - Transfered Project GUI into Coliform module
 
-Usage
-=====
-OneWire
--------
+#Usage
+##Imports
+The following imports are used:
+```python
+from Coliform import *
+from Coliform import GUI
+```
+The first is for all functions, but the GUI, and the second is to import the GUI function.
+##OneWire
+###Setup
 These group of functions allow you to detect one or multiple OneWires, get their address and display their respective temperature. This code was written and tested for [DS18B20](https://www.maximintegrated.com/en/products/analog/sensors-and-sensor-interface/DS18B20.html/tb_tab0) OneWires.
 
 If multiple OneWires are connected, they need to be in the following configuration:
@@ -89,3 +95,12 @@ In order to detect OneWires, the GPIO4 pin has to be setup to recieve the inform
 ```python
 
 ```
+###Code
+In order to get OneWire address, use the following function:
+```python
+from Coliform import *
+
+getOneWireID()
+```
+The output will be a list with the addresses of the OneWires connected, for example:
+```[
