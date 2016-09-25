@@ -67,6 +67,9 @@ Alternatively, you can download the python wheel package from [Coliform PyPI](ht
 * Version 0.2.1
   - Minor Update:
     - Transfered Project GUI into Coliform module
+* Version 0.2.2
+  - Minor Update:
+    - Added GPL License classifiers.
 
 #Usage
 ##Imports
