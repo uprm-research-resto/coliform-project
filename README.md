@@ -1,5 +1,5 @@
 Coliform Project [![Build Status](https://travis-ci.org/Regendor/coliform-project.svg?branch=master)](https://travis-ci.org/Regendor/coliform-project)
-=================
+================
 Python module for the UPRM BioMEMS Research Laboratory water quality project.
 
 Written for Raspberry Pi(RPi) in Python 3.
@@ -46,14 +46,14 @@ The reason is you need [fakeRPiGPIO](https://github.com/ArmlessJohn404/fakeRPiGP
 Alternatively, you can download the python wheel package from [Coliform PyPI](https://pypi.python.org/pypi/Coliform) and python source from [fakeRPiGPIO PyPI](https://pypi.python.org/pypi/fakeRPiGPIO)
 
 Requirements
-=================
+============
 * [pyserial](https://github.com/pyserial/pyserial)
 * [Pillow](https://github.com/python-pillow/Pillow)
 * [matplotlib](https://github.com/matplotlib/matplotlib)
 * [RPi.GPIO](https://pypi.python.org/pypi/RPi.GPIO) (when running on RPi) or [fakeRPiGPIO](https://github.com/ArmlessJohn404/fakeRPiGPIO) (when not running on RPi)
 
 Changelog
-=================
+=========
 * Version 0.1
   - Initial Build 
 * Version 0.1.1
@@ -69,7 +69,23 @@ Changelog
     - Transfered Project GUI into Coliform module
 
 Usage
-=================
+=====
+OneWire
+-------
+These group of functions allow you to detect one or multiple OneWires, get their address and display their respective temperature. This code was written and tested for [DS18B20](https://www.maximintegrated.com/en/products/analog/sensors-and-sensor-interface/DS18B20.html/tb_tab0) OneWires.
+
+If multiple OneWires are connected, they need to be in the following configuration:
+![OneWire Connection](https://camo.githubusercontent.com/99c16972ad946ec3d40c29d4999fdc90600728ac/68747470733a2f2f7570726d7265736561726368726573746f2e66696c65732e776f726470726573732e636f6d2f323031362f30392f6f6e657769726572706973657475702e706e673f773d34383326683d363431)
+
+Where black, is ground, red is power (3.3V), and yellow is the digital signal. You also need a 4.7kΩ resistor connected as shown. All yellow (signal) cables send their signal to the GPIO4 pin of the RPi.
+
+In order to detect OneWires, the GPIO4 pin has to be setup to recieve the information from them, in order to do this open the RPi terminal and do the following:
+
+* Type: ```sudo nado /boot/config.txt```
+* Add: ```dtoverlay=w1-gpio,gpiopin=4``` to the end of the file.
+* Press: ```Ctrl + X``` followed by ```y``` and ```ENTER``` or ```RETURN```
+* After this, type: ```sudo reboot``` and wait for RPi to reboot, for changes to be applied.
+
 ```python
 
 ```
