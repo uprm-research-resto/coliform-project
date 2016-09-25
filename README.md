@@ -1,8 +1,12 @@
-Coliform Project
+Coliform Project [![Build Status](https://travis-ci.org/Regendor/coliform-project.svg?branch=master)](https://travis-ci.org/Regendor/coliform-project)
 =================
 Python module for the UPRM BioMEMS Research Laboratory water quality project.
+
 Written for Raspberry Pi(RPi) in Python 3.
-Download page: https://pypi.python.org/pypi/Coliform
+
+Download page: [![PyPI Version](https://img.shields.io/pypi/v/coliform.svg)](https://pypi.python.org/pypi/Coliform)
+
+
 
 Table of contents
 =================
