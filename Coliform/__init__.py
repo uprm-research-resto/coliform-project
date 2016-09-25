@@ -1,3 +1,11 @@
+#!/usr/bin/env python3
+#
+# These are the main functions for Coliform Module
+#
+# This file is part of Coliform. https://github.com/Regendor/coliform-project
+# (C) 2016
+#
+# Licensed under the Open Software License version 3.0 
 import serial
 import os
 import glob
