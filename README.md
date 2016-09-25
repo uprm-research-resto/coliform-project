@@ -137,4 +137,5 @@ from Coliform import GUI
 GUI.startGUI()
 ```
 The GUI displayed should look like this:
-![GUI](https://uprmresearchresto.files.wordpress.com/2016/09/guiuploaded.png?w=748)
+
+![GUI](https://camo.githubusercontent.com/fec1ad443d25d345045462c50a307343fc3ff7a8/68747470733a2f2f7570726d7265736561726368726573746f2e66696c65732e776f726470726573732e636f6d2f323031362f30392f67756975706c6f616465642e706e673f773d373438)
