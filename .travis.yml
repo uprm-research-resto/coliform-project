@@ -10,5 +10,6 @@ python:
 # command to install dependencies
 install:
   - pip3 install Coliform
+  - pip3 install fakeRPiGPIO
 # command to run tests
 script: nosetests
