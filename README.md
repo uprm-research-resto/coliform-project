@@ -126,3 +126,15 @@ The second value ```TemperatureRawNumbers``` gives a list of temperature numbers
 ['21.312','32.321','43.232']
 ```
 ##MultiPlot
+
+##GPIO
+
+##GUI
+In order to display the project GUI, the following code can be used:
+```python
+from Coliform import GUI
+
+GUI.startGUI()
+```
+The GUI displayed should look like this:
+![GUI](https://uprmresearchresto.files.wordpress.com/2016/09/guiuploaded.png?w=748)
