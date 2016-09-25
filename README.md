@@ -48,6 +48,15 @@ Requirements
 Changelog
 =================
 * Version 0.1
+  - Initial Build 
 * Version 0.1.1
+  - Minor Update: 
+    - Added install requirements to wheel package
 * Version 0.2
+  - Major Update: 
+    - Added MultiPlot and GPIO
+    - Revamped OneWire and ArduCAM
+    - Added PyPI Cassifiers
 * Version 0.2.1
+  - Minor Update:
+    - Transfered Project GUI into Coliform module
