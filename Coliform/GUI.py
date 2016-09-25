@@ -1,3 +1,11 @@
+#!/usr/bin/env python3
+#
+# This is the GUI function for Coliform Module
+#
+# This file is part of Coliform. https://github.com/Regendor/coliform-project
+# (C) 2016
+#
+# Licensed under the Open Software License version 3.0 
 from tkinter import *
 from tkinter import ttk
 from tkinter import filedialog
