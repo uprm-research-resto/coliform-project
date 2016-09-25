@@ -1,4 +1,4 @@
-#Coliform Project [![Build Status](https://travis-ci.org/Regendor/coliform-project.svg?branch=master)](https://travis-ci.org/Regendor/coliform-project)
+#Coliform Project [![Build Status](https://travis-ci.org/Regendor/coliform-project.svg?branch=master)](https://travis-ci.org/Regendor/coliform-project) [![License](https://img.shields.io/badge/license-OSL--3.0-blue.svg)](https://spdx.org/licenses/OSL-3.0.html)
 Python module for the UPRM BioMEMS Research Laboratory water quality project.
 
 Written for Raspberry Pi(RPi) in Python 3.
