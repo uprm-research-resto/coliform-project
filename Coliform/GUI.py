@@ -8,7 +8,7 @@ from PIL import ImageTk, Image
 from Coliform import *
 from datetime import datetime
 
-def startGUI():
+def startGUI(*args):
     filepath = os.sep.join((os.path.expanduser('~'), 'Desktop'))
     filename = 'TestJPEG.jpeg'
     tf = 'PlotTextFile.txt'
