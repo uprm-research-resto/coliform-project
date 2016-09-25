@@ -30,6 +30,5 @@ install:
 # command to run tests
 script: 
  coverage run --source=Coliform setup.py test
- coverage report
 after_success:
  coveralls
