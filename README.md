@@ -10,13 +10,13 @@ Table of contents
   * [Table of contents](#table-of-contents)
   * [Installation](#installation)
   * [Requirements](#requirements)
+  * [Changelog](#changelog)
   * [Usage](#usage)
-    * [STDIN](#stdin)
-    * [Local files](#local-files)
-    * [Remote files](#remote-files)
-    * [Multiple files](#multiple-files)
-    * [Combo](#combo)
-  * [Tests](#tests)
+    * [OneWire](#onewire)
+    * [MultiPlot](#multiplot)
+    * [ArduCAM](#arducam)
+    * [GPIO](#gpio)
+    * [GUI](#gui)
   * [Dependency](#dependency)
 
 Installation
@@ -45,3 +45,9 @@ Requirements
 ```python
 
 ```
+Changelog
+=================
+* Version 0.1
+* Version 0.1.1
+* Version 0.2
+* Version 0.2.1
