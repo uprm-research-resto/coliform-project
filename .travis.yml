@@ -23,6 +23,9 @@ matrix:
 # command to install dependencies
 install:
   - pip3 install fakeRPiGPIO
+  - pip3 install matplotlib
+  - pip3 install Pillow
+  - pip3 install pyserial
   - pip3 install coveralls
 # command to run tests
 script: 
