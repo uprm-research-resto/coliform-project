@@ -35,7 +35,7 @@ Windows:
 python -m pip install fakeRPiGPIO
 python -m pip install Coliform
 ```
-The reason is you need [fakeRPiGPIO](https://github.com/ArmlessJohn404/fakeRPiGPIO) module in order to "emulate" the RPi.GPIO module of the Raspberry Pi.
+The reason is you need [fakeRPiGPIO](https://github.com/ArmlessJohn404/fakeRPiGPIO) module in order to "emulate" the [RPi.GPIO](https://pypi.python.org/pypi/RPi.GPIO) module of the Raspberry Pi.
 
 Requirements
 =================
