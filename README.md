@@ -113,15 +113,16 @@ TemperatureStringValues, TemperatureRawNumbers = getTempList()
 ```
 Where the first value, ```TemperatureStringValues``` is a string in the following format, for 3 OneWires:
 ```python
-'21.312\n32.321\n43.232'
+'21.312 C\n32.321 C\n43.232 C'
 ```
 Which is displayed as:
 ```
-   21.312
-   32.321
-   43.232
+   21.312 C
+   32.321 C
+   43.232 C
 ```
 The second value ```TemperatureRawNumbers``` gives a list of temperature numbers, for 3 OneWires:
 ```python
 ['21.312','32.321','43.232']
 ```
+##MultiPlot
