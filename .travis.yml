@@ -22,11 +22,10 @@ matrix:
 
 # command to install dependencies
 install:
-  - pip3 install Coliform
   - pip3 install fakeRPiGPIO
   - pip3 install coveralls
 # command to run tests
 script: 
- coverage run --source=yourpackagename setup.py test
+ coverage run --source=Coliform setup.py test
 after_success:
  coveralls
