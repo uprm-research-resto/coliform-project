@@ -28,7 +28,7 @@ class ArduCAM():
         except AttributeError:
             pass
 
-    def getSerialPort():
+    def getSerialPort(*args):
         result = []
         if sys.platform.startswith('win'):
             ports = ['COM' + str(i + 1) for i in range(256)]
@@ -59,7 +59,7 @@ class OneWire():
         except:
             return 99999
 
-    def getOneWireID():
+    def getOneWireID(*args):
         result = []
         ports = glob.glob('/sys/bus/w1/devices/28*')
         for port in ports:
@@ -86,7 +86,7 @@ class OneWire():
                 out = x+','+y_all + '\n'
                 fi.write(out)
 
-    def getTempList():
+    def getTempList(*args):
         temperature_raw = []
         temperaturesstr = []
         ids = OneWire.getOneWireID()
@@ -114,7 +114,7 @@ class Heater():
         else:
             HEATPWM.ChangeDutyCycle(0)
 
-    def stopHeater():
+    def stopHeater(*args):
         HEATPWM.stop()
         GPIO.cleanup()
 
@@ -127,7 +127,7 @@ class Pump():
         PUMPPWM = GPIO.PWM(PUMP, 100)
         PUMPPWM.start(float(frequency))
 
-    def stopPump():
+    def stopPump(*args):
         PUMPPWM.stop()
         GPIO.cleanup()
 
