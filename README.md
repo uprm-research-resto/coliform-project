@@ -92,9 +92,6 @@ In order to detect OneWires, using the w1-gpio kernel driver, the GPIO4 pin has 
 * Press: ```Ctrl + X``` followed by ```y``` and ```ENTER``` or ```RETURN```
 * After this, type: ```sudo reboot``` and wait for RPi to reboot, for changes to be applied.
 
-```python
-
-```
 ###Code
 In order to get OneWire address, use the following function:
 ```python
@@ -114,7 +111,7 @@ from Coliform import *
 
 TemperatureStringValues, TemperatureRawNumbers = getTempList()
 ```
-Where the first value is a string in the following format, for 3 OneWires:
+Where the first value, ```TemperatureStringValues``` is a string in the following format, for 3 OneWires:
 ```python
 '21.312\n32.321\n43.232'
 ```
@@ -124,4 +121,7 @@ Which is displayed as:
    32.321
    43.232
 ```
-
+The second value ```TemperatureRawNumbers``` gives a list of temperature numbers, for 3 OneWires:
+```python
+['21.312','32.321','43.232']
+```
