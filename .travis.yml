@@ -1,12 +1,28 @@
-language: python
-python:
-  - "3.2"
-  - "3.3"
-  - "3.4"
-  - "3.5"
+anguage: python
+cache:
+  directories:
+  - "$HOME/.cache/pip"
+  - "$HOME/.pyenv"
+matrix:
+  include:
+  - os: osx
+    dist: trusty
+    python: '3.4'
+  - os: windows
+    dist: trusty
+    python: '3.4'
+  - os: linux
+    dist: trusty
+    python: '3.3'
+  - os: linux
+    dist: trusty
+    python: '3.4'
+  - os: linux
+    dist: trusty
+    python: '3.5'
   # does not have headers provided, please ask https://launchpad.net/~pypy/+archive/ppa
   # maintainers to fix their pypy-dev package.
-  - "pypy3"
+
 # command to install dependencies
 install:
   - pip3 install Coliform
