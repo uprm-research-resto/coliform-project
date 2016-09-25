@@ -85,7 +85,7 @@ If multiple OneWires are connected, they need to be in the following configurati
 
 Where black, is ground, red is power (3.3V), and yellow is the digital signal. You also need a 4.7kΩ resistor connected as shown. All yellow (signal) cables send their signal to the GPIO4 pin of the RPi.
 
-In order to detect OneWires, the GPIO4 pin has to be setup to recieve the information from them, in order to do this open the RPi terminal and do the following:
+In order to detect OneWires, using the w1-gpio kernel driver, the GPIO4 pin has to be setup to recieve the information from them, in order to do this open the RPi terminal and do the following:
 
 * Type: ```sudo nado /boot/config.txt```
 * Add: ```dtoverlay=w1-gpio,gpiopin=4``` to the end of the file.
@@ -100,7 +100,28 @@ In order to get OneWire address, use the following function:
 ```python
 from Coliform import *
 
-getOneWireID()
+ids = getOneWireID()
 ```
-The output will be a list with the addresses of the OneWires connected, for example:
-```[
+Where the values stored in ```ids``` will be a list with the addresses of the OneWires connected, for 2 OneWires:
+```python
+['/sys/bus/w1/devices/28-000005e2fdc3','/sys/bus/w1/devices/28-00000482b243']
+```
+These addresses change for each OneWire device.
+
+In order to get temperature values the following code can be used:
+```python
+from Coliform import *
+
+TemperatureStringValues, TemperatureRawNumbers = getTempList()
+```
+Where the first value is a string in the following format, for 3 OneWires:
+```python
+'21.312\n32.321\n43.232'
+```
+Which is displayed as:
+```
+   21.312
+   32.321
+   43.232
+```
+
