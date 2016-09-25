@@ -41,7 +41,7 @@ Windows:
 python -m pip install fakeRPiGPIO
 python -m pip install Coliform
 ```
-The reason is you need [fakeRPiGPIO](https://github.com/ArmlessJohn404/fakeRPiGPIO) module in order to "emulate" the [RPi.GPIO](https://pypi.python.org/pypi/RPi.GPIO) module of the Raspberry Pi.
+The reason is you need [fakeRPiGPIO](https://github.com/ArmlessJohn404/fakeRPiGPIO) module in order to "emulate" the [RPi.GPIO](https://pypi.python.org/pypi/RPi.GPIO) module of the RPi.
 
 Alternatively, you can download the python wheel package from [Coliform PyPI](https://pypi.python.org/pypi/Coliform) and python source from [fakeRPiGPIO PyPI](https://pypi.python.org/pypi/fakeRPiGPIO)
 
@@ -50,6 +50,7 @@ Requirements
 * [pyserial](https://github.com/pyserial/pyserial)
 * [Pillow](https://github.com/python-pillow/Pillow)
 * [matplotlib](https://github.com/matplotlib/matplotlib)
+* [RPi.GPIO](https://pypi.python.org/pypi/RPi.GPIO) or [fakeRPiGPIO](https://github.com/ArmlessJohn404/fakeRPiGPIO) (when not running on RPi)
 
 Changelog
 =================
