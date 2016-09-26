@@ -13,7 +13,7 @@ from tkinter import messagebox
 import os
 import time
 from PIL import ImageTk, Image
-from Coliform import *
+from Coliform import OneWire, ArduCAM, Heater, Pump, MultiPlot
 from datetime import datetime
 '''
 import as:
@@ -89,7 +89,7 @@ def startGUI():
 
     def savefile(*args):
         tempfilename = 'TemperatureData.csv'
-        OneWire.SaveToCsv(tf,tempfilename,filepath,len(ids))
+        MultiPlot.SaveToCsv(tf,tempfilename,filepath,len(ids))
         messagebox.showinfo(message='File saved to directory.')
 
     def pumppoweron(*args):
