@@ -70,12 +70,15 @@ Alternatively, you can download the python wheel package from [Coliform PyPI](ht
 * Version 0.2.2
   - Minor Update:
     - Added GPL License classifiers.
+* Version 0.3
+  - Major Update:
+    - Internal refactoring and cleaning up.
 
 #Usage
 ##Imports
 The following imports are used:
 ```python
-from Coliform import *
+from Coliform import OneWire, Pump, ArduCAM, MultiPlot, Heater
 from Coliform import GUI
 ```
 The first is for all functions, but the GUI, and the second is to import the GUI function.
@@ -98,9 +101,9 @@ In order to detect OneWires, using the w1-gpio kernel driver, the GPIO4 pin has 
 ###Code
 In order to get OneWire address, use the following function:
 ```python
-from Coliform import *
+from Coliform import OneWire
 
-ids = getOneWireID()
+ids = OneWire.getOneWireID()
 ```
 Where the values stored in ```ids``` will be a list with the addresses of the OneWires connected, for 2 OneWires:
 ```python
@@ -110,9 +113,9 @@ These addresses change for each OneWire device.
 
 In order to get temperature values the following code can be used:
 ```python
-from Coliform import *
+from Coliform import OneWire
 
-TemperatureStringValues, TemperatureRawNumbers = getTempList()
+TemperatureStringValues, TemperatureRawNumbers = OneWire.getTempList()
 ```
 Where the first value, ```TemperatureStringValues``` is a string in the following format, for 3 OneWires:
 ```python
