@@ -98,6 +98,7 @@ class OneWire():
                 y_all, x = eachLine.split('-')
                 out = x+','+y_all + '\n'
                 fi.write(out)
+        fi.close()
 
     def getTempList():
         temperature_raw = []
@@ -157,7 +158,7 @@ class MultiPlot():
         f.close()
 
     def Plot(textfile,y_amount):
-        #Source File
+        # Source File
         tf = textfile
         # Setup figure and subplots
         f = figure(num = 0, figsize = (12, 8))#, dpi = 100)
@@ -174,10 +175,10 @@ class MultiPlot():
         a.set_xlabel("t(s)")
         a.set_ylabel("Temperature(C)")
 
-        #set y limits
+        # set y limits
         a.set_ylim(0,50)
 
-        #Data Placeholders
+        # Data Placeholders
         dph = zeros(0)
 
         # set plots
@@ -188,10 +189,10 @@ class MultiPlot():
             plots['plt{}'.format(i)], = a.plot(dph,dph, label="Sensor{}".format(i+1))
             lph1.append(plots['plt{}'.format(i)])
             lph2.append(plots['plt{}'.format(i)].get_label())
-            #set legends
+            # set legends
         a.legend(lph1, lph2)
 
-        #Setup animation function
+        # Setup animation function
         def updateData(self):
             pullData = open(tf,"r").read()
             dataList = pullData.split('\n')

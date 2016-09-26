@@ -92,10 +92,6 @@ def startGUI():
         OneWire.SaveToCsv(tf,tempfilename,filepath,len(ids))
         messagebox.showinfo(message='File saved to directory.')
 
-    # def closebutton(*args):
-    #     f.close()
-    #     root.destroy()
-
     def pumppoweron(*args):
         try:
             PumpPowerStatus.set("Pump ON")
@@ -148,10 +144,8 @@ def startGUI():
             global t1
             t1 = Toplevel(mainframe)
             currentimg = ImageTk.PhotoImage(Image.open(os.path.join(filepath, filename)))
-            #currentimgs = Image.open(os.path.join(filepath, filename))
             imglabel = Label(t1, image=currentimg)
             imglabel.pack(side='bottom', fill='both',expand='yes')
-            #currentimgs.show()
             currentimg.show()
         except FileNotFoundError:
             t1.destroy()
