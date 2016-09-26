@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 #
-# This is the GUI function for Coliform Module
+# This is the main GUI function for Coliform Project
 #
 # This file is part of Coliform. https://github.com/Regendor/coliform-project
 # (C) 2016
@@ -15,6 +15,12 @@ import time
 from PIL import ImageTk, Image
 from Coliform import *
 from datetime import datetime
+'''
+import as:
+from Coliform import GUI
+use as:
+GUI.startGUI()
+'''
 
 def startGUI():
     filepath = os.sep.join((os.path.expanduser('~'), 'Desktop'))

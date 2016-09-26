@@ -17,6 +17,11 @@ import matplotlib.animation as animation
 from shutil import copyfile
 import RPi.GPIO as GPIO
 
+'''
+Note: if not running on Raspberry Pi, and are testing on your PC, you will need to download fakeRPiGPIO module:
+pip3 install fakeRPiGPIO
+'''
+
 class ArduCAM():
     def TakePicture(path, port, filename):
         try:
@@ -36,7 +41,7 @@ class ArduCAM():
         except AttributeError:
             pass
 
-    def getSerialPort(*args):
+    def getSerialPort():
         result = []
         if sys.platform.startswith('win'):
             ports = ['COM' + str(i + 1) for i in range(256)]
@@ -67,7 +72,7 @@ class OneWire():
         except:
             return 99999
 
-    def getOneWireID(*args):
+    def getOneWireID():
         result = []
         ports = glob.glob('/sys/bus/w1/devices/28*')
         for port in ports:
@@ -94,7 +99,7 @@ class OneWire():
                 out = x+','+y_all + '\n'
                 fi.write(out)
 
-    def getTempList(*args):
+    def getTempList():
         temperature_raw = []
         temperaturesstr = []
         ids = OneWire.getOneWireID()
@@ -122,7 +127,7 @@ class Heater():
         else:
             HEATPWM.ChangeDutyCycle(0)
 
-    def stopHeater(*args):
+    def stopHeater():
         HEATPWM.stop()
         GPIO.cleanup()
 
@@ -135,7 +140,7 @@ class Pump():
         PUMPPWM = GPIO.PWM(PUMP, 100)
         PUMPPWM.start(float(frequency))
 
-    def stopPump(*args):
+    def stopPump():
         PUMPPWM.stop()
         GPIO.cleanup()
 
