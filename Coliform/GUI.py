@@ -13,7 +13,7 @@ from tkinter import messagebox
 import os
 import time
 from PIL import ImageTk, Image
-from Coliform import OneWire, ArduCAM, Heater, Pump, MultiPlot
+from Coliform import OneWire, ArduCAM, MultiPlot, RPiGPIO
 from datetime import datetime
 '''
 import as:
@@ -29,12 +29,15 @@ def startGUI():
     if os.path.isfile(tf):
         os.remove(tf)
 
+
     def heaterpoweron(*args):
         try:
             HeaterPowerStatus.set('Heater ON')
             heaterbutton.configure(text='Heater OFF')
             heaterbutton.configure(command=heaterpoweroff)
-            Heater.startHeater(12,100)
+            global HEATPWM
+            HEATPWM = RPiGPIO.Controller(12, 100)
+            HEATPWM.startup()
             heaterbutton.after(1000,heaterinput)
         except ValueError:
             pass
@@ -44,10 +47,10 @@ def startGUI():
             if HeaterPowerStatus.get() != 'Heater OFF':
                 value = float(temp.get())
                 sensor = float(TemperatureNumber[1])
-                Heater.HeaterPID(value,sensor)
+                HEATPWM.HeaterPID(value,sensor)
             heaterbutton.after(1000,heaterinput)
         except ValueError:
-            Heater.stopHeater()
+            HEATPWM.shutdown()
             HeaterPowerStatus.set('Heater OFF')
             heaterbutton.configure(text='Heater ON')
             heaterbutton.configure(command=heaterpoweron)
@@ -56,7 +59,7 @@ def startGUI():
 
     def heaterpoweroff(*args):
         try:
-            Heater.stopHeater()
+            HEATPWM.shutdown()
             HeaterPowerStatus.set('Heater OFF')
             heaterbutton.configure(text='Heater ON')
             heaterbutton.configure(command=heaterpoweron)
@@ -97,13 +100,15 @@ def startGUI():
             PumpPowerStatus.set("Pump ON")
             pumpbutton.configure(text='Pump OFF')
             pumpbutton.configure(command=pumppoweroff)
-            Pump.startPump(11,pumpintensity.get())
+            global PUMPPWM
+            PUMPPWM = RPiGPIO.Controller(11, 100)
+            PUMPPWM.startup()
 
         except ValueError:
             PumpPowerStatus.set("Pump OFF")
             pumpbutton.configure(text='Pump ON')
             pumpbutton.configure(command=pumppoweron)
-            Pump.stopPump()
+            PUMPPWM.shutdown()
             messagebox.showinfo(message='Please type number from 0-100 into Pump text box.')
 
     def pumppoweroff(*args):
@@ -111,13 +116,14 @@ def startGUI():
             PumpPowerStatus.set("Pump OFF")
             pumpbutton.configure(text='Pump ON')
             pumpbutton.configure(command=pumppoweron)
+            PUMPPWM.shutdown()
 
         except ValueError:
             pass
 
     def pumppowerchange(*args):
         try:
-            Pump.setPumpIntensity(pumpintensity.get())
+            PUMPPWM.setIntensity(pumpintensity.get())
         except ValueError:
             messagebox.showinfo(message='Please type number from 0-100 into Pump text box.')
 
@@ -145,7 +151,7 @@ def startGUI():
             t1 = Toplevel(mainframe)
             currentimg = ImageTk.PhotoImage(Image.open(os.path.join(filepath, filename)))
             imglabel = Label(t1, image=currentimg)
-            imglabel.pack(side='bottom', fill='both',expand='yes')
+            imglabel.pack(side='bottom', fill='both', expand='yes')
             currentimg.show()
         except FileNotFoundError:
             t1.destroy()
@@ -201,7 +207,7 @@ def startGUI():
 
     pumpbutton = ttk.Button(f4, text="Power ON", command=pumppoweron)
     pumpbutton.grid(column=1, row=1, sticky=W)
-    pumpchangebutton = ttk.Button(f4, text="Submit", command=pumppoweron)
+    pumpchangebutton = ttk.Button(f4, text="Submit", command=pumppowerchange)
     pumpchangebutton.grid(column=1, row=3, sticky=(W, E))
     pump_entry = ttk.Entry(f4, width=4, textvariable=pumpintensity)
     pump_entry.grid(column=1, row=2, sticky=(W, E))

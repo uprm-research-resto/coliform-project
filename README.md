@@ -134,6 +134,14 @@ The second value ```TemperatureRawNumbers``` gives a list of temperature numbers
 ##MultiPlot
 
 ##Heater/Pump
+Both heater and pump use GPIO interface from [RPi.GPIO](https://pypi.python.org/pypi/RPi.GPIO). 
+
+###Heater
+In order to start the heater the following code can be used:
+```python
+from Coliform import Heater
+
+Heater.start
 
 ##GUI
 In order to display the project GUI, the following code can be used:
