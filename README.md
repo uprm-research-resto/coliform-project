@@ -19,7 +19,7 @@ Download page: [![PyPI Version](https://img.shields.io/pypi/v/coliform.svg)](htt
     * [OneWire](#onewire)
     * [MultiPlot](#multiplot)
     * [ArduCAM](#arducam)
-    * [GPIO](#gpio)
+    * [Heater/Pump](#heater/pump)
     * [GUI](#gui)
   * [Contact](#contact)
 
@@ -133,7 +133,7 @@ The second value ```TemperatureRawNumbers``` gives a list of temperature numbers
 ```
 ##MultiPlot
 
-##GPIO
+##Heater/Pump
 
 ##GUI
 In order to display the project GUI, the following code can be used:
