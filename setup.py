@@ -8,7 +8,7 @@ class BinaryDistribution(Distribution):
 
 setup(
     name='Coliform',
-    version='0.3',
+    version='0.4',
     description='Coliform UPRM Project Library, Written for Raspberry Pi',
     packages=['Coliform'],
     author='Osvaldo E Duran',

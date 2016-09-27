@@ -19,7 +19,7 @@ Download page: [![PyPI Version](https://img.shields.io/pypi/v/coliform.svg)](htt
     * [OneWire](#onewire)
     * [MultiPlot](#multiplot)
     * [ArduCAM](#arducam)
-    * [Heater/Pump](#heater/pump)
+    * [RPiGPIO](#rpigpio)
     * [GUI](#gui)
   * [Contact](#contact)
 
@@ -73,6 +73,9 @@ Alternatively, you can download the python wheel package from [Coliform PyPI](ht
 * Version 0.3
   - Major Update:
     - Internal refactoring and cleaning up.
+* Version 0.4
+  - Major Update:
+    - Merged Heater and Pump modules into a generic one called RPiGPIO
 
 #Usage
 ##Imports
@@ -133,15 +136,32 @@ The second value ```TemperatureRawNumbers``` gives a list of temperature numbers
 ```
 ##MultiPlot
 
-##Heater/Pump
-Both heater and pump use GPIO interface from [RPi.GPIO](https://pypi.python.org/pypi/RPi.GPIO). 
+##RPiGPIO
+Both RPiGPIO use GPIO.PWM class from [RPi.GPIO](https://pypi.python.org/pypi/RPi.GPIO). 
+This is done in order to use software PWM to control pumps and Heaters.
 
-###Heater
-In order to start the heater the following code can be used:
+In order to start the PWM control, and use it, the following code can be used:
 ```python
-from Coliform import Heater
+from Coliform import RPiGPIO
+pin = 11 #RPi pin
+frequency = 100 #start frequency
 
-Heater.start
+# Initialize the PWM controller
+PWM = RPiGPIO.Controller(pin, frequency)
+
+#Start PWM controller
+PWM.startup()
+
+#Start HeaterPID
+PWM.HeaterPID()
+
+freq = 50 # new frequency value
+#change frequency within range
+PWM.setIntensity(freq)
+
+#Stop PWM
+PWM.shutdown()
+```
 
 ##GUI
 In order to display the project GUI, the following code can be used:
