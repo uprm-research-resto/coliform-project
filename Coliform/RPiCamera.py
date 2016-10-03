@@ -1,9 +1,18 @@
+#!/usr/bin/env python3
+#
+# This is the Camera feature function for Coliform Project
+#
+# This file is part of Coliform. https://github.com/Regendor/coliform-project
+# (C) 2016
+#
+# Licensed under the GNU General Public License version 3.0 (GPL-3.0)
 import time
 import picamera
 import picamera.array
 import matplotlib.pyplot as plt
 import matplotlib.colors as colors
 import numpy as np
+from fractions import Fraction
 
 
 def takePicture():
@@ -11,6 +20,21 @@ def takePicture():
         with picamera.array.PiYUVArray(camera) as stream:
             camera.resolution = (1024, 1008)
             time.sleep(2)
+            camera.capture(stream, 'yuv')
+            # print(stream.array.shape)
+            # print(stream.rgb_array.shape)
+            rgb_array = stream.rgb_array
+            return rgb_array
+
+
+def takePictureLow():
+    with picamera.PiCamera(framerate=Fraction(1, 6)) as camera:
+        with picamera.array.PiYUVArray(camera) as stream:
+            camera.resolution = (1024, 1008)
+            camera.shutter_speed = 6000000
+            camera.iso = 800
+            time.sleep(30)
+            camera.exposure_mode = 'off'
             camera.capture(stream, 'yuv')
             # print(stream.array.shape)
             # print(stream.rgb_array.shape)

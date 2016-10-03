@@ -24,14 +24,14 @@ class Controller(object):
     def __init__(self, channel, frequency):
         self.channel = channel
         self.frequency = float(frequency)
-        self.pwm = GPIO.PWM(channel,self.frequency)
+        self.pwm = GPIO.PWM(channel, self.frequency)
 
     def startup(self):
         GPIO.setmode(GPIO.BOARD)
         GPIO.setup(self.channel, GPIO.OUT)
         self.pwm.start(self.frequency)
 
-    def HeaterPID(self,targetvalue, currentvalue):
+    def HeaterPID(self, targetvalue, currentvalue):
         if targetvalue > currentvalue:
             self.pwm.ChangeDutyCycle(100)
         elif targetvalue < currentvalue:
