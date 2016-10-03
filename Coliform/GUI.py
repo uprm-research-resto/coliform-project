@@ -12,9 +12,10 @@ from tkinter import filedialog
 from tkinter import messagebox
 import os
 import time
-from PIL import ImageTk, Image
-from Coliform import OneWire, ArduCAM, MultiPlot, RPiGPIO
-from datetime import datetime
+# from PIL import ImageTk, Image
+from Coliform import OneWire, MultiPlot, RPiGPIO, RPiCamera
+
+# from datetime import datetime
 '''
 import as:
 from Coliform import GUI
@@ -22,15 +23,15 @@ use as:
 GUI.startGUI()
 '''
 
+
 def startGUI():
     filepath = os.sep.join((os.path.expanduser('~'), 'Desktop'))
-    filename = 'TestJPEG.jpeg'
+    # filename = 'TestJPEG.jpeg'
     tf = 'PlotTextFile.txt'
     if os.path.isfile(tf):
         os.remove(tf)
 
-
-    def heaterpoweron(*args):
+    def heaterpoweron():
         try:
             HeaterPowerStatus.set('Heater ON')
             heaterbutton.configure(text='Heater OFF')
@@ -42,22 +43,22 @@ def startGUI():
         except ValueError:
             pass
 
-    def heaterinput(*args):
+    def heaterinput():
         try:
             if HeaterPowerStatus.get() != 'Heater OFF':
                 value = float(temp.get())
                 sensor = float(TemperatureNumber[1])
-                HEATPWM.HeaterPID(value,sensor)
-            heaterbutton.after(1000,heaterinput)
+                HEATPWM.HeaterPID(value, sensor)
+            heaterbutton.after(1000, heaterinput)
         except ValueError:
             HEATPWM.shutdown()
             HeaterPowerStatus.set('Heater OFF')
             heaterbutton.configure(text='Heater ON')
             heaterbutton.configure(command=heaterpoweron)
             messagebox.showinfo(message='Please type number into Target Temperature box.')
-            heaterbutton.after(1000,heaterinput)
+            heaterbutton.after(1000, heaterinput)
 
-    def heaterpoweroff(*args):
+    def heaterpoweroff():
         try:
             HEATPWM.shutdown()
             HeaterPowerStatus.set('Heater OFF')
@@ -66,7 +67,7 @@ def startGUI():
         except ValueError:
             pass
 
-    def onewireon(*args):
+    def onewireon():
         try:
             global ids
             global TemperatureNumber
@@ -79,23 +80,22 @@ def startGUI():
                 templabel.config(text='NULL')
             else:
                 TempSensorPowerStatus.set('Temp. Sensor ON')
-            templabel.after(1000,onewireon)
+            templabel.after(1000, onewireon)
         except IndexError:
             pass
 
-    def popupplot(*args):
+    def tempplot():
         try:
-            MultiPlot.Plot(tf,len(ids))
+            MultiPlot.Plot(tf, len(ids))
         except KeyError:
             messagebox.showinfo(message='No temperature sensor connected.')
 
-
-    def savefile(*args):
+    def savefile():
         tempfilename = 'TemperatureData.csv'
-        MultiPlot.SaveToCsv(tf,tempfilename,filepath,len(ids))
+        MultiPlot.SaveToCsv(tf, tempfilename, filepath, len(ids))
         messagebox.showinfo(message='File saved to directory.')
 
-    def pumppoweron(*args):
+    def pumppoweron():
         try:
             PumpPowerStatus.set("Pump ON")
             pumpbutton.configure(text='Pump OFF')
@@ -111,7 +111,7 @@ def startGUI():
             PUMPPWM.shutdown()
             messagebox.showinfo(message='Please type number from 0-100 into Pump text box.')
 
-    def pumppoweroff(*args):
+    def pumppoweroff():
         try:
             PumpPowerStatus.set("Pump OFF")
             pumpbutton.configure(text='Pump ON')
@@ -121,41 +121,55 @@ def startGUI():
         except ValueError:
             pass
 
-    def pumppowerchange(*args):
+    def pumppowerchange():
         try:
             PUMPPWM.setIntensity(pumpintensity.get())
         except ValueError:
             messagebox.showinfo(message='Please type number from 0-100 into Pump text box.')
 
-    def directorychosen(*args):
+    def directorychosen():
         try:
             global filepath
             filepath = filedialog.askdirectory()
         except ValueError:
             pass
 
-    def picturetaken(*args):
+    def picturetaken():
         try:
-            path = filepath
-            global filename
-            filename = datetime.strftime(datetime.now(),"%Y.%m.%d-%H:%M:%S")+'.jpeg'
-            portid = ArduCAM.getSerialPort()
-            ArduCAM.TakePicture(path, portid[0], filename)
-            messagebox.showinfo(message='JPEG created on directory')
-        except (UnboundLocalError, IndexError):
-            messagebox.showinfo(message='Arduino not found, make sure it is connected to USB port')
+            # path = filepath
+            # global filename
+            # filename = datetime.strftime(datetime.now(),"%Y.%m.%d-%H:%M:%S")+'.jpeg'
+            # portid = ArduCAM.getSerialPort()
+            # ArduCAM.TakePicture(path, portid[0], filename)
+            global rgb_array
+            rgb_array = RPiCamera.takePicture()
+            red_intensity, green_intensity, blue_intensity = RPiCamera.returnIntensity(rgb_array)
+            intensity_array = ','.join(['R:'+str(red_intensity), 'G:'+str(green_intensity), 'B:'+str(blue_intensity)])
+            intensitylabel.config(text=intensity_array)
 
-    def showimage(*args):
+            # messagebox.showinfo(message='JPEG created on directory')
+        except (UnboundLocalError, IndexError):
+            # messagebox.showinfo(message='Arduino not found, make sure it is connected to USB port')
+            pass
+
+    def showimageplot():
         try:
-            global t1
-            t1 = Toplevel(mainframe)
-            currentimg = ImageTk.PhotoImage(Image.open(os.path.join(filepath, filename)))
-            imglabel = Label(t1, image=currentimg)
-            imglabel.pack(side='bottom', fill='both', expand='yes')
-            currentimg.show()
+            # global t1
+            # t1 = Toplevel(mainframe)
+            # currentimg = ImageTk.PhotoImage(Image.open(os.path.join(filepath, filename)))
+            # imglabel = Label(t1, image=currentimg)
+            # imglabel.pack(side='bottom', fill='both', expand='yes')
+            # currentimg.show()
+            RPiCamera.showPlot(rgb_array)
         except FileNotFoundError:
-            t1.destroy()
+            # t1.destroy()
             messagebox.showinfo(message='File not found, make sure you selected the correct directory.')
+
+    def showimage():
+        try:
+            RPiCamera.showImage(rgb_array)
+        except ValueError:
+            pass
 
     root = Tk()
     root.title("Coliform Control GUI")
@@ -185,10 +199,10 @@ def startGUI():
     masterpane.add(toppane)
 
     templabel = ttk.Label(f2)
-    templabel.grid(column=1, row=2, sticky=(W))
+    templabel.grid(column=1, row=2, sticky=W)
     ttk.Label(f2, text="Temperature:").grid(column=1, row=1, sticky=W)
-    ttk.Button(f2, text='Show Plot', command=popupplot).grid(column=2,row=1,sticky=E)
-    ttk.Button(f2, text='Save Data File', command=savefile).grid(column=2,row=2,sticky=(S,E))
+    ttk.Button(f2, text='Show Plot', command=tempplot).grid(column=2, row=1, sticky=E)
+    ttk.Button(f2, text='Save Data File', command=savefile).grid(column=2, row=2, sticky=(S, E))
 
     temp_entry = ttk.Entry(f3, width=7, textvariable=temp)
     temp_entry.grid(column=2, row=1, sticky=(W, E))
@@ -212,15 +226,20 @@ def startGUI():
     pump_entry = ttk.Entry(f4, width=4, textvariable=pumpintensity)
     pump_entry.grid(column=1, row=2, sticky=(W, E))
 
-    ttk.Button(f5, text="Take Picture", command=picturetaken).grid(column=1, row=1, sticky=(E,W))
-    ttk.Button(f5, text="Choose Directory",command=directorychosen).grid(column=1, row=2, sticky=E)
-    ttk.Button(f5, text="Show Last Image", command=showimage).grid(column=1, row=4, sticky=(E,W))
+    ttk.Button(f5, text="Take Picture", command=picturetaken).grid(column=1, row=1, sticky=(E, W))
+    ttk.Button(f5, text="Choose Directory", command=directorychosen).grid(column=1, row=3, sticky=E)
+    ttk.Label(f5, text="Intensity: ").grid(column=1, row=2)
+    intensitylabel = ttk.Label(f5, text='Not Taken')
+    intensitylabel.grid(column=2, row=2, sticky=W)
+    ttk.Button(f5, text="Show Plots", command=showimageplot).grid(column=2, row=1, sticky=(E, W))
+    ttk.Button(f5, text="Show Image", command=showimage).grid(column=2, row=3, sticky=(E, W))
 
-    tempsensorstatus = ttk.Label(f1, textvariable=TempSensorPowerStatus).grid(column=1, row=1, sticky=(W, E))
-    pumpstatus = ttk.Label(f1, textvariable=PumpPowerStatus).grid(column=1, row=2, sticky=(W, E))
-    heaterstatus = ttk.Label(f1, textvariable=HeaterPowerStatus).grid(column=1, row=3, sticky=(W, E))
+    ttk.Label(f1, textvariable=TempSensorPowerStatus).grid(column=1, row=1, sticky=(W, E))
+    ttk.Label(f1, textvariable=PumpPowerStatus).grid(column=1, row=2, sticky=(W, E))
+    ttk.Label(f1, textvariable=HeaterPowerStatus).grid(column=1, row=3, sticky=(W, E))
 
-    for child in mainframe.winfo_children(): child.grid_configure(padx=5, pady=5)
+    for child in mainframe.winfo_children():
+        child.grid_configure(padx=5, pady=5)
 
     temp_entry.focus()
     start_time = time.time()

@@ -18,7 +18,7 @@ Download page: [![PyPI Version](https://img.shields.io/pypi/v/coliform.svg)](htt
     * [Imports](#imports)
     * [OneWire](#onewire)
     * [MultiPlot](#multiplot)
-    * [ArduCAM](#arducam)
+    * [RPiCamera](#rpicamera)
     * [RPiGPIO](#rpigpio)
     * [GUI](#gui)
   * [Contact](#contact)
@@ -76,6 +76,11 @@ Alternatively, you can download the python wheel package from [Coliform PyPI](ht
 * Version 0.4
   - Major Update:
     - Merged Heater and Pump modules into a generic one called RPiGPIO
+* Version 0.5b (Beta Version)
+  - Major Update:
+    - Added support for [picamera](https://github.com/waveform80/picamera), to use with our OV5647
+    - Added corresponding GUI entries in order to get our results from OV5647
+    - Began phasing out ArduCAM code
 
 #Usage
 ##Imports
@@ -135,6 +140,8 @@ The second value ```TemperatureRawNumbers``` gives a list of temperature numbers
 ['21.312','32.321','43.232']
 ```
 ##MultiPlot
+
+##RPiCamera
 
 ##RPiGPIO
 Both RPiGPIO use GPIO.PWM class from [RPi.GPIO](https://pypi.python.org/pypi/RPi.GPIO). 

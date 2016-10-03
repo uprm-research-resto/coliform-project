@@ -7,8 +7,6 @@
 #
 # Licensed under the GNU General Public License version 3.0 (GPL-3.0)
 import glob
-import os
-from shutil import copyfile
 
 '''
 import as:
