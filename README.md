@@ -48,9 +48,10 @@ The reason is you need [fakeRPiGPIO](https://github.com/ArmlessJohn404/fakeRPiGP
 Alternatively, you can download the python wheel package from [Coliform PyPI](https://pypi.python.org/pypi/Coliform) and python source from [fakeRPiGPIO PyPI](https://pypi.python.org/pypi/fakeRPiGPIO)
 
 #Requirements
-* [pyserial](https://github.com/pyserial/pyserial)
-* [Pillow](https://github.com/python-pillow/Pillow)
+* [pyserial](https://github.com/pyserial/pyserial) (only required if you need to use Arduino/ArduCAM)
+* [Pillow](https://github.com/python-pillow/Pillow) (not required after version 0.5.3)
 * [matplotlib](https://github.com/matplotlib/matplotlib)
+* [picamera](https://github.com/waveform80/picamera)
 * [RPi.GPIO](https://pypi.python.org/pypi/RPi.GPIO) (when running on RPi) or [fakeRPiGPIO](https://github.com/ArmlessJohn404/fakeRPiGPIO) (when not running on RPi)
 
 #Changelog
@@ -76,7 +77,7 @@ Alternatively, you can download the python wheel package from [Coliform PyPI](ht
 * Version 0.4
   - Major Update:
     - Merged Heater and Pump modules into a generic one called RPiGPIO
-* Version 0.5b (Beta Version)
+* Version 0.5b0 (Beta Version)
   - Major Update:
     - Added support for [picamera](https://github.com/waveform80/picamera), to use with our OV5647
     - Added corresponding GUI entries in order to get our results from OV5647
@@ -87,6 +88,21 @@ Alternatively, you can download the python wheel package from [Coliform PyPI](ht
     - Corrupted package, was deleted.
 * Version 0.5b3 (Beta Version)
     - Added intensity to location plot.
+* Versions 0.5b4-7 (Beta Versions)
+    - Fixed formatting errors and corrupted releases.
+    - General debugging for new camera features
+* Version 0.5.1b1 (Beta Version)
+    - Stable tested release.
+* Version 0.5.1
+  - Minor Update:
+    - Fixed minor errors in previous beta version
+    - Has minor GUI formatting errors.
+* Version 0.5.2
+  - Minor Update:
+    - Fixed formatting errors found in previous version.
+* Version 0.5.3
+  - Minor Update:
+    - Fixed GUI formatting.
 #Usage
 ##Imports
 The following imports are used:
@@ -145,6 +161,15 @@ The second value ```TemperatureRawNumbers``` gives a list of temperature numbers
 ['21.312','32.321','43.232']
 ```
 ##MultiPlot
+
+##ArduCAM
+```python
+   from Coliform Import ArduCAM
+   path = /home/
+   filename = 'Test.jpg'
+   portid = ArduCAM.getSerialPort()
+   ArduCAM.TakePicture(path, portid[0], filename)
+```
 
 ##RPiCamera
 

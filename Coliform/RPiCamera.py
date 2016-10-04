@@ -42,13 +42,14 @@ def takePictureLow():
             return rgb_array
 
 
+# noinspection PyTypeChecker
 def returnIntensity(rgb_array):
-    red_avg = np.mean(rgb_array[..., 0].flatten())
-    green_avg = np.mean(rgb_array[..., 1].flatten())
-    blue_avg = np.mean(rgb_array[..., 2].flatten())
+    red_avg = np.mean((rgb_array[..., 0].flatten())*(100/255))
+    green_avg = np.mean((rgb_array[..., 1].flatten())*(100/255))
+    blue_avg = np.mean((rgb_array[..., 2].flatten())*(100/255))
     img_hsv = colors.rgb_to_hsv(rgb_array[..., :3])
-    intensity_avg = np.mean(img_hsv[..., 2].flatten)
-    return (red_avg, green_avg, blue_avg,intensity_avg)
+    intensity_avg = np.mean((img_hsv[..., 2].flatten())*(100/255))
+    return red_avg, green_avg, blue_avg, intensity_avg
 
 
 def showImage(rgb_array):
@@ -57,32 +58,41 @@ def showImage(rgb_array):
 
 
 def showPlot(rgb_array):
-    # imgplot = plt.imshow(rgb_array)
     img_hsv = colors.rgb_to_hsv(rgb_array[..., :3])
     lu1 = rgb_array[..., 0].flatten()
-    lu2 = rgb_array[..., 1].flatten()
-    lu3 = rgb_array[..., 2].flatten()
-    lu8 = img_hsv[..., 2].flatten()
-    plt.subplot2grid((2, 3), (0, 0), colspan=2)
-    plt.plot(lu1, color='r', label='Red')
-    plt.plot(lu2, color='g', label='Green')
-    plt.plot(lu3, color='b', label='Blue')
-    plt.plot(lu8, color='black', label='Intensity')
-    plt.title("Colors by Location")
+    plt.subplot2grid((2, 4), (0, 0))
+    plt.plot(lu1, color='r', label='Red', linestyle='-')
+    plt.title("Red by Location")
     plt.xlabel("Location")
-    plt.ylabel("Intensity")
+    plt.ylabel("Value")
+    plt.legend()
+
+    lu2 = rgb_array[..., 1].flatten()
+    plt.subplot2grid((2, 4), (0, 1))
+    plt.plot(lu2, color='g', label='Green', linestyle='-')
+    plt.title("Green by Location")
+    plt.xlabel("Location")
+    plt.ylabel("Value")
+    plt.legend()
+
+    lu3 = rgb_array[..., 2].flatten()
+    plt.subplot2grid((2, 4), (0, 2))
+    plt.plot(lu3, color='b', label='Blue', linestyle='-')
+    plt.title("Blue by Location")
+    plt.xlabel("Location")
+    plt.ylabel("Value")
     plt.legend()
 
     lu4 = img_hsv[..., 2].flatten()
-    plt.subplot2grid((2, 3), (0, 3))
-    plt.hist(lu4, bins=256, range=(0, 256), histtype='stepfilled', color='b', label='Intesity')
-    plt.title("Intensity")
-    plt.xlabel("Value")
-    plt.ylabel("Frequency")
+    plt.subplot2grid((2, 4), (0, 3))
+    plt.plot(lu4, color='k', label='Intensity', linestyle='-')
+    plt.title("Intensity by Location")
+    plt.xlabel("Location")
+    plt.ylabel("Value")
     plt.legend()
 
     lu5 = rgb_array[..., 0].flatten()
-    plt.subplot2grid((2, 3), (1, 0))
+    plt.subplot2grid((2, 4), (1, 0))
     plt.hist(lu5, bins=256, range=(0, 256), histtype='stepfilled', color='r', label='Red')
     plt.title("Red")
     plt.xlabel("Value")
@@ -90,7 +100,7 @@ def showPlot(rgb_array):
     plt.legend()
 
     lu6 = rgb_array[..., 1].flatten()
-    plt.subplot2grid((2, 3), (1, 1))
+    plt.subplot2grid((2, 4), (1, 1))
     plt.hist(lu6, bins=256, range=(0, 256), histtype='stepfilled', color='g', label='Green')
     plt.title("Green")
     plt.xlabel("Value")
@@ -98,11 +108,20 @@ def showPlot(rgb_array):
     plt.legend()
 
     lu7 = rgb_array[..., 2].flatten()
-    plt.subplot2grid((2, 3), (1, 2))
+    plt.subplot2grid((2, 4), (1, 2))
     plt.hist(lu7, bins=256, range=(0, 256), histtype='stepfilled', color='b', label='Blue')
     plt.title("Blue")
     plt.xlabel("Value")
     plt.ylabel("Frequency")
     plt.legend()
+
+    lu8 = img_hsv[..., 2].flatten()
+    plt.subplot2grid((2, 4), (1, 3))
+    plt.hist(lu8, bins=256, range=(0, 256), histtype='stepfilled', color='k', label='Intesity')
+    plt.title("Intensity")
+    plt.xlabel("Value")
+    plt.ylabel("Frequency")
+    plt.legend()
+
     # plt.hist((rgb_array).ravel(), bins=256, range=(0,1), fc = 'k', ec = 'k')
     plt.show()

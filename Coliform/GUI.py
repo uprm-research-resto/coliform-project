@@ -12,7 +12,6 @@ from tkinter import filedialog
 from tkinter import messagebox
 import os
 import time
-# from PIL import ImageTk, Image
 from Coliform import OneWire, MultiPlot, RPiGPIO, RPiCamera
 
 # from datetime import datetime
@@ -136,16 +135,15 @@ def startGUI():
 
     def picturetaken():
         try:
-            # path = filepath
             # global filename
             # filename = datetime.strftime(datetime.now(),"%Y.%m.%d-%H:%M:%S")+'.jpeg'
-            # portid = ArduCAM.getSerialPort()
-            # ArduCAM.TakePicture(path, portid[0], filename)
             global rgb_array
             rgb_array = RPiCamera.takePicture()
             red_intensity, green_intensity, blue_intensity, intensity = RPiCamera.returnIntensity(rgb_array)
-            intensity_array = ','.join(['R:'+str(red_intensity), 'G:'+str(green_intensity),
-                                        'B:'+str(blue_intensity), 'I:'+str(intensity)])
+            intensity_array = '\n'.join(['R:'+'{:.3f}'.format(red_intensity),
+                                         'G:'+'{:.3f}'.format(green_intensity),
+                                         'B:'+'{:.3f}'.format(blue_intensity),
+                                         'I:'+'{:.3f}'.format(intensity)])
             intensitylabel.config(text=intensity_array)
 
             # messagebox.showinfo(message='JPEG created on directory')
@@ -155,22 +153,15 @@ def startGUI():
 
     def showimageplot():
         try:
-            # global t1
-            # t1 = Toplevel(mainframe)
-            # currentimg = ImageTk.PhotoImage(Image.open(os.path.join(filepath, filename)))
-            # imglabel = Label(t1, image=currentimg)
-            # imglabel.pack(side='bottom', fill='both', expand='yes')
-            # currentimg.show()
             RPiCamera.showPlot(rgb_array)
-        except FileNotFoundError:
-            # t1.destroy()
-            messagebox.showinfo(message='File not found, make sure you selected the correct directory.')
+        except ValueError:
+            messagebox.showinfo(message='File not found, make sure take picture before showing plot.')
 
     def showimage():
         try:
             RPiCamera.showImage(rgb_array)
         except ValueError:
-            pass
+            messagebox.showinfo(message='File not found, make sure take picture before showing Image.')
 
     root = Tk()
     root.title("Coliform Control GUI")
@@ -214,9 +205,11 @@ def startGUI():
     bottompane = ttk.Panedwindow(masterpane, orient=HORIZONTAL)
     f1 = ttk.Labelframe(bottompane, text='Status:', width=100, height=100)
     f4 = ttk.Labelframe(bottompane, text='Pump:', width=100, height=100)
-    f5 = ttk.Labelframe(bottompane, text='Camera:', width=100, height=100)
+    f5 = ttk.Labelframe(bottompane, text='Camera Options:', width=100, height=100)
+    f6 = ttk.LabelFrame(bottompane, text='Image Data:', width=100, height=100)
     bottompane.add(f4)
     bottompane.add(f5)
+    bottompane.add(f6)
     bottompane.add(f1)
     masterpane.add(bottompane)
 
@@ -227,13 +220,14 @@ def startGUI():
     pump_entry = ttk.Entry(f4, width=4, textvariable=pumpintensity)
     pump_entry.grid(column=1, row=2, sticky=(W, E))
 
-    ttk.Button(f5, text="Take Picture", command=picturetaken).grid(column=1, row=1, sticky=(E, W))
-    ttk.Button(f5, text="Choose Directory", command=directorychosen).grid(column=1, row=3, sticky=E)
-    ttk.Label(f5, text="Intensity: ").grid(column=1, row=2)
-    intensitylabel = ttk.Label(f5, text='Not Taken')
-    intensitylabel.grid(column=2, row=2, sticky=W)
-    ttk.Button(f5, text="Show Plots", command=showimageplot).grid(column=2, row=1, sticky=(E, W))
-    ttk.Button(f5, text="Show Image", command=showimage).grid(column=2, row=3, sticky=(E, W))
+    ttk.Button(f5, text="Take Picture", command=picturetaken).grid(column=1, row=1, sticky=(W, E))
+    ttk.Button(f5, text="Choose Directory", command=directorychosen).grid(column=1, row=4, sticky=(W, E))
+    ttk.Button(f5, text="Show Plots", command=showimageplot).grid(column=1, row=2, sticky=(W, E))
+    ttk.Button(f5, text="Show Image", command=showimage).grid(column=1, row=3, sticky=(W, E))
+
+    ttk.Label(f6, text="Intensity: ").grid(column=1, row=1, sticky=(W, E))
+    intensitylabel = ttk.Label(f6, text='Not Taken')
+    intensitylabel.grid(column=1, row=2, sticky=(W, E))
 
     ttk.Label(f1, textvariable=TempSensorPowerStatus).grid(column=1, row=1, sticky=(W, E))
     ttk.Label(f1, textvariable=PumpPowerStatus).grid(column=1, row=2, sticky=(W, E))
