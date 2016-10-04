@@ -39,7 +39,7 @@ def startGUI():
             global HEATPWM
             HEATPWM = RPiGPIO.Controller(12, 100)
             HEATPWM.startup()
-            heaterbutton.after(1000,heaterinput)
+            heaterbutton.after(1000, heaterinput)
         except ValueError:
             pass
 
@@ -74,7 +74,7 @@ def startGUI():
             ids = OneWire.getOneWireID()
             TemperatureDegrees, TemperatureNumber = OneWire.getTempList()
             templabel.config(text=TemperatureDegrees)
-            MultiPlot.GeneratePlotDataFile(tf,TemperatureNumber,start_time)
+            MultiPlot.GeneratePlotDataFile(tf, TemperatureNumber, start_time)
             if ids == []:
                 TempSensorPowerStatus.set('Temp. Sensor OFF')
                 templabel.config(text='NULL')
@@ -143,8 +143,9 @@ def startGUI():
             # ArduCAM.TakePicture(path, portid[0], filename)
             global rgb_array
             rgb_array = RPiCamera.takePicture()
-            red_intensity, green_intensity, blue_intensity = RPiCamera.returnIntensity(rgb_array)
-            intensity_array = ','.join(['R:'+str(red_intensity), 'G:'+str(green_intensity), 'B:'+str(blue_intensity)])
+            red_intensity, green_intensity, blue_intensity, intensity = RPiCamera.returnIntensity(rgb_array)
+            intensity_array = ','.join(['R:'+str(red_intensity), 'G:'+str(green_intensity),
+                                        'B:'+str(blue_intensity), 'I:'+str(intensity)])
             intensitylabel.config(text=intensity_array)
 
             # messagebox.showinfo(message='JPEG created on directory')

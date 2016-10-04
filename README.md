@@ -81,7 +81,12 @@ Alternatively, you can download the python wheel package from [Coliform PyPI](ht
     - Added support for [picamera](https://github.com/waveform80/picamera), to use with our OV5647
     - Added corresponding GUI entries in order to get our results from OV5647
     - Began phasing out ArduCAM code
-
+* Version 0.5b1 (Beta Version)
+    - Added average intensity display to GUI
+* Version 0.5b2 (Beta Version) (Deleted)
+    - Corrupted package, was deleted.
+* Version 0.5b3 (Beta Version)
+    - Added intensity to location plot.
 #Usage
 ##Imports
 The following imports are used:

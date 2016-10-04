@@ -46,7 +46,9 @@ def returnIntensity(rgb_array):
     red_avg = np.mean(rgb_array[..., 0].flatten())
     green_avg = np.mean(rgb_array[..., 1].flatten())
     blue_avg = np.mean(rgb_array[..., 2].flatten())
-    return (red_avg, green_avg, blue_avg)
+    img_hsv = colors.rgb_to_hsv(rgb_array[..., :3])
+    intensity_avg = np.mean(img_hsv[..., 2].flatten)
+    return (red_avg, green_avg, blue_avg,intensity_avg)
 
 
 def showImage(rgb_array):
@@ -60,10 +62,12 @@ def showPlot(rgb_array):
     lu1 = rgb_array[..., 0].flatten()
     lu2 = rgb_array[..., 1].flatten()
     lu3 = rgb_array[..., 2].flatten()
+    lu8 = img_hsv[..., 2].flatten()
     plt.subplot2grid((2, 3), (0, 0), colspan=2)
     plt.plot(lu1, color='r', label='Red')
     plt.plot(lu2, color='g', label='Green')
     plt.plot(lu3, color='b', label='Blue')
+    plt.plot(lu8, color='black', label='Intensity')
     plt.title("Colors by Location")
     plt.xlabel("Location")
     plt.ylabel("Intensity")
