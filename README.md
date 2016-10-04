@@ -103,6 +103,7 @@ Alternatively, you can download the python wheel package from [Coliform PyPI](ht
 * Version 0.5.3
   - Minor Update:
     - Fixed GUI formatting.
+
 #Usage
 ##Imports
 The following imports are used:
