@@ -13,6 +13,7 @@ import matplotlib.pyplot as plt
 import matplotlib.colors as colors
 import numpy as np
 from fractions import Fraction
+import subprocess
 
 
 def takePicture():
@@ -42,14 +43,27 @@ def takePictureLow():
             return rgb_array
 
 
-# noinspection PyTypeChecker
-def returnIntensity(rgb_array):
-    red_avg = np.mean((rgb_array[..., 0].flatten())*(100/255))
-    green_avg = np.mean((rgb_array[..., 1].flatten())*(100/255))
-    blue_avg = np.mean((rgb_array[..., 2].flatten())*(100/255))
+def returnIntensity(rgb_array, color='all'):
+    red_avg = np.mean(rgb_array[..., 0].flatten())
+    green_avg = np.mean(rgb_array[..., 1].flatten())
+    blue_avg = np.mean(rgb_array[..., 2].flatten())
     img_hsv = colors.rgb_to_hsv(rgb_array[..., :3])
-    intensity_avg = np.mean((img_hsv[..., 2].flatten())*(100/255))
-    return red_avg, green_avg, blue_avg, intensity_avg
+    intensity_avg = np.mean(img_hsv[..., 2].flatten())
+    if color in ['all', 'a']:
+        return red_avg, green_avg, blue_avg, intensity_avg
+    elif color in ['r', 'red']:
+        return red_avg
+    elif color in ['g', 'green']:
+        return green_avg
+    elif color in ['b', 'blue']:
+        return blue_avg
+    elif color in ['intensity', 'int']:
+        return intensity_avg
+    elif color in ['rgb', 'red, green, blue']:
+        return red_avg, green_avg, blue_avg
+    else:
+        raise ValueError("Color parameter not recognized, please type one of the following: 'a', for all colors,"
+                         " 'b' for blue, 'r' for red, 'g' for green, or 'int' for intensity")
 
 
 def showImage(rgb_array):
@@ -57,31 +71,40 @@ def showImage(rgb_array):
     plt.show()
 
 
+def detectCamera():
+    c = subprocess.check_output(['vcgencmd', 'get_camera'])
+    value = int(c.decode().replace('\n', '').rstrip('detected=')[1])
+    return value
+
+
+def setImageColor(rgb_array, color):
+    if color in ['b', 'blue']:
+        rgb_array[..., 0] *= 0
+        rgb_array[..., 1] *= 0
+    elif color in ['g', 'green']:
+        rgb_array[..., 0] *= 0
+        rgb_array[..., 2] *= 0
+    elif color in ['r', 'red']:
+        rgb_array[..., 1] *= 0
+        rgb_array[..., 2] *= 0
+    else:
+        raise ValueError("Output color error: You need to specify which output you want from: 'r', 'g' or 'b'")
+    return rgb_array
+
+
 def showPlot(rgb_array):
     img_hsv = colors.rgb_to_hsv(rgb_array[..., :3])
-    lu1 = rgb_array[..., 0].flatten()
+    lu1 = setImageColor(rgb_array, 'r')
     plt.subplot2grid((2, 4), (0, 0))
-    plt.plot(lu1, color='r', label='Red', linestyle='-')
-    plt.title("Red by Location")
-    plt.xlabel("Location")
-    plt.ylabel("Value")
-    plt.legend()
+    plt.imshow(lu1)
 
-    lu2 = rgb_array[..., 1].flatten()
+    lu2 = setImageColor(rgb_array, 'g')
     plt.subplot2grid((2, 4), (0, 1))
-    plt.plot(lu2, color='g', label='Green', linestyle='-')
-    plt.title("Green by Location")
-    plt.xlabel("Location")
-    plt.ylabel("Value")
-    plt.legend()
+    plt.imshow(lu2)
 
-    lu3 = rgb_array[..., 2].flatten()
+    lu3 = setImageColor(rgb_array, 'b')
     plt.subplot2grid((2, 4), (0, 2))
-    plt.plot(lu3, color='b', label='Blue', linestyle='-')
-    plt.title("Blue by Location")
-    plt.xlabel("Location")
-    plt.ylabel("Value")
-    plt.legend()
+    plt.imshow(lu3)
 
     lu4 = img_hsv[..., 2].flatten()
     plt.subplot2grid((2, 4), (0, 3))

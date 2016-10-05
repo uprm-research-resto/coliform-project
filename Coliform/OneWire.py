@@ -16,11 +16,11 @@ GUI.startGUI()
 '''
 
 
-def getTemp(id):
+def getTemp(identifier):
     try:
         mytemp = ''
         filename = 'w1_slave'
-        f = open(id + '/' + filename, 'r')
+        f = open(identifier + '/' + filename, 'r')
         line = f.readline()  # read 1st line
         crc = line.rsplit(' ', 1)
         crc = crc[1].replace('\n', '')
@@ -47,9 +47,9 @@ def getTempList():
     temperature_raw = []
     temperaturesstr = []
     ids = getOneWireID()
-    for id in ids:
-        tempvalue = '{:.3f}'.format(getTemp(id) / float(1000))
+    for identifier in ids:
+        tempvalue = '{:.3f}'.format(getTemp(identifier) / float(1000))
         temperature_raw.append(tempvalue)
         temperaturesstr.append(tempvalue + ' C')
     temperature_degrees_string = '\n'.join(temperaturesstr)
-    return (temperature_degrees_string, temperature_raw)
+    return temperature_degrees_string, temperature_raw

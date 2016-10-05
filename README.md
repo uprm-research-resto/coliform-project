@@ -24,6 +24,7 @@ Download page: [![PyPI Version](https://img.shields.io/pypi/v/coliform.svg)](htt
   * [Contact](#contact)
 
 #Installation
+For instructions on how to setup RPi watch: [Getting started with NOOBS](https://vimeo.com/90518800)
 
 Before installing, you need to make sure you have [pip](https://pip.pypa.io/en/stable/installing/) installed, as it is required in order to install this module.
 
@@ -36,23 +37,19 @@ If you are running the code on Linux, Windows or Mac PC, for testing or other pu
 Linux/Mac:
 ```bash
 sudo pip install Coliform
-sudo pip install fakeRPiGPIO
 ```
 Windows:
 ```bash
-python -m pip install fakeRPiGPIO
 python -m pip install Coliform
 ```
-The reason is you need [fakeRPiGPIO](https://github.com/ArmlessJohn404/fakeRPiGPIO) module in order to "emulate" the [RPi.GPIO](https://pypi.python.org/pypi/RPi.GPIO) module of the RPi.
-
-Alternatively, you can download the python wheel package from [Coliform PyPI](https://pypi.python.org/pypi/Coliform) and python source from [fakeRPiGPIO PyPI](https://pypi.python.org/pypi/fakeRPiGPIO)
+Warning: As of version 0.5.3 only MultiPlot and ArduCAM libraries are compatible on systems other than RPi. 
 
 #Requirements
 * [pyserial](https://github.com/pyserial/pyserial) (only required if you need to use Arduino/ArduCAM)
 * [Pillow](https://github.com/python-pillow/Pillow) (not required after version 0.5.3)
 * [matplotlib](https://github.com/matplotlib/matplotlib)
 * [picamera](https://github.com/waveform80/picamera)
-* [RPi.GPIO](https://pypi.python.org/pypi/RPi.GPIO) (when running on RPi) or [fakeRPiGPIO](https://github.com/ArmlessJohn404/fakeRPiGPIO) (when not running on RPi)
+* [RPi.GPIO](https://pypi.python.org/pypi/RPi.GPIO)
 
 #Changelog
 * Version 0.1
@@ -103,6 +100,13 @@ Alternatively, you can download the python wheel package from [Coliform PyPI](ht
 * Version 0.5.3
   - Minor Update:
     - Fixed GUI formatting.
+* Version 0.6
+  - Major Update:
+    - Canged intensity display range to 0-256
+    - Fixed old formatting issues from OneWire module
+    - Code restructuring for better fit good programming practices
+    - Added image 'colorscaling' and functionality to various RPiCamera functions
+    - Added more RPiCamera functions that better manage rgb data
 
 #Usage
 ##Imports
@@ -173,6 +177,76 @@ The second value ```TemperatureRawNumbers``` gives a list of temperature numbers
 ```
 
 ##RPiCamera
+These functions use [picamera](https://github.com/waveform80/picamera), 
+for more information on how to use the Camera and addtional usage, visit picamera [documentation](https://picamera.readthedocs.io/en/release-1.12/).
+
+Here is a sample code to take a picture and show image taken. Current resolution is 1024 x 1008
+```python
+from Coliform import RPiCamera
+
+# Takes picture after a 2 sec delay, and returns array to rgb_array variable
+rgb_array = RPiCamera.takePicture()
+
+# Show image taken
+RPiCamera.showImage(rgb_array)
+
+
+```
+
+Now, to display an image with only green values in low light environment, we use:
+```python
+from Coliform import RPi.Camera
+
+# Takes picture after a 30 sec delay, and returns array to rgb_array variable
+# The following parameters are set: ISO(300), shutter speed(6 seconds), framerate(1/6), set exposure to off.
+rgb_array_lowlight = RPiCamera.takePictureLow()
+
+# Display only set color for the image, color choices are, for red: 'r' or 'red', green: 'g' or 'green', and blue: 'b' or 'blue'
+# This requires an rgb image array, which is provided from the picture taken above and stored in rgb_array_lowlight
+g_array = RPiCamera.setImageColor(rgb_array_lowlight, 'g')
+
+# Displays image provided by the green rgb array. A 'greensacle' image
+RPiCamera.showImage(g_array)
+
+```
+
+In order to get intensity values from the previous example, the following can be used:
+```python
+# Continuing from previous example
+# Returns green intensity average value between range 0-256
+green_intensity_avg = RPiCamera.returnIntensity(rgb_array_lowlight, 'g')
+
+# Returns red intensity average value for the same range as described above
+red_intensity_avg = RPiCamera.returnIntensity(rgb_array_lowlight, 'r')
+
+# Returns blue intensity average value for the same range as described above
+blue_intensity_avg = RPiCamera.returnIntensity(rgb_array_lowlight, 'b')
+
+# Returns overall "Brightness" intensity value, for the same range as described above
+overall_intensity_avg = RPiCamera.returnIntensity(rgb_array_lowlight, 'intensity')
+
+# Or if we want to get all rgb and overall intensity values at the same time:
+red_avg, green_avg, blue_avg, intensity_avg = RPiCamera.returnIntensity(rgb_array_lowlight)
+
+# If we only want to get all rgb values at the same time:
+red_avg, green_avg, blue_avg = RPiCamera.returnIntensity(rgb_array_lowlight, 'rgb')
+```
+
+In order to display plots containing histograms of red, green, blue raw data, along with redscale, greenscale, and bluescale images, we use the following:
+```python
+# Continuing from low light example
+# Shows histograms and colorscaled images
+RPiCamera.showPlot(rgb_array_lowlight)
+
+```
+```python
+if RPiCamera.detectCamera():
+    print('Camera is found')
+else:
+    print('Camera not found')
+```
+
+For further image processing, consider using [scipy](https://github.com/scipy/scipy) and [numpy](https://github.com/numpy/numpy) python libraries, for image manipulation as described here: [Advanced image processing using scipy and numpy](http://www.scipy-lectures.org/advanced/image_processing/)
 
 ##RPiGPIO
 Both RPiGPIO use GPIO.PWM class from [RPi.GPIO](https://pypi.python.org/pypi/RPi.GPIO). 

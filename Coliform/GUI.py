@@ -21,6 +21,12 @@ from Coliform import GUI
 use as:
 GUI.startGUI()
 '''
+# Defining global variables
+PUMPPWM = None
+HEATPWM = None
+rgb_array = None
+ids = []
+TemperatureNumber = None
 
 
 def startGUI():
@@ -74,11 +80,15 @@ def startGUI():
             TemperatureDegrees, TemperatureNumber = OneWire.getTempList()
             templabel.config(text=TemperatureDegrees)
             MultiPlot.GeneratePlotDataFile(tf, TemperatureNumber, start_time)
-            if ids == []:
+            if not ids:
                 TempSensorPowerStatus.set('Temp. Sensor OFF')
                 templabel.config(text='NULL')
             else:
                 TempSensorPowerStatus.set('Temp. Sensor ON')
+            if RPiCamera.detectCamera():
+                CameraStatus.set('Connected')
+            else:
+                CameraStatus.set('Disconnected')
             templabel.after(1000, onewireon)
         except IndexError:
             pass
@@ -175,10 +185,12 @@ def startGUI():
     PumpPowerStatus = StringVar()
     HeaterPowerStatus = StringVar()
     TempSensorPowerStatus = StringVar()
+    CameraStatus = StringVar()
     pumpintensity = StringVar()
 
     HeaterPowerStatus.set('Heater OFF')
     PumpPowerStatus.set("Pump OFF")
+    CameraStatus.set('Disconnected')
 
     masterpane = ttk.Panedwindow(mainframe, orient=VERTICAL)
 
