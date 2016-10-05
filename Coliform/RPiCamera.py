@@ -13,7 +13,6 @@ import matplotlib.pyplot as plt
 import matplotlib.colors as colors
 import numpy as np
 from fractions import Fraction
-import subprocess
 
 
 def takePicture():
@@ -71,12 +70,6 @@ def showImage(rgb_array):
     plt.show()
 
 
-def detectCamera():
-    c = subprocess.check_output(['vcgencmd', 'get_camera'])
-    value = int(c.decode().replace('\n', '').rstrip('detected=')[1])
-    return value
-
-
 def setImageColor(rgb_array, color):
     if color in ['b', 'blue']:
         rgb_array[..., 0] *= 0
@@ -93,55 +86,43 @@ def setImageColor(rgb_array, color):
 
 
 def showPlot(rgb_array):
-    img_hsv = colors.rgb_to_hsv(rgb_array[..., :3])
-    lu1 = setImageColor(rgb_array, 'r')
-    plt.subplot2grid((2, 4), (0, 0))
+    # img_hsv = colors.rgb_to_hsv(rgb_array[..., :3])
+    rgb_array_red = rgb_array * 1
+    rgb_array_green = rgb_array * 1
+    rgb_array_blue = rgb_array * 1
+    rgb_array_hist = rgb_array
+    lu1 = setImageColor(rgb_array_red, 'r')
+    plt.subplot2grid((2, 3), (0, 0))
     plt.imshow(lu1)
 
-    lu2 = setImageColor(rgb_array, 'g')
-    plt.subplot2grid((2, 4), (0, 1))
+    lu2 = setImageColor(rgb_array_green, 'g')
+    plt.subplot2grid((2, 3), (0, 1))
     plt.imshow(lu2)
 
-    lu3 = setImageColor(rgb_array, 'b')
-    plt.subplot2grid((2, 4), (0, 2))
+    lu3 = setImageColor(rgb_array_blue, 'b')
+    plt.subplot2grid((2, 3), (0, 2))
     plt.imshow(lu3)
 
-    lu4 = img_hsv[..., 2].flatten()
-    plt.subplot2grid((2, 4), (0, 3))
-    plt.plot(lu4, color='k', label='Intensity', linestyle='-')
-    plt.title("Intensity by Location")
-    plt.xlabel("Location")
-    plt.ylabel("Value")
-    plt.legend()
-
-    lu5 = rgb_array[..., 0].flatten()
-    plt.subplot2grid((2, 4), (1, 0))
-    plt.hist(lu5, bins=256, range=(0, 256), histtype='stepfilled', color='r', label='Red')
+    lu4 = rgb_array_hist[..., 0].flatten()
+    plt.subplot2grid((2, 3), (1, 0))
+    plt.hist(lu4, bins=256, range=(0, 256), histtype='stepfilled', color='r', label='Red')
     plt.title("Red")
     plt.xlabel("Value")
     plt.ylabel("Frequency")
     plt.legend()
 
-    lu6 = rgb_array[..., 1].flatten()
-    plt.subplot2grid((2, 4), (1, 1))
-    plt.hist(lu6, bins=256, range=(0, 256), histtype='stepfilled', color='g', label='Green')
+    lu5 = rgb_array_hist[..., 1].flatten()
+    plt.subplot2grid((2, 3), (1, 1))
+    plt.hist(lu5, bins=256, range=(0, 256), histtype='stepfilled', color='g', label='Green')
     plt.title("Green")
     plt.xlabel("Value")
     plt.ylabel("Frequency")
     plt.legend()
 
-    lu7 = rgb_array[..., 2].flatten()
-    plt.subplot2grid((2, 4), (1, 2))
-    plt.hist(lu7, bins=256, range=(0, 256), histtype='stepfilled', color='b', label='Blue')
+    lu6 = rgb_array_hist[..., 2].flatten()
+    plt.subplot2grid((2, 3), (1, 2))
+    plt.hist(lu6, bins=256, range=(0, 256), histtype='stepfilled', color='b', label='Blue')
     plt.title("Blue")
-    plt.xlabel("Value")
-    plt.ylabel("Frequency")
-    plt.legend()
-
-    lu8 = img_hsv[..., 2].flatten()
-    plt.subplot2grid((2, 4), (1, 3))
-    plt.hist(lu8, bins=256, range=(0, 256), histtype='stepfilled', color='k', label='Intesity')
-    plt.title("Intensity")
     plt.xlabel("Value")
     plt.ylabel("Frequency")
     plt.legend()

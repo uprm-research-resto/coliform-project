@@ -85,10 +85,6 @@ def startGUI():
                 templabel.config(text='NULL')
             else:
                 TempSensorPowerStatus.set('Temp. Sensor ON')
-            if RPiCamera.detectCamera():
-                CameraStatus.set('Connected')
-            else:
-                CameraStatus.set('Disconnected')
             templabel.after(1000, onewireon)
         except IndexError:
             pass
@@ -185,12 +181,10 @@ def startGUI():
     PumpPowerStatus = StringVar()
     HeaterPowerStatus = StringVar()
     TempSensorPowerStatus = StringVar()
-    CameraStatus = StringVar()
     pumpintensity = StringVar()
 
     HeaterPowerStatus.set('Heater OFF')
     PumpPowerStatus.set("Pump OFF")
-    CameraStatus.set('Disconnected')
 
     masterpane = ttk.Panedwindow(mainframe, orient=VERTICAL)
 

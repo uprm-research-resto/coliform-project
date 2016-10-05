@@ -61,10 +61,10 @@ Warning: As of version 0.5.3 only MultiPlot and ArduCAM libraries are compatible
   - Major Update: 
     - Added MultiPlot and GPIO
     - Revamped OneWire and ArduCAM
-    - Added PyPI Cassifiers
+    - Added PyPI Classifiers
 * Version 0.2.1
   - Minor Update:
-    - Transfered Project GUI into Coliform module
+    - Transferred Project GUI into Coliform module
 * Version 0.2.2
   - Minor Update:
     - Added GPL License classifiers.
@@ -102,11 +102,14 @@ Warning: As of version 0.5.3 only MultiPlot and ArduCAM libraries are compatible
     - Fixed GUI formatting.
 * Version 0.6
   - Major Update:
-    - Canged intensity display range to 0-256
+    - Changed intensity display range to 0-256
     - Fixed old formatting issues from OneWire module
     - Code restructuring for better fit good programming practices
     - Added image 'colorscaling' and functionality to various RPiCamera functions
     - Added more RPiCamera functions that better manage rgb data
+* Version 0.6.1
+  - Hotfix:
+    - Fixed plots grid layout, and eliminated camera detection indicator because of critical error.
 
 #Usage
 ##Imports
@@ -238,12 +241,6 @@ In order to display plots containing histograms of red, green, blue raw data, al
 # Shows histograms and colorscaled images
 RPiCamera.showPlot(rgb_array_lowlight)
 
-```
-```python
-if RPiCamera.detectCamera():
-    print('Camera is found')
-else:
-    print('Camera not found')
 ```
 
 For further image processing, consider using [scipy](https://github.com/scipy/scipy) and [numpy](https://github.com/numpy/numpy) python libraries, for image manipulation as described here: [Advanced image processing using scipy and numpy](http://www.scipy-lectures.org/advanced/image_processing/)
