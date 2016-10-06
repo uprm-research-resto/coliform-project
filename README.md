@@ -63,6 +63,7 @@ From the Desktop:
 * Raspberry Pi Configuration
 * Interfaces
 * Enable Camera, 1-wire, SSH, and Remote GPIO, then click OK
+
 ##Remote Programming using PC
 In order to run programs in the Raspberry Pi from your Windows, Linux, or Mac PC, you need to setup an ssh connection. You can do this with PyCharm IDE, following this: [Remote Programming of Raspberry Pi using PyCharm](http://www.codeproject.com/Tips/987276/Remote-Programming-of-RaspberryPi-using-PyCharm)
 RPi default login:
