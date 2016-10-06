@@ -228,6 +228,8 @@ MultiPlot.SaveToCsv(fileinput, fileoutput, filepath, y_amount)
 MultiPlot.Plot(textfile, y_amount)
 
 ```
+Sample Plot, using 3 OneWires:
+![Sample Plot](https://s18.postimg.org/3vzojmw6x/figure_0.png)
 
 ##ArduCAM
 ```python
