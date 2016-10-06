@@ -183,7 +183,7 @@ Where black, is ground, red is power (3.3V), and yellow is the digital signal. Y
 
 In order to detect OneWires, using the w1-gpio kernel driver, the GPIO4 pin has to be setup to recieve the information from them, in order to do this open the RPi terminal and do the following:
 
-* Type: ```sudo nado /boot/config.txt```
+* Type: ```sudo nano /boot/config.txt```
 * Add: ```dtoverlay=w1-gpio,gpiopin=4``` to the end of the file.
 * Press: ```Ctrl + X``` followed by ```y``` and ```ENTER``` or ```RETURN```
 * After this, type: ```sudo reboot``` and wait for RPi to reboot, for changes to be applied.
