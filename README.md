@@ -229,7 +229,7 @@ MultiPlot.Plot(textfile, y_amount)
 
 ```
 Sample Plot, using 3 OneWires:
-![Sample Plot](https://s18.postimg.org/3vzojmw6x/figure_0.png)
+![Sample Plot](https://camo.githubusercontent.com/3bd6ff556987cee682ff93436b6a2ea167a73228/68747470733a2f2f7331382e706f7374696d672e6f72672f33767a6f6a6d7736782f6669677572655f302e706e67)
 
 ##ArduCAM
 ```python
