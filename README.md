@@ -39,6 +39,8 @@ Learn Python:
 * [SoloLearn Python Course](https://www.sololearn.com/Course/Python/)
 * [Python 3 Programming Introduction](https://pythonprogramming.net/introduction-to-python-programming/)
 * [Non-Programmers Tutorial for Python 3](https://en.wikibooks.org/wiki/Non-Programmer%27s_Tutorial_for_Python_3)
+* [List of Python Tutorials](http://docs.python-guide.org/en/latest/intro/learning/)
+* [Official Python Tutorial](https://docs.python.org/3/tutorial/index.html)
 
 #Installation
 ## Setup RPi and install Coliform library
