@@ -98,13 +98,18 @@ sudo raspi-config
 ```
 Go to Advanced Options > ssh > enable. After this, do check the config file:
 ```bash
-cat /etc/ssh/sshd-config
+sudo nano /etc/ssh/sshd-config
 ```
 Two of the lines of the file should show:
 ```bash
 X11Forwarding yes
 ```
 On your linux or mac computer:
+Check:
+```bash
+/etc/ssh/ssh-config
+```
+
 ```bash
 ForwardAgent yes
 ForwardX11 yes
