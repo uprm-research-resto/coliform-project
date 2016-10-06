@@ -301,7 +301,9 @@ RPiCamera.showPlot(rgb_array_lowlight)
 
 ```
 
-For further image processing, consider using [scipy](https://github.com/scipy/scipy) and [numpy](https://github.com/numpy/numpy) python libraries, for image manipulation as described here: [Advanced image processing using scipy and numpy](http://www.scipy-lectures.org/advanced/image_processing/)
+For further image processing and display, consider using [scipy](https://github.com/scipy/scipy), [numpy](https://github.com/numpy/numpy), and [matplotlib](https://github.com/matplotlib/matplotlib) python libraries, for image manipulation and display as described here:
+  - [Advanced image processing using scipy and numpy](http://www.scipy-lectures.org/advanced/image_processing/)
+  - [Image tutorial matplotlib](http://matplotlib.org/users/image_tutorial.html)
 
 ##RPiGPIO
 Both RPiGPIO use GPIO.PWM class from [RPi.GPIO](https://pypi.python.org/pypi/RPi.GPIO). 
