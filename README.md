@@ -11,7 +11,10 @@ Download page: [![PyPI Version](https://img.shields.io/pypi/v/coliform.svg)](htt
 
 * [Coliform Project](#coliform-project)
   * [Table of contents](#table-of-contents)
+  * [Setting up your IDE](#setting-up-your-ide)
   * [Installation](#installation)
+    * [Setup RPi and install Coliform library](#setup-rpi-and-install-coliform-library)
+    * [Remote programming using PC](#remote-programming-using-pc)
   * [Requirements](#requirements)
   * [Changelog](#changelog)
   * [Usage](#usage)
@@ -23,8 +26,23 @@ Download page: [![PyPI Version](https://img.shields.io/pypi/v/coliform.svg)](htt
     * [GUI](#gui)
   * [Contact](#contact)
 
+#Setting up your IDE
+Download [Python 3](https://www.python.org/downloads/)
+
+If you wish to install a python IDE on your computer, install PyCharm, for more information follow: 
+
+* [Get PyCharm Pro](https://www.jetbrains.com/shop/eform/students) (For Students and Professors)
+* [Getting Started with PyCharm](https://www.youtube.com/watch?v=BPC-bGdBSM8&list=PLQ176FUIyIUZ1mwB-uImQE-gmkwzjNLjP)
+
+Learn Python: 
+
+* [SoloLearn Python Course](https://www.sololearn.com/Course/Python/)
+* [Python 3 Programming Introduction](https://pythonprogramming.net/introduction-to-python-programming/)
+* [Non-Programmers Tutorial for Python 3](https://en.wikibooks.org/wiki/Non-Programmer%27s_Tutorial_for_Python_3)
+
 #Installation
-For instructions on how to setup RPi watch: [Getting started with NOOBS](https://vimeo.com/90518800)
+## Setup RPi and install Coliform library
+For instructions on how to setup RPi watch: [Getting started with NOOBS](https://www.youtube.com/watch?v=Ntmek1DDRrM)
 
 Before installing, you need to make sure you have [pip](https://pip.pypa.io/en/stable/installing/) installed, as it is required in order to install this module.
 
@@ -32,17 +50,49 @@ In Raspberry Pi, or Linux Type the following into terminal:
 ```bash
 sudo pip3 install Coliform
 ```
-If you are running the code on Linux, Windows or Mac PC, for testing or other purposes, you need to run the following code in terminal, or CMD depending on your OS:
+Or to upgrade an existing install:
+```bash
+sudo pip3 install -U Coliform
+```
+Now we need to enable Camera, 1-wire, SSH, and Remote GPIO:
 
-Linux/Mac:
+From the Desktop:
+
+* Click on Menu
+* Preferences
+* Raspberry Pi Configuration
+* Interfaces
+* Enable Camera, 1-wire, SSH, and Remote GPIO, then click OK
+##Remote Programming using PC
+In order to run programs in the Raspberry Pi from your Windows, Linux, or Mac PC, you need to setup an ssh connection. You can do this with PyCharm IDE, following this: [Remote Programming of Raspberry Pi using PyCharm](http://www.codeproject.com/Tips/987276/Remote-Programming-of-RaspberryPi-using-PyCharm)
+RPi default login:
 ```bash
-sudo pip install Coliform
+Username: pi
+Password: raspberry
 ```
-Windows:
+Additionally you need to install [Xming](http://people.arsc.edu/~murakami/xming/) on Windows.
+
+If you have any errors do the run the following on RPi terminal:
+
 ```bash
-python -m pip install Coliform
+sudo raspi-config
 ```
-Warning: As of version 0.5.3 only MultiPlot and ArduCAM libraries are compatible on systems other than RPi. 
+Go to Advanced Options > ssh > enable. After this, do a ssh restart and check the config file:
+```bash
+sudo service ssh restart
+cat /etc/ssh/ssh-config
+```
+One of the lines of the file should show:
+```bash
+X11ForwardingTrusted yes
+```
+Try to run a program again, if you still get an error:
+Go to PyCharm > Run > Edit Configurations > Environment Variables, add:
+```bash
+Name        Value
+DISPLAY     localhost:10
+```
+
 
 #Requirements
 * [pyserial](https://github.com/pyserial/pyserial) (only required if you need to use Arduino/ArduCAM)
@@ -169,6 +219,14 @@ The second value ```TemperatureRawNumbers``` gives a list of temperature numbers
 ['21.312','32.321','43.232']
 ```
 ##MultiPlot
+```python
+from Coliform import MultiPlot
+
+MultiPlot.GeneratePlotDataFile(textfile, y_values, start_time)
+MultiPlot.SaveToCsv(fileinput, fileoutput, filepath, y_amount)
+MultiPlot.Plot(textfile, y_amount)
+
+```
 
 ##ArduCAM
 ```python
