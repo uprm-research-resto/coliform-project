@@ -47,6 +47,12 @@ Learn Python:
 For instructions on how to setup RPi watch: [Getting started with NOOBS](https://www.youtube.com/watch?v=Ntmek1DDRrM)
 
 Before installing, you need to make sure you have [pip](https://pip.pypa.io/en/stable/installing/) installed, as it is required in order to install this module.
+To install pip you can type the following into terminal:
+```bash
+curl -O https://bootstrap.pypa.io/get-pip.py
+   
+sudo python3 get-pip.py
+```
 
 In Raspberry Pi, or Linux Type the following into terminal:
 ```bash
