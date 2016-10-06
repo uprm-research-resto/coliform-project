@@ -5,7 +5,7 @@ Written for Raspberry Pi(RPi) in Python 3.
 
 Download page: [![PyPI Version](https://img.shields.io/pypi/v/coliform.svg)](https://pypi.python.org/pypi/Coliform)
 
-
+For information about packaging and distributing your library to PyPi: [Packaging and Distributing Guide](https://packaging.python.org/distributing/)
 
 #Table of contents
 
