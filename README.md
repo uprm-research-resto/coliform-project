@@ -72,6 +72,16 @@ From the Desktop:
 * Interfaces
 * Enable Camera, 1-wire, SSH, and Remote GPIO, then click OK
 
+If when running a code you get a matplotlib error, type this into terminal:
+```bash
+sudo apt install python3-cairocffi
+```
+If you still have the error after this:
+```bash
+sudo apt install python3-matplotlib
+```
+
+
 ##Remote Programming using PC
 In order to run programs in the Raspberry Pi from your Windows, Linux, or Mac PC, you need to setup an ssh connection. You can do this with PyCharm IDE, following this: [Remote Programming of Raspberry Pi using PyCharm](http://www.codeproject.com/Tips/987276/Remote-Programming-of-RaspberryPi-using-PyCharm)
 RPi default login:
@@ -86,15 +96,20 @@ If you have any errors do the run the following on RPi terminal:
 ```bash
 sudo raspi-config
 ```
-Go to Advanced Options > ssh > enable. After this, do a ssh restart and check the config file:
+Go to Advanced Options > ssh > enable. After this, do check the config file:
 ```bash
-sudo service ssh restart
-cat /etc/ssh/ssh-config
+cat /etc/ssh/sshd-config
 ```
-One of the lines of the file should show:
+Two of the lines of the file should show:
 ```bash
-X11ForwardingTrusted yes
+X11Forwarding yes
 ```
+On your linux or mac computer:
+```bash
+ForwardAgent yes
+ForwardX11 yes
+```
+
 Try to run a program again, if you still get an error:
 Go to PyCharm > Run > Edit Configurations > Environment Variables, add:
 ```bash
@@ -102,6 +117,8 @@ Name        Value
 DISPLAY     localhost:10
 ```
 
+If you still get errors, read additional [X11 Forwarding Debugging](http://www.seas.upenn.edu/cets/answers/x11-forwarding.html)
+Additional information on setting up SSH: [Oracle Global Desktop Administration](https://docs.oracle.com/cd/E19351-01/821-1926/z40001c51312870.html#z40001c51375313)
 
 #Requirements
 * [pyserial](https://github.com/pyserial/pyserial) (only required if you need to use Arduino/ArduCAM)
@@ -178,6 +195,7 @@ from Coliform import OneWire, Pump, ArduCAM, MultiPlot, Heater
 from Coliform import GUI
 ```
 The first is for all functions, but the GUI, and the second is to import the GUI function.
+
 ##OneWire
 ###Setup
 These group of functions allow you to detect one or multiple OneWires, get their address and display their respective temperature. This code was written and tested for [DS18B20](https://www.maximintegrated.com/en/products/analog/sensors-and-sensor-interface/DS18B20.html/tb_tab0) OneWires.
