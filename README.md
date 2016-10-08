@@ -29,6 +29,8 @@ For information about packaging and distributing your library to PyPi: [Packagin
 #Setting up your IDE
 Download [Python 3](https://www.python.org/downloads/)
 
+Important Note: When installing python 3, please click on Add to PATH, before continuing with install.
+
 If you wish to install a python IDE on your computer, install PyCharm, for more information follow: 
 
 * [Get PyCharm Pro](https://www.jetbrains.com/shop/eform/students) (For Students and Professors)
@@ -81,9 +83,11 @@ If you still have the error after this:
 sudo apt install python3-matplotlib
 ```
 
-
 ##Remote Programming using PC
 In order to run programs in the Raspberry Pi from your Windows, Linux, or Mac PC, you need to setup an ssh connection. You can do this with PyCharm IDE, following this: [Remote Programming of Raspberry Pi using PyCharm](http://www.codeproject.com/Tips/987276/Remote-Programming-of-RaspberryPi-using-PyCharm)
+
+For Windows, download: [OpenSSH](https://www.mls-software.com/opensshd.html) and [Xming](http://people.arsc.edu/~murakami/xming/), before setting up on PyCharm.
+
 RPi default login:
 ```bash
 Username: pi
