@@ -64,6 +64,15 @@ Or to upgrade an existing install:
 ```bash
 sudo pip3 install -U Coliform
 ```
+
+After installing Coliform, type this into terminal:
+```bash
+sudo apt install python3-cairocffi
+```
+If you still have the error after this:
+```bash
+sudo apt install python3-matplotlib
+```
 Now we need to enable Camera, 1-wire, SSH, and Remote GPIO:
 
 From the Desktop:
@@ -73,15 +82,6 @@ From the Desktop:
 * Raspberry Pi Configuration
 * Interfaces
 * Enable Camera, 1-wire, SSH, and Remote GPIO, then click OK
-
-If when running a code you get a matplotlib error, type this into terminal:
-```bash
-sudo apt install python3-cairocffi
-```
-If you still have the error after this:
-```bash
-sudo apt install python3-matplotlib
-```
 
 ##Remote Programming using PC
 Guide still in progress...

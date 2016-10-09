@@ -67,7 +67,9 @@ def returnIntensity(rgb_array, color='all'):
 
 def showImage(rgb_array):
     plt.imshow(rgb_array)
-    plt.show()
+    f1 = plt.figure(1)
+    f1.canvas.set_window_title('Image Capture')
+    f1.show()
 
 
 def setImageColor(rgb_array, color):
@@ -127,4 +129,6 @@ def showPlot(rgb_array):
     plt.legend()
 
     # plt.hist((rgb_array).ravel(), bins=256, range=(0,1), fc = 'k', ec = 'k')
-    plt.show()
+    f2 = plt.figure(2)
+    f2.canvas.set_window_title('RGB Plots')
+    f2.show()
