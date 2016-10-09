@@ -46,9 +46,9 @@ Learn Python:
 
 #Installation
 ## Setup RPi and install Coliform library
-For instructions on how to setup RPi watch: [Getting started with NOOBS](https://www.youtube.com/watch?v=Ntmek1DDRrM)
+For instructions on how to setup RPi watch: [Getting started with NOOBS](https://youtu.be/-6OGuhLtKbU?t=684)
 
-Before installing, you need to make sure you have [pip](https://pip.pypa.io/en/stable/installing/) installed, as it is required in order to install this module.
+Before installing, you need to make sure you have pip installed, as it is required in order to install this module.
 To install pip you can type the following into terminal:
 ```bash
 curl -O https://bootstrap.pypa.io/get-pip.py
@@ -84,46 +84,35 @@ sudo apt install python3-matplotlib
 ```
 
 ##Remote Programming using PC
+Guide still in progress...
 In order to run programs in the Raspberry Pi from your Windows, Linux, or Mac PC, you need to setup an ssh connection. You can do this with PyCharm IDE, following this: [Remote Programming of Raspberry Pi using PyCharm](http://www.codeproject.com/Tips/987276/Remote-Programming-of-RaspberryPi-using-PyCharm)
 
-For Windows, download: [OpenSSH](https://www.mls-software.com/opensshd.html) and [Xming](http://people.arsc.edu/~murakami/xming/), before setting up on PyCharm.
+For Windows, download: [OpenSSH](https://www.mls-software.com/opensshd.html) and [MobaXterm](http://mobaxterm.mobatek.net/MobaXterm_Setup_9.3.msi), before setting up on PyCharm.
+
+On Windows make sure to run MobaXterm and open an ssh connection, before opening Pycharm:
 
 RPi default login:
 ```bash
 Username: pi
 Password: raspberry
 ```
-Additionally you need to install [Xming](http://people.arsc.edu/~murakami/xming/) on Windows.
 
 If you have any errors do the run the following on RPi terminal:
 
-```bash
-sudo raspi-config
-```
-Go to Advanced Options > ssh > enable. After this, do check the config file:
+Check the config file in RPi:
 ```bash
 sudo nano /etc/ssh/sshd-config
 ```
-Two of the lines of the file should show:
+A line on the file should show:
 ```bash
 X11Forwarding yes
-```
-On your linux or mac computer:
-Check:
-```bash
-/etc/ssh/ssh-config
-```
-
-```bash
-ForwardAgent yes
-ForwardX11 yes
 ```
 
 Try to run a program again, if you still get an error:
 Go to PyCharm > Run > Edit Configurations > Environment Variables, add:
 ```bash
 Name        Value
-DISPLAY     localhost:10
+DISPLAY     raspberrypi:10
 ```
 
 If you still get errors, read additional [X11 Forwarding Debugging](http://www.seas.upenn.edu/cets/answers/x11-forwarding.html)

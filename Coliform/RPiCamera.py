@@ -86,7 +86,6 @@ def setImageColor(rgb_array, color):
 
 
 def showPlot(rgb_array):
-    # img_hsv = colors.rgb_to_hsv(rgb_array[..., :3])
     rgb_array_red = rgb_array * 1
     rgb_array_green = rgb_array * 1
     rgb_array_blue = rgb_array * 1
