@@ -84,18 +84,27 @@ From the Desktop:
 * Enable Camera, 1-wire, SSH, and Remote GPIO, then click OK
 
 ##Remote Programming using PC
-Guide still in progress...
-In order to run programs in the Raspberry Pi from your Windows, Linux, or Mac PC, you need to setup an ssh connection. You can do this with PyCharm IDE, following this: [Remote Programming of Raspberry Pi using PyCharm](http://www.codeproject.com/Tips/987276/Remote-Programming-of-RaspberryPi-using-PyCharm)
-
-For Windows, download: [OpenSSH](https://www.mls-software.com/opensshd.html) and [MobaXterm](http://mobaxterm.mobatek.net/MobaXterm_Setup_9.3.msi), before setting up on PyCharm.
-
-On Windows make sure to run MobaXterm and open an ssh connection, before opening Pycharm:
-
+###Remote Desktop
 RPi default login:
 ```bash
 Username: pi
 Password: raspberry
 ```
+
+Connect Remotely to RPi desktop using Mac: [Remote connection to Raspberry Pi 3, Mac](https://www.youtube.com/watch?v=F_eUCMXhvgk)
+
+Connect Remotely to RPi using Windows: [Connect wirelessly to Raspberry Pi](https://www.youtube.com/watch?v=toWBmUsWD6M)
+
+Connect Remotely to RPi desktop using Windows: [Access Raspberry Pi Desktop (Windows)](https://www.youtube.com/watch?v=OE2FC1aSAqM)
+
+###Using Pycharm (Harder)
+This section is still in progress...
+
+In order to run programs in the Raspberry Pi from your Windows, Linux, or Mac PC, you need to setup an ssh connection. You can do this with PyCharm IDE, following this: [Remote Programming of Raspberry Pi using PyCharm](http://www.codeproject.com/Tips/987276/Remote-Programming-of-RaspberryPi-using-PyCharm)
+
+For Windows, download: [OpenSSH](https://www.mls-software.com/opensshd.html) and [MobaXterm](http://mobaxterm.mobatek.net/MobaXterm_Setup_9.3.msi), before setting up on PyCharm.
+
+On Windows make sure to run MobaXterm and open an ssh connection, before opening Pycharm:
 
 If you have any errors do the run the following on RPi terminal:
 
@@ -116,8 +125,8 @@ DISPLAY     raspberrypi:10
 ```
 
 If you still get errors, read additional [X11 Forwarding Debugging](http://www.seas.upenn.edu/cets/answers/x11-forwarding.html)
+
 Additional information on setting up SSH: [Oracle Global Desktop Administration](https://docs.oracle.com/cd/E19351-01/821-1926/z40001c51312870.html#z40001c51375313)
-Connect Remotely to RPi desktop usign Mac: [Remote connection to Raspberry Pi 3, Mac](https://www.youtube.com/watch?v=F_eUCMXhvgk&t=0s)
 
 #Requirements
 * [pyserial](https://github.com/pyserial/pyserial) (only required if you need to use Arduino/ArduCAM)
@@ -164,7 +173,7 @@ Connect Remotely to RPi desktop usign Mac: [Remote connection to Raspberry Pi 3,
     - Fixed formatting errors and corrupted releases.
     - General debugging for new camera features
 * Version 0.5.1b1 (Beta Version)
-    - Stable tested release.https://www.youtube.com/watch?v=F_eUCMXhvgk&t=0s
+    - Stable tested release.
 * Version 0.5.1
   - Minor Update:
     - Fixed minor errors in previous beta version
@@ -185,7 +194,7 @@ Connect Remotely to RPi desktop usign Mac: [Remote connection to Raspberry Pi 3,
 * Version 0.6.1
   - Hotfix:
     - Fixed plots grid layout, and eliminated camera detection indicator because of critical error.
-https://www.youtube.com/watch?v=F_eUCMXhvgk&t=0s
+
 #Usage
 ##Imports
 The following imports are used:
@@ -233,7 +242,7 @@ TemperatureStringValues, TemperatureRawNumbers = OneWire.getTempList()
 Where the first value, ```TemperatureStringValues``` is a string in the following format, for 3 OneWires:
 ```python
 '21.312 C\n32.321 C\n43.232 C'
-```https://www.youtube.com/watch?v=F_eUCMXhvgk&t=0s
+```
 Which is displayed as:
 ```
    21.312 C
