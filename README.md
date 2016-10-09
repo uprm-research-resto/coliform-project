@@ -84,18 +84,27 @@ sudo apt install python3-matplotlib
 ```
 
 ##Remote Programming using PC
-Guide still in progress...
-In order to run programs in the Raspberry Pi from your Windows, Linux, or Mac PC, you need to setup an ssh connection. You can do this with PyCharm IDE, following this: [Remote Programming of Raspberry Pi using PyCharm](http://www.codeproject.com/Tips/987276/Remote-Programming-of-RaspberryPi-using-PyCharm)
-
-For Windows, download: [OpenSSH](https://www.mls-software.com/opensshd.html) and [MobaXterm](http://mobaxterm.mobatek.net/MobaXterm_Setup_9.3.msi), before setting up on PyCharm.
-
-On Windows make sure to run MobaXterm and open an ssh connection, before opening Pycharm:
-
+###Remote Desktop
 RPi default login:
 ```bash
 Username: pi
 Password: raspberry
 ```
+
+Connect Remotely to RPi desktop using Mac: [Remote connection to Raspberry Pi 3, Mac](https://www.youtube.com/watch?v=F_eUCMXhvgk)
+
+Connect Remotely to RPi using Windows: [Connect wirelessly to Raspberry Pi](https://www.youtube.com/watch?v=toWBmUsWD6M)
+
+Connect Remotely to RPi desktop using Windows: [Access Raspberry Pi Desktop (Windows)](https://www.youtube.com/watch?v=OE2FC1aSAqM)
+
+###Using Pycharm (Harder)
+This section is still in progress...
+
+In order to run programs in the Raspberry Pi from your Windows, Linux, or Mac PC, you need to setup an ssh connection. You can do this with PyCharm IDE, following this: [Remote Programming of Raspberry Pi using PyCharm](http://www.codeproject.com/Tips/987276/Remote-Programming-of-RaspberryPi-using-PyCharm)
+
+For Windows, download: [OpenSSH](https://www.mls-software.com/opensshd.html) and [MobaXterm](http://mobaxterm.mobatek.net/MobaXterm_Setup_9.3.msi), before setting up on PyCharm.
+
+On Windows make sure to run MobaXterm and open an ssh connection, before opening Pycharm:
 
 If you have any errors do the run the following on RPi terminal:
 
@@ -116,8 +125,8 @@ DISPLAY     raspberrypi:10
 ```
 
 If you still get errors, read additional [X11 Forwarding Debugging](http://www.seas.upenn.edu/cets/answers/x11-forwarding.html)
+
 Additional information on setting up SSH: [Oracle Global Desktop Administration](https://docs.oracle.com/cd/E19351-01/821-1926/z40001c51312870.html#z40001c51375313)
-Connect Remotely to RPi desktop usign Mac: [Remote connection to Raspberry Pi 3, Mac](https://www.youtube.com/watch?v=F_eUCMXhvgk&t=0s)
 
 #Requirements
 * [pyserial](https://github.com/pyserial/pyserial) (only required if you need to use Arduino/ArduCAM)
