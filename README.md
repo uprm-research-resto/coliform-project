@@ -164,7 +164,7 @@ Connect Remotely to RPi desktop usign Mac: [Remote connection to Raspberry Pi 3,
     - Fixed formatting errors and corrupted releases.
     - General debugging for new camera features
 * Version 0.5.1b1 (Beta Version)
-    - Stable tested release.https://www.youtube.com/watch?v=F_eUCMXhvgk&t=0s
+    - Stable tested release.
 * Version 0.5.1
   - Minor Update:
     - Fixed minor errors in previous beta version
@@ -185,7 +185,7 @@ Connect Remotely to RPi desktop usign Mac: [Remote connection to Raspberry Pi 3,
 * Version 0.6.1
   - Hotfix:
     - Fixed plots grid layout, and eliminated camera detection indicator because of critical error.
-https://www.youtube.com/watch?v=F_eUCMXhvgk&t=0s
+
 #Usage
 ##Imports
 The following imports are used:
@@ -233,7 +233,7 @@ TemperatureStringValues, TemperatureRawNumbers = OneWire.getTempList()
 Where the first value, ```TemperatureStringValues``` is a string in the following format, for 3 OneWires:
 ```python
 '21.312 C\n32.321 C\n43.232 C'
-```https://www.youtube.com/watch?v=F_eUCMXhvgk&t=0s
+```
 Which is displayed as:
 ```
    21.312 C
