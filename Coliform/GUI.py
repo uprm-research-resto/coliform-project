@@ -45,12 +45,11 @@ def startGUI():
             HEATPWM = RPiGPIO.Controller(12, 100)
             HEATPWM.startup()
             heaterbutton.after(1000, heaterinput)
-        except (ValueError, RuntimeError, AttributeError):
-            HEATPWM.shutdown()
+        except (RuntimeError, AttributeError, NameError):
             HeaterPowerStatus.set('Heater OFF')
             heaterbutton.configure(text='Heater ON')
             heaterbutton.configure(command=heaterpoweron)
-            messagebox.showinfo(message='Heater not detected, make sure Heater is connected to pin 12')
+            messagebox.showinfo(message='Heater not detected on pin 12, please make sure its connected.')
 
     def heaterinput():
         try:
@@ -59,13 +58,12 @@ def startGUI():
                 sensor = float(TemperatureNumber[1])
                 HEATPWM.HeaterPID(value, sensor)
             heaterbutton.after(1000, heaterinput)
-        except (RuntimeError, ValueError, AttributeError):
+        except ValueError:
             HEATPWM.shutdown()
             HeaterPowerStatus.set('Heater OFF')
             heaterbutton.configure(text='Heater ON')
             heaterbutton.configure(command=heaterpoweron)
-            messagebox.showinfo(message='Please type number into Target Temperature box. '
-                                        'And make sure Heater is connected to pin 12')
+            messagebox.showinfo(message='Please type number into Target Temperature box.')
             heaterbutton.after(1000, heaterinput)
 
     def heaterpoweroff():
@@ -74,8 +72,8 @@ def startGUI():
             HeaterPowerStatus.set('Heater OFF')
             heaterbutton.configure(text='Heater ON')
             heaterbutton.configure(command=heaterpoweron)
-        except (ValueError, AttributeError):
-            messagebox.showinfo(message='Heater not detected on pin 12')
+        except ValueError:
+            pass
 
     def onewireon():
         try:
@@ -114,13 +112,18 @@ def startGUI():
             PUMPPWM = RPiGPIO.Controller(11, 100)
             PUMPPWM.startup()
 
-        except (RuntimeError, AttributeError, ValueError):
+        except ValueError:
             PumpPowerStatus.set("Pump OFF")
             pumpbutton.configure(text='Pump ON')
             pumpbutton.configure(command=pumppoweron)
             PUMPPWM.shutdown()
-            messagebox.showinfo(message='Please type number from 0-100 into Pump text box.'
-                                        ' And make sure pump is connected to pin 11')
+            messagebox.showinfo(message='Please type number from 0-100 into Pump text box.')
+
+        except (RuntimeError, AttributeError, NameError):
+            PumpPowerStatus.set("Pump OFF")
+            pumpbutton.configure(text='Pump ON')
+            pumpbutton.configure(command=pumppoweron)
+            messagebox.showinfo(message='Pump not detected, Please make sure pump is connected to pin 11')
 
     def pumppoweroff():
         try:
@@ -129,7 +132,7 @@ def startGUI():
             pumpbutton.configure(command=pumppoweron)
             PUMPPWM.shutdown()
 
-        except (AttributeError, ValueError):
+        except (AttributeError, RuntimeError):
             messagebox.showinfo(message='Please make sure pump is connected to pin 11.')
 
     def pumppowerchange():

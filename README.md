@@ -69,6 +69,20 @@ After installing Coliform, type this into terminal:
 ```bash
 sudo apt install python3-cairocffi
 ```
+For matplotlib version higher than 1.5.3:
+
+Change matplotlib backend to TkAgg:
+
+- Find out where the matplotlibrc file is so you can edit it. This can be done using the following in RPi Terminal:
+  - ```python3```
+  - ```import matplotlib```
+  - ```matplotlib.matplotlib_fname()```
+  - Take note of the address shown
+  - ```exit()```
+  - ```sudo nano /usr/local/lib/python3.4/dist-packages/mpl-data/matplotlibrc``` Note: if your address differs from this one, change it to your address.
+  - Look for: ```backend: gtk3agg``` and change to: ```backend: Tkagg```
+  - Press: ```Ctrl + X``` followed by ```y``` and ```ENTER``` or ```RETURN```
+
 If you still have the error after this:
 ```bash
 sudo apt install python3-matplotlib
@@ -194,6 +208,11 @@ Additional information on setting up SSH: [Oracle Global Desktop Administration]
 * Version 0.6.1
   - Hotfix:
     - Fixed plots grid layout, and eliminated camera detection indicator because of critical error.
+* Version 0.6.2
+  - Minor Update:
+    - GUI:
+      - Now Show Image and Show Plots display figures on different windows.
+      - Fixed error display for when heater and pump are not conneted at pin 12 and 11 respectively.
 
 #Usage
 ##Imports
