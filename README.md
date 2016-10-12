@@ -325,7 +325,7 @@ RPiCamera.showImage(rgb_array)
 
 Now, to display an image with only green values in low light environment, we use:
 ```python
-from Coliform import RPi.Camera
+from Coliform import RPiCamera
 
 # Takes picture after a 30 sec delay, and returns array to rgb_array variable
 # The following parameters are set: ISO(300), shutter speed(6 seconds), framerate(1/6), set exposure to off.
