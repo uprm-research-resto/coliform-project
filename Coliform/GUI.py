@@ -148,36 +148,6 @@ def startGUI():
         except ValueError:
             pass
 
-    def picturetaken():
-        try:
-            # global filename
-            # filename = datetime.strftime(datetime.now(),"%Y.%m.%d-%H:%M:%S")+'.jpeg'
-            global rgb_array
-            rgb_array = RPiCamera.takePicture()
-            red_intensity, green_intensity, blue_intensity, intensity = RPiCamera.returnIntensity(rgb_array)
-            intensity_array = '\n'.join(['R:'+'{:.3f}'.format(red_intensity),
-                                         'G:'+'{:.3f}'.format(green_intensity),
-                                         'B:'+'{:.3f}'.format(blue_intensity),
-                                         'I:'+'{:.3f}'.format(intensity)])
-            intensitylabel.config(text=intensity_array)
-
-            # messagebox.showinfo(message='JPEG created on directory')
-        except (UnboundLocalError, IndexError):
-            # messagebox.showinfo(message='Arduino not found, make sure it is connected to USB port')
-            pass
-
-    def showimageplot():
-        try:
-            RPiCamera.showPlot(rgb_array)
-        except ValueError:
-            messagebox.showinfo(message='File not found, make sure take picture before showing plot.')
-
-    def showimage():
-        try:
-            RPiCamera.showImage(rgb_array)
-        except ValueError:
-            messagebox.showinfo(message='File not found, make sure take picture before showing Image.')
-
     root = Tk()
     root.title("Coliform Control GUI")
 
@@ -220,11 +190,7 @@ def startGUI():
     bottompane = ttk.Panedwindow(masterpane, orient=HORIZONTAL)
     f1 = ttk.Labelframe(bottompane, text='Status:', width=100, height=100)
     f4 = ttk.Labelframe(bottompane, text='Pump:', width=100, height=100)
-    f5 = ttk.Labelframe(bottompane, text='Camera Options:', width=100, height=100)
-    f6 = ttk.LabelFrame(bottompane, text='Image Data:', width=100, height=100)
     bottompane.add(f4)
-    bottompane.add(f5)
-    bottompane.add(f6)
     bottompane.add(f1)
     masterpane.add(bottompane)
 
@@ -234,15 +200,6 @@ def startGUI():
     pumpchangebutton.grid(column=1, row=3, sticky=(W, E))
     pump_entry = ttk.Entry(f4, width=4, textvariable=pumpintensity)
     pump_entry.grid(column=1, row=2, sticky=(W, E))
-
-    ttk.Button(f5, text="Take Picture", command=picturetaken).grid(column=1, row=1, sticky=(W, E))
-    ttk.Button(f5, text="Choose Directory", command=directorychosen).grid(column=1, row=4, sticky=(W, E))
-    ttk.Button(f5, text="Show Plots", command=showimageplot).grid(column=1, row=2, sticky=(W, E))
-    ttk.Button(f5, text="Show Image", command=showimage).grid(column=1, row=3, sticky=(W, E))
-
-    ttk.Label(f6, text="Intensity: ").grid(column=1, row=1, sticky=(W, E))
-    intensitylabel = ttk.Label(f6, text='Not Taken')
-    intensitylabel.grid(column=1, row=2, sticky=(W, E))
 
     ttk.Label(f1, textvariable=TempSensorPowerStatus).grid(column=1, row=1, sticky=(W, E))
     ttk.Label(f1, textvariable=PumpPowerStatus).grid(column=1, row=2, sticky=(W, E))
@@ -255,4 +212,165 @@ def startGUI():
     start_time = time.time()
     onewireon()
     heaterinput()
+    root.mainloop()
+
+
+def startCameraGUI():
+    tf = 'PlotTextFile.txt'
+    if os.path.isfile(tf):
+        os.remove(tf)
+    filepath = os.sep.join((os.path.expanduser('~'), 'Desktop'))
+
+    def picturetaken():
+        try:
+            # global filename
+            # filename = datetime.strftime(datetime.now(),"%Y.%m.%d-%H:%M:%S")+'.jpeg'
+            global rgb_array
+            rgb_array = RPiCamera.takePictureDefault()
+            red_intensity, green_intensity, blue_intensity, intensity = RPiCamera.returnIntensity(rgb_array)
+            intensity_array = '\n'.join(['R:'+'{:.3f}'.format(red_intensity),
+                                         'G:'+'{:.3f}'.format(green_intensity),
+                                         'B:'+'{:.3f}'.format(blue_intensity),
+                                         'I:'+'{:.3f}'.format(intensity)])
+            intensitylabel.config(text=intensity_array)
+
+            # messagebox.showinfo(message='JPEG created on directory')
+        except (UnboundLocalError, IndexError):
+            # messagebox.showinfo(message='Arduino not found, make sure it is connected to USB port')
+            pass
+
+    def darkpicturetaken():
+        try:
+            # global filename
+            # filename = datetime.strftime(datetime.now(),"%Y.%m.%d-%H:%M:%S")+'.jpeg'
+            iso = 800
+            resolution = (2592,1944)
+            delay = 30
+
+            global rgb_array
+            if isovar.get():
+                iso = isovar.get()
+            if delayvar.get():
+                delay = delayvar.get()
+            if resolutionvarx.get() and resolutionvary.get():
+                resolution = (resolutionvarx.get(),resolutionvary.get())
+            rgb_array = RPiCamera.takePicture(iso=iso, delay=delay, resolution=resolution, exposure=exposuremode.get())
+            red_intensity, green_intensity, blue_intensity, intensity = RPiCamera.returnIntensity(rgb_array)
+            intensity_array = '\n'.join(['R:'+'{:.3f}'.format(red_intensity),
+                                         'G:'+'{:.3f}'.format(green_intensity),
+                                         'B:'+'{:.3f}'.format(blue_intensity),
+                                         'I:'+'{:.3f}'.format(intensity)])
+            intensitylabel.config(text=intensity_array)
+
+            # messagebox.showinfo(message='JPEG created on directory')
+        except (UnboundLocalError, IndexError):
+            # messagebox.showinfo(message='Arduino not found, make sure it is connected to USB port')
+            pass
+
+    def showimageplot():
+        try:
+            RPiCamera.showPlot(rgb_array)
+        except ValueError:
+            messagebox.showinfo(message='File not found, make sure take picture before showing plot.')
+
+    def showimage():
+        try:
+            RPiCamera.showImage(rgb_array)
+        except ValueError:
+            messagebox.showinfo(message='File not found, make sure take picture before showing Image.')
+
+    def directorychosen():
+        try:
+            global filepath
+            filepath = filedialog.askdirectory()
+        except ValueError:
+            pass
+
+    # def realtimeplot():
+    #     MultiPlot.GeneratePlotDataFile(tf, RPiCamera.returnIntensity(rgb_array), start_time)
+
+    root = Tk()
+    root.title("Image Processing GUI")
+
+    mainframe = ttk.Frame(root, padding="3 3 12 12")
+    mainframe.grid(column=0, row=0, sticky=(N, W, E, S))
+    mainframe.columnconfigure(0, weight=1)
+    mainframe.rowconfigure(0, weight=1)
+
+    isovar = IntVar()
+    resolutionvarx = IntVar()
+    resolutionvary = IntVar()
+    exposuremode = StringVar()
+    delayvar = IntVar()
+
+    exposuremode.set('off')
+
+    masterpane = ttk.Panedwindow(mainframe, orient=VERTICAL)
+
+    toppane = ttk.Panedwindow(masterpane, orient=HORIZONTAL)
+    f1 = ttk.Labelframe(toppane, text='ISO: (max=1600, Default=800)', width=100, height=100)
+    f2 = ttk.Labelframe(toppane, text='Resolution: (max=2592 x 1944, Default=2592 x 1944)', width=100, height=100)
+    toppane.add(f1)
+    toppane.add(f2)
+    masterpane.add(toppane)
+
+    iso_variable = ttk.Entry(f1, width=4, textvariable=isovar)
+    iso_variable.grid(column=1, row=1, sticky=(E,W))
+
+    xresolution_variable = ttk.Entry(f2, width=4, textvariable=resolutionvarx)
+    xresolution_variable.grid(column=1, row=1, sticky=E)
+    ttk.Label(f2, text='x').grid(column=2, row=1)
+    yresolution_variable = ttk.Entry(f2, width=4, textvariable=resolutionvary)
+    yresolution_variable.grid(column=3, row=1, sticky=W)
+
+    midpane = ttk.Panedwindow(masterpane, orient=VERTICAL)
+    f3 = ttk.Labelframe(midpane, text='Delay: (seconds, not including time to setup camera, Default=30)',
+                        width=100, height=100)
+    f4 = ttk.Labelframe(midpane, text='Exposure Modes: (Default = auto, Only select one)', width=100, height=100)
+    midpane.add(f3)
+    midpane.add(f4)
+    masterpane.add(midpane)
+
+    delay_variable = ttk.Entry(f3, width=4, textvariable=delayvar)
+    delay_variable.grid(column=1, row=1, sticky=(W,E))
+
+    exposuremode_night = ttk.Radiobutton(f4, text='night', variable=exposuremode, value='night')
+    exposuremode_night.grid(column=1, row=1, sticky=W)
+
+    exposuremode_backlight = ttk.Radiobutton(f4, text='auto', variable=exposuremode, value='auto')
+    exposuremode_backlight.grid(column=2, row=1, sticky=W)
+
+    exposuremode_verylong = ttk.Radiobutton(f4, text='verylong', variable=exposuremode, value='verylong')
+    exposuremode_verylong.grid(column=3, row=1, sticky=W)
+
+    exposuremode_spotlight = ttk.Radiobutton(f4, text='spotlight', variable=exposuremode, value='spotlight')
+    exposuremode_spotlight.grid(column=4, row=1, sticky=W)
+
+    exposuremode_sports = ttk.Radiobutton(f4, text='sports', variable=exposuremode, value='sports')
+    exposuremode_sports.grid(column=5, row=1, sticky=W)
+
+    exposuremode_off = ttk.Radiobutton(f4, text='off', variable=exposuremode, state=ACTIVE, value='off')
+    exposuremode_off.grid(column=6, row=1, sticky=W)
+
+    bottompane = ttk.Panedwindow(masterpane, orient=HORIZONTAL)
+    f5 = ttk.Labelframe(bottompane, text='Camera Options:', width=100, height=100)
+    f6 = ttk.Labelframe(bottompane, text='Image Data:', width=100, height=100)
+    bottompane.add(f5)
+    bottompane.add(f6)
+    masterpane.add(bottompane)
+
+    ttk.Button(f5, text='Take Picture Custom/Dark', command=darkpicturetaken).grid(column=1, row=1, sticky=(W,E))
+    ttk.Button(f5, text="Take Picture Default", command=picturetaken).grid(column=1, row=2, sticky=(W, E))
+    ttk.Button(f5, text="Choose Directory", command=directorychosen).grid(column=1, row=5, sticky=(W, E))
+    ttk.Button(f5, text="Show Plots", command=showimageplot).grid(column=1, row=3, sticky=(W, E))
+    ttk.Button(f5, text="Show Image", command=showimage).grid(column=1, row=4, sticky=(W, E))
+
+    ttk.Label(f6, text="Intensity: ").grid(column=1, row=1, sticky=(W, E))
+    intensitylabel = ttk.Label(f6, text='Not Taken')
+    intensitylabel.grid(column=1, row=2, sticky=(W, E))
+
+    for child in mainframe.winfo_children():
+        child.grid_configure(padx=5, pady=5)
+
+    start_time = time.time()
     root.mainloop()

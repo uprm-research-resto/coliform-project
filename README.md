@@ -213,6 +213,19 @@ Additional information on setting up SSH: [Oracle Global Desktop Administration]
     - GUI:
       - Now Show Image and Show Plots display figures on different windows.
       - Fixed error display for when heater and pump are not conneted at pin 12 and 11 respectively.
+* Version 0.6.3
+  - Separated Camera GUI from the general GUI
+  - Added support for changing camera options directly from Camera GUI or from command
+* Version 0.6.4
+  - Added Take Picture button
+* Version 0.6.5
+  - Hotfix:
+    - Disabled exposure options until critical error is fixed.
+* Version 0.6.6
+  - Changed Camera GUI formatting
+  - Added exposure modes
+* Version 0.6.7
+  - Fixed green scaling and increased camera speed.
 
 #Usage
 ##Imports
