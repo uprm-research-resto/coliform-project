@@ -225,8 +225,20 @@ def startCameraGUI():
         try:
             # global filename
             # filename = datetime.strftime(datetime.now(),"%Y.%m.%d-%H:%M:%S")+'.jpeg'
+            iso = 100
+            brightness = 50
+            contrast = 0
+            resolution = (2592,1944)
             global rgb_array
-            rgb_array = RPiCamera.takePictureDefault()
+            if isovar.get():
+                iso = isovar.get()
+            if brightnessvar.get():
+                brightness = brightnessvar.get()
+            if contrastvar.get():
+                contrast = contrastvar.get()
+            if resolutionvarx.get() and resolutionvary.get():
+                resolution = (resolutionvarx.get(),resolutionvary.get())
+            rgb_array = RPiCamera.takePictureDefault(iso=iso, brightness=brightness, contrast=contrast, resolution=resolution)
             red_intensity, green_intensity, blue_intensity, intensity = RPiCamera.returnIntensity(rgb_array)
             intensity_array = '\n'.join(['R:'+'{:.3f}'.format(red_intensity),
                                          'G:'+'{:.3f}'.format(green_intensity),
@@ -243,9 +255,11 @@ def startCameraGUI():
         try:
             # global filename
             # filename = datetime.strftime(datetime.now(),"%Y.%m.%d-%H:%M:%S")+'.jpeg'
-            iso = 800
+            iso = 100
             resolution = (2592,1944)
             delay = 30
+            brightness = 50
+            contrast = 0
 
             global rgb_array
             if isovar.get():
@@ -254,7 +268,12 @@ def startCameraGUI():
                 delay = delayvar.get()
             if resolutionvarx.get() and resolutionvary.get():
                 resolution = (resolutionvarx.get(),resolutionvary.get())
-            rgb_array = RPiCamera.takePicture(iso=iso, delay=delay, resolution=resolution, exposure=exposuremode.get())
+            if brightnessvar.get():
+                brightness = brightnessvar.get()
+            if contrastvar.get():
+                contrast = contrastvar.get()
+            rgb_array = RPiCamera.takePicture(iso=iso, delay=delay, resolution=resolution, exposure=exposuremode.get(),
+                                              brightness=brightness, contrast=contrast)
             red_intensity, green_intensity, blue_intensity, intensity = RPiCamera.returnIntensity(rgb_array)
             intensity_array = '\n'.join(['R:'+'{:.3f}'.format(red_intensity),
                                          'G:'+'{:.3f}'.format(green_intensity),
@@ -302,13 +321,15 @@ def startCameraGUI():
     resolutionvary = IntVar()
     exposuremode = StringVar()
     delayvar = IntVar()
+    contrastvar = IntVar()
+    brightnessvar = IntVar()
 
     exposuremode.set('off')
 
     masterpane = ttk.Panedwindow(mainframe, orient=VERTICAL)
 
     toppane = ttk.Panedwindow(masterpane, orient=HORIZONTAL)
-    f1 = ttk.Labelframe(toppane, text='ISO: (max=1600, Default=800)', width=100, height=100)
+    f1 = ttk.Labelframe(toppane, text='ISO: (max=1600, Default=100)', width=100, height=100)
     f2 = ttk.Labelframe(toppane, text='Resolution: (max=2592 x 1944, Default=2592 x 1944)', width=100, height=100)
     toppane.add(f1)
     toppane.add(f2)
@@ -324,15 +345,24 @@ def startCameraGUI():
     yresolution_variable.grid(column=3, row=1, sticky=W)
 
     midpane = ttk.Panedwindow(masterpane, orient=VERTICAL)
-    f3 = ttk.Labelframe(midpane, text='Delay: (seconds, not including time to setup camera, Default=30)',
+    f3 = ttk.Labelframe(midpane, text='More Options:',
                         width=100, height=100)
     f4 = ttk.Labelframe(midpane, text='Exposure Modes: (Default = auto, Only select one)', width=100, height=100)
     midpane.add(f3)
     midpane.add(f4)
     masterpane.add(midpane)
 
+    ttk.Label(f3, text='Delay: ').grid(column=1, row=1, sticky=E)
     delay_variable = ttk.Entry(f3, width=4, textvariable=delayvar)
-    delay_variable.grid(column=1, row=1, sticky=(W,E))
+    delay_variable.grid(column=2, row=1, sticky=W)
+
+    ttk.Label(f3, text='Brightness: ').grid(column=3, row=1, sticky=E)
+    delay_variable = ttk.Entry(f3, width=4, textvariable=brightnessvar)
+    delay_variable.grid(column=4, row=1, sticky=W)
+
+    ttk.Label(f3, text='Contrast: ').grid(column=5, row=1, sticky=E)
+    delay_variable = ttk.Entry(f3, width=4, textvariable=contrastvar)
+    delay_variable.grid(column=6, row=1, sticky=W)
 
     exposuremode_night = ttk.Radiobutton(f4, text='night', variable=exposuremode, value='night')
     exposuremode_night.grid(column=1, row=1, sticky=W)

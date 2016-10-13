@@ -15,10 +15,13 @@ import numpy as np
 from fractions import Fraction
 
 
-def takePictureDefault():
+def takePictureDefault(iso=100, brightness=50, contrast=0, resolution=(1024,1008)):
     with picamera.PiCamera() as camera:
         with picamera.array.PiYUVArray(camera) as stream:
-            camera.resolution = (1024, 1008)
+            camera.resolution = resolution
+            camera.brightness = brightness
+            camera.contrast = contrast
+            camera.iso = iso
             time.sleep(2)
             camera.capture(stream, 'yuv')
             # print(stream.array.shape)
@@ -27,7 +30,7 @@ def takePictureDefault():
             return rgb_array
 
 
-def takePicture(iso=100, delay=60, exposure='auto', resolution=(1024,1008)):
+def takePicture(iso=100, delay=60, exposure='auto', resolution=(1024,1008), brightness=50, contrast=0):
     with picamera.PiCamera() as camera:
         with picamera.array.PiYUVArray(camera) as stream:
             camera.resolution = resolution
@@ -35,6 +38,8 @@ def takePicture(iso=100, delay=60, exposure='auto', resolution=(1024,1008)):
             camera.shutter_speed = 6000000
             camera.iso = iso
             camera.exposure_mode = exposure
+            camera.brightness = brightness
+            camera.contrast = contrast
             camera.zoom(0.0,0.0,1.0,1.0)
             time.sleep(delay)
             camera.capture(stream, 'yuv')
