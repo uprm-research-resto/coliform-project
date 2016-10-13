@@ -226,6 +226,8 @@ Additional information on setting up SSH: [Oracle Global Desktop Administration]
   - Added exposure modes
 * Version 0.6.7
   - Fixed green scaling and increased camera speed.
+* Version 0.6.8
+  - Found and fixed critical GPIO error in RPiGPIO library.
 
 #Usage
 ##Imports
