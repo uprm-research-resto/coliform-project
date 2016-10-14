@@ -13,6 +13,7 @@ from tkinter import messagebox
 import os
 import time
 from Coliform import OneWire, MultiPlot, RPiGPIO, RPiCamera
+from fractions import Fraction
 
 # from datetime import datetime
 '''
@@ -260,6 +261,7 @@ def startCameraGUI():
             delay = 30
             brightness = 50
             contrast = 0
+            shutterspeed = 0
 
             global rgb_array
             if isovar.get():
@@ -272,8 +274,17 @@ def startCameraGUI():
                 brightness = brightnessvar.get()
             if contrastvar.get():
                 contrast = contrastvar.get()
+            if shutterspeedvar.get():
+                shutterspeed = shutterspeedvar.get() * 10**6
+            if frameratevar.get():
+                framelist = frameratevar.get().split('/')
+                if len(framelist) == 2:
+                    framerate = Fraction(int(framelist[0]),int(framelist[1]))
+                else:
+                    framerate = int(framelist[0])
             rgb_array = RPiCamera.takePicture(iso=iso, delay=delay, resolution=resolution, exposure=exposuremode.get(),
-                                              brightness=brightness, contrast=contrast)
+                                              brightness=brightness, contrast=contrast, shutterspeed=shutterspeed,
+                                              framerate=framerate)
             red_intensity, green_intensity, blue_intensity, intensity = RPiCamera.returnIntensity(rgb_array)
             intensity_array = '\n'.join(['R:'+'{:.3f}'.format(red_intensity),
                                          'G:'+'{:.3f}'.format(green_intensity),
@@ -298,12 +309,44 @@ def startCameraGUI():
         except ValueError:
             messagebox.showinfo(message='File not found, make sure take picture before showing Image.')
 
+    def showredimage():
+        try:
+            RPiCamera.showImage(rgb_array, 'r')
+        except ValueError:
+            messagebox.showinfo(message='File not found, make sure take picture before showing Image.')
+
+    def showgreenimage():
+        try:
+            RPiCamera.showImage(rgb_array, 'g')
+        except ValueError:
+            messagebox.showinfo(message='File not found, make sure take picture before showing Image.')
+
+    def showblueimage():
+        try:
+            RPiCamera.showImage(rgb_array, 'b')
+        except ValueError:
+            messagebox.showinfo(message='File not found, make sure take picture before showing Image.')
+
     def directorychosen():
         try:
             global filepath
             filepath = filedialog.askdirectory()
         except ValueError:
             pass
+
+    def importimage():
+        global rgb_array
+        rgb_array = RPiCamera.importImage()
+
+        red_intensity, green_intensity, blue_intensity, intensity = RPiCamera.returnIntensity(rgb_array)
+        intensity_array = '\n'.join(['R:' + '{:.3f}'.format(red_intensity),
+                                     'G:' + '{:.3f}'.format(green_intensity),
+                                     'B:' + '{:.3f}'.format(blue_intensity),
+                                     'I:' + '{:.3f}'.format(intensity)])
+        intensitylabel.config(text=intensity_array)
+
+    def saveimage():
+        RPiCamera.saveImage(rgb_array)
 
     # def realtimeplot():
     #     MultiPlot.GeneratePlotDataFile(tf, RPiCamera.returnIntensity(rgb_array), start_time)
@@ -323,8 +366,17 @@ def startCameraGUI():
     delayvar = IntVar()
     contrastvar = IntVar()
     brightnessvar = IntVar()
+    shutterspeedvar = IntVar()
+    frameratevar = StringVar()
 
     exposuremode.set('off')
+    shutterspeedvar.set(6)
+    frameratevar.set('1/6')
+    isovar.set(100)
+    resolutionvary.set(1944)
+    resolutionvarx.set(2592)
+    delayvar.set(30)
+    brightnessvar.set(50)
 
     masterpane = ttk.Panedwindow(mainframe, orient=VERTICAL)
 
@@ -364,6 +416,14 @@ def startCameraGUI():
     delay_variable = ttk.Entry(f3, width=4, textvariable=contrastvar)
     delay_variable.grid(column=6, row=1, sticky=W)
 
+    ttk.Label(f3, text='Framerate: ').grid(column=7, row=1, sticky=E)
+    delay_variable = ttk.Entry(f3, width=4, textvariable=frameratevar)
+    delay_variable.grid(column=8, row=1, sticky=W)
+
+    ttk.Label(f3, text='Shutter Speed: ').grid(column=9, row=1, sticky=E)
+    delay_variable = ttk.Entry(f3, width=4, textvariable=shutterspeedvar)
+    delay_variable.grid(column=10, row=1, sticky=W)
+
     exposuremode_night = ttk.Radiobutton(f4, text='night', variable=exposuremode, value='night')
     exposuremode_night.grid(column=1, row=1, sticky=W)
 
@@ -389,11 +449,15 @@ def startCameraGUI():
     bottompane.add(f6)
     masterpane.add(bottompane)
 
-    ttk.Button(f5, text='Take Picture Custom/Dark', command=darkpicturetaken).grid(column=1, row=1, sticky=(W,E))
+    ttk.Button(f5, text='Take Picture Custom/Dark', command=darkpicturetaken).grid(column=1, row=1, sticky=(W, E))
     ttk.Button(f5, text="Take Picture Default", command=picturetaken).grid(column=1, row=2, sticky=(W, E))
-    ttk.Button(f5, text="Choose Directory", command=directorychosen).grid(column=1, row=5, sticky=(W, E))
-    ttk.Button(f5, text="Show Plots", command=showimageplot).grid(column=1, row=3, sticky=(W, E))
-    ttk.Button(f5, text="Show Image", command=showimage).grid(column=1, row=4, sticky=(W, E))
+    ttk.Button(f5, text="Choose Directory", command=directorychosen).grid(column=1, row=3, sticky=(W, E))
+    ttk.Button(f5, text="Show Plots", command=showimageplot).grid(column=2, row=2, sticky=(W, E))
+    ttk.Button(f5, text="Show Image", command=showimage).grid(column=2, row=1, sticky=(W, E))
+    ttk.Button(f5, text="Import Image", command=importimage).grid(column=2, row=3, sticky=(W, E))
+    ttk.Button(f5, text="Show Red", command=showredimage).grid(column=3, row=1, sticky=(W, E))
+    ttk.Button(f5, text="Show Green", command=showgreenimage).grid(column=3, row=2, sticky=(W, E))
+    ttk.Button(f5, text="Show Blue", command=showblueimage).grid(column=3, row=3, sticky=(W, E))
 
     ttk.Label(f6, text="Intensity: ").grid(column=1, row=1, sticky=(W, E))
     intensitylabel = ttk.Label(f6, text='Not Taken')

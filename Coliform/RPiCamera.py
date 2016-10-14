@@ -6,12 +6,15 @@
 # (C) 2016
 #
 # Licensed under the GNU General Public License version 3.0 (GPL-3.0)
+from tkinter import filedialog
 import time
 import picamera
 import picamera.array
 import matplotlib.pyplot as plt
+from scipy import misc
 import matplotlib.colors as colors
 import numpy as np
+import png
 from fractions import Fraction
 
 
@@ -30,17 +33,17 @@ def takePictureDefault(iso=100, brightness=50, contrast=0, resolution=(1024,1008
             return rgb_array
 
 
-def takePicture(iso=100, delay=60, exposure='auto', resolution=(1024,1008), brightness=50, contrast=0):
+def takePicture(iso=100, delay=60, exposure='auto', resolution=(1024,1008), brightness=50, contrast=0, shutterspeed=0, framerate=25):
     with picamera.PiCamera() as camera:
         with picamera.array.PiYUVArray(camera) as stream:
             camera.resolution = resolution
-            camera.framerate = Fraction(1,6)
-            camera.shutter_speed = 6000000
+            camera.framerate = framerate
+            camera.shutter_speed = shutterspeed
             camera.iso = iso
             camera.exposure_mode = exposure
             camera.brightness = brightness
             camera.contrast = contrast
-            camera.zoom(0.0,0.0,1.0,1.0)
+            camera.zoom = (0.0,0.0,1.0,1.0)
             time.sleep(delay)
             camera.capture(stream, 'yuv')
             # print(stream.array.shape)
@@ -72,11 +75,21 @@ def returnIntensity(rgb_array, color='all'):
                          " 'b' for blue, 'r' for red, 'g' for green, or 'int' for intensity")
 
 
-def showImage(rgb_array):
-    f1 = plt.figure(1)
-    f1.canvas.set_window_title('Image Capture')
-    plt.imshow(rgb_array)
-    plt.show()
+def showImage(rgb_array, color='true'):
+    if color == 'true':
+        misc.imshow(rgb_array)
+    if color == 'r':
+        rgb_array_red = rgb_array * 1
+        r_array = setImageColor(rgb_array_red, 'r')
+        misc.imshow(r_array)
+    if color == 'g':
+        rgb_array_green = rgb_array * 1
+        g_array = setImageColor(rgb_array_green, 'g')
+        misc.imshow(g_array)
+    if color == 'b':
+        rgb_array_blue = rgb_array * 1
+        b_array = setImageColor(rgb_array_blue, 'b')
+        misc.imshow(b_array)
 
 
 def setImageColor(rgb_array, color):
@@ -94,13 +107,24 @@ def setImageColor(rgb_array, color):
     return rgb_array
 
 
+def importImage():
+    image = filedialog.askopenfilename(filetypes=[('Image Files', '*.png *.jpg *.jpeg')])
+    rgb_array = misc.imread(image)
+    return rgb_array
+
+
+def saveImage(rgb_array):
+    filename = filedialog.asksaveasfilename(defaultextension='.png')
+    png.from_array(rgb_array, 'L').save(filename)
+
+
 def showPlot(rgb_array):
     rgb_array_red = rgb_array * 1
     rgb_array_green = rgb_array * 1
     rgb_array_blue = rgb_array * 1
     rgb_array_hist = rgb_array
 
-    f2 = plt.figure(2)
+    f2 = plt.figure()
     f2.canvas.set_window_title('RGB Plots')
 
     lu1 = setImageColor(rgb_array_red, 'r')

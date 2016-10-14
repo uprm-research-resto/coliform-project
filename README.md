@@ -55,6 +55,14 @@ curl -O https://bootstrap.pypa.io/get-pip.py
    
 sudo python3 get-pip.py
 ```
+Before installing this module, you need to install the jpeg library:
+
+In RPi terminal:
+```bash
+sudo apt install libjpeg-dev
+```
+
+Now to install the module:
 
 In Raspberry Pi, or Linux Type the following into terminal:
 ```bash
