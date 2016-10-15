@@ -14,6 +14,9 @@ import os
 import time
 from Coliform import OneWire, MultiPlot, RPiGPIO, RPiCamera
 from fractions import Fraction
+from scipy import misc
+from PIL import Image, ImageTk
+
 
 # from datetime import datetime
 '''
@@ -277,11 +280,12 @@ def startCameraGUI():
             if shutterspeedvar.get():
                 shutterspeed = shutterspeedvar.get() * 10**6
             if frameratevar.get():
-                framelist = frameratevar.get().split('/')
-                if len(framelist) == 2:
-                    framerate = Fraction(int(framelist[0]),int(framelist[1]))
+                if '/' in frameratevar.get():
+                    framelist = frameratevar.get().split('/')
+                    if len(framelist) == 2:
+                        framerate = Fraction(int(framelist[0]), int(framelist[1]))
                 else:
-                    framerate = int(framelist[0])
+                    framerate = int(frameratevar.get())
             rgb_array = RPiCamera.takePicture(iso=iso, delay=delay, resolution=resolution, exposure=exposuremode.get(),
                                               brightness=brightness, contrast=contrast, shutterspeed=shutterspeed,
                                               framerate=framerate)
@@ -308,12 +312,16 @@ def startCameraGUI():
             RPiCamera.showImage(rgb_array)
         except ValueError:
             messagebox.showinfo(message='File not found, make sure take picture before showing Image.')
+        # except AttributeError:
+        #     pass
 
     def showredimage():
         try:
             RPiCamera.showImage(rgb_array, 'r')
         except ValueError:
             messagebox.showinfo(message='File not found, make sure take picture before showing Image.')
+        # except AttributeError:
+        #     pass
 
     def showgreenimage():
         try:
@@ -327,12 +335,12 @@ def startCameraGUI():
         except ValueError:
             messagebox.showinfo(message='File not found, make sure take picture before showing Image.')
 
-    def directorychosen():
-        try:
-            global filepath
-            filepath = filedialog.askdirectory()
-        except ValueError:
-            pass
+    # def directorychosen():
+    #     try:
+    #         global filepath
+    #         filepath = filedialog.askdirectory()
+    #     except ValueError:
+    #         pass
 
     def importimage():
         global rgb_array
@@ -347,6 +355,44 @@ def startCameraGUI():
 
     def saveimage():
         RPiCamera.saveImage(rgb_array)
+
+    def saveallimages():
+        foldername = 'ISO:{}-Delay:{}-Resolution:{}x{}-Brightness:{}-Contrast:{}-Framerate:{}-ShutterSpeed:{}' \
+                     '-Exposure:{}'.format(isovar.get(), delayvar.get(), resolutionvarx.get(), resolutionvary.get(),
+                                           brightnessvar.get(), contrastvar.get(), frameratevar.get(),
+                                           shutterspeedvar.get(), exposuremode.get())
+        RPiCamera.saveAllImages(rgb_array, foldername)
+
+    def preview():
+        iso = 100
+        resolution = (2592, 1944)
+        brightness = 50
+        contrast = 0
+        shutterspeed = 0
+
+        global rgb_array
+        if isovar.get():
+            iso = isovar.get()
+        if previewtimeout.get():
+            timeout = previewtimeout.get()
+        if resolutionvarx.get() and resolutionvary.get():
+            resolution = (resolutionvarx.get(), resolutionvary.get())
+        if brightnessvar.get():
+            brightness = brightnessvar.get()
+        if contrastvar.get():
+            contrast = contrastvar.get()
+        if shutterspeedvar.get():
+            shutterspeed = shutterspeedvar.get() * 10 ** 6
+        if frameratevar.get():
+            if '/' in frameratevar.get():
+                framelist = frameratevar.get().split('/')
+                if len(framelist) == 2:
+                    framerate = Fraction(int(framelist[0]), int(framelist[1]))
+            else:
+                framerate = int(frameratevar.get())
+
+        RPiCamera.startPreview(iso=iso, timeout=timeout, resolution=resolution, exposure=exposuremode.get(),
+                               brightness=brightness, contrast=contrast, shutterspeed=shutterspeed,framerate=framerate)
 
     # def realtimeplot():
     #     MultiPlot.GeneratePlotDataFile(tf, RPiCamera.returnIntensity(rgb_array), start_time)
@@ -368,6 +414,7 @@ def startCameraGUI():
     brightnessvar = IntVar()
     shutterspeedvar = IntVar()
     frameratevar = StringVar()
+    previewtimeout = IntVar()
 
     exposuremode.set('off')
     shutterspeedvar.set(6)
@@ -377,29 +424,14 @@ def startCameraGUI():
     resolutionvarx.set(2592)
     delayvar.set(30)
     brightnessvar.set(50)
+    previewtimeout.set(10)
 
     masterpane = ttk.Panedwindow(mainframe, orient=VERTICAL)
-
-    toppane = ttk.Panedwindow(masterpane, orient=HORIZONTAL)
-    f1 = ttk.Labelframe(toppane, text='ISO: (max=1600, Default=100)', width=100, height=100)
-    f2 = ttk.Labelframe(toppane, text='Resolution: (max=2592 x 1944, Default=2592 x 1944)', width=100, height=100)
-    toppane.add(f1)
-    toppane.add(f2)
-    masterpane.add(toppane)
-
-    iso_variable = ttk.Entry(f1, width=4, textvariable=isovar)
-    iso_variable.grid(column=1, row=1, sticky=(E,W))
-
-    xresolution_variable = ttk.Entry(f2, width=4, textvariable=resolutionvarx)
-    xresolution_variable.grid(column=1, row=1, sticky=E)
-    ttk.Label(f2, text='x').grid(column=2, row=1)
-    yresolution_variable = ttk.Entry(f2, width=4, textvariable=resolutionvary)
-    yresolution_variable.grid(column=3, row=1, sticky=W)
 
     midpane = ttk.Panedwindow(masterpane, orient=VERTICAL)
     f3 = ttk.Labelframe(midpane, text='More Options:',
                         width=100, height=100)
-    f4 = ttk.Labelframe(midpane, text='Exposure Modes: (Default = auto, Only select one)', width=100, height=100)
+    f4 = ttk.Labelframe(midpane, text='Exposure Modes:', width=100, height=100)
     midpane.add(f3)
     midpane.add(f4)
     masterpane.add(midpane)
@@ -423,6 +455,21 @@ def startCameraGUI():
     ttk.Label(f3, text='Shutter Speed: ').grid(column=9, row=1, sticky=E)
     delay_variable = ttk.Entry(f3, width=4, textvariable=shutterspeedvar)
     delay_variable.grid(column=10, row=1, sticky=W)
+
+    ttk.Label(f3, text='ISO: (max=1600)').grid(column=1, row=2, sticky=E)
+    iso_variable = ttk.Entry(f3, width=4, textvariable=isovar)
+    iso_variable.grid(column=2, row=2, sticky=W)
+
+    ttk.Label(f3, text='Resolution: (max=2592 x 1944)').grid(column=3, row=2, sticky=E)
+    xresolution_variable = ttk.Entry(f3, width=4, textvariable=resolutionvarx)
+    xresolution_variable.grid(column=4, row=2, sticky=E)
+    ttk.Label(f3, text='x').grid(column=5, row=2)
+    yresolution_variable = ttk.Entry(f3, width=4, textvariable=resolutionvary)
+    yresolution_variable.grid(column=6, row=2, sticky=W)
+
+    ttk.Label(f3, text='Preview Timeout: ').grid(column=7, row=2, sticky=E)
+    delay_variable = ttk.Entry(f3, width=4, textvariable=shutterspeedvar)
+    delay_variable.grid(column=8, row=2, sticky=W)
 
     exposuremode_night = ttk.Radiobutton(f4, text='night', variable=exposuremode, value='night')
     exposuremode_night.grid(column=1, row=1, sticky=W)
@@ -451,10 +498,12 @@ def startCameraGUI():
 
     ttk.Button(f5, text='Take Picture Custom/Dark', command=darkpicturetaken).grid(column=1, row=1, sticky=(W, E))
     ttk.Button(f5, text="Take Picture Default", command=picturetaken).grid(column=1, row=2, sticky=(W, E))
-    ttk.Button(f5, text="Choose Directory", command=directorychosen).grid(column=1, row=3, sticky=(W, E))
+    ttk.Button(f5, text="Camera Preview", command=preview).grid(column=1, row=3, sticky=(W, E))
+    ttk.Button(f5, text="Save Image", command=saveimage).grid(column=1, row=4, sticky=(W, E))
     ttk.Button(f5, text="Show Plots", command=showimageplot).grid(column=2, row=2, sticky=(W, E))
     ttk.Button(f5, text="Show Image", command=showimage).grid(column=2, row=1, sticky=(W, E))
     ttk.Button(f5, text="Import Image", command=importimage).grid(column=2, row=3, sticky=(W, E))
+    ttk.Button(f5, text="Save All", command=saveimage).grid(column=2, row=4, sticky=(W, E))
     ttk.Button(f5, text="Show Red", command=showredimage).grid(column=3, row=1, sticky=(W, E))
     ttk.Button(f5, text="Show Green", command=showgreenimage).grid(column=3, row=2, sticky=(W, E))
     ttk.Button(f5, text="Show Blue", command=showblueimage).grid(column=3, row=3, sticky=(W, E))
