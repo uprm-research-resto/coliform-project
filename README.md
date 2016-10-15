@@ -162,86 +162,89 @@ Additional information on setting up SSH: [Oracle Global Desktop Administration]
 
 #Changelog
 * Version 0.1
-  - Initial Build 
+    - Initial Build 
 * Version 0.1.1
-  - Added install requirements to wheel package
+    - Added install requirements to wheel package
 * Version 0.2
-  - Added MultiPlot and GPIO
-  - Revamped OneWire and ArduCAM
-  - Added PyPI Classifiers
+    - Added MultiPlot and GPIO
+    - Revamped OneWire and ArduCAM
+    - Added PyPI Classifiers
 * Version 0.2.1
-  - Transferred Project GUI into Coliform module
+    - Transferred Project GUI into Coliform module
 * Version 0.2.2
-  - Added GPL License classifiers.
+    - Added GPL License classifiers.
 * Version 0.3
-  - Internal refactoring and cleaning up.
+    - Internal refactoring and cleaning up.
 * Version 0.4
-  - Merged Heater and Pump modules into a generic one called RPiGPIO
+    - Merged Heater and Pump modules into a generic one called RPiGPIO
 * Version 0.5
-  - Added support for [picamera](https://github.com/waveform80/picamera), to use with our OV5647
-  - Added corresponding GUI entries in order to get our results from OV5647
-  - Began phasing out ArduCAM code
-  - Added average intensity display to GUI
-  - Added intensity to location plot.
-  - General debugging for new camera features
-  - Not Tested on RPi yet!
+    - Added support for [picamera](https://github.com/waveform80/picamera), to use with our OV5647
+    - Added corresponding GUI entries in order to get our results from OV5647
+    - Began phasing out ArduCAM code
+    - Added average intensity display to GUI
+    - Added intensity to location plot.
+    - General debugging for new camera features
+    - Not Tested on RPi yet!
 * Version 0.5.1
-  - Stable tested release.
-  - Fixed minor errors in previous beta version
-  - Has minor GUI formatting errors.
+    - Stable tested release.
+    - Fixed minor errors in previous beta version
+    - Has minor GUI formatting errors.
 * Version 0.5.2
-  - Hotfix:
-    - Fixed formatting errors found in previous version.
+    - Hotfix:
+        - Fixed formatting errors found in previous version.
 * Version 0.5.3
-  - Fixed GUI formatting.
+    - Fixed GUI formatting.
 * Version 0.6
-  - Major Update:
-    - Changed intensity display range to 0-256
-    - Fixed old formatting issues from OneWire module
-    - Code restructuring for better fit good programming practices
-    - Added image 'colorscaling' and functionality to various RPiCamera functions
-    - Added more RPiCamera functions that better manage rgb data
+    - GUI and RPiCamera:
+        - Changed intensity display range to 0-256
+        - Fixed old formatting issues from OneWire module
+        - Code restructuring for better fit good programming practices
+        - Added image 'colorscaling' and functionality to various RPiCamera functions
+        - Added more RPiCamera functions that better manage rgb data
 * Version 0.6.1
-  - Hotfix:
-    - Fixed plots grid layout, and eliminated camera detection indicator because of critical error.
+    - Hotfix:
+        - Fixed plots grid layout, and eliminated camera detection indicator because of critical error.
 * Version 0.6.2
-  - Minor Update:
     - GUI:
-      - Now Show Image and Show Plots display figures on different windows.
-      - Fixed error display for when heater and pump are not conneted at pin 12 and 11 respectively.
+        - Now Show Image and Show Plots display figures on different windows.
+        - Fixed error display for when heater and pump are not conneted at pin 12 and 11 respectively.
 * Version 0.6.3
-  - Separated Camera GUI from the general GUI
-  - Added support for changing camera options directly from Camera GUI or from command
+    - Separated Camera GUI from the general GUI
+    - Added support for changing camera options directly from Camera GUI or from command
 * Version 0.6.4
-  - Added Take Picture button
+    - Camera GUI:
+        - Added Take Picture button
 * Version 0.6.5
-  - Hotfix:
-    - Disabled exposure options until critical error is fixed.
+    - Hotfix:
+        - Disabled exposure options until critical error is fixed.
 * Version 0.6.6
-  - Changed Camera GUI formatting
-  - Added exposure modes
+    - Changed Camera GUI formatting
+    - Added exposure modes
 * Version 0.6.7
-  - Fixed green scaling and increased camera speed.
+    - Fixed green scaling and increased camera speed.
 * Version 0.6.8
-  - Found and fixed critical GPIO error in RPiGPIO library.
+    - Found and fixed critical GPIO error in RPiGPIO library.
 * Version 0.6.9.1
-  - Added Brightness and Contrast options
+    - Camera GUI and RPiCamera:
+        - Added Brightness and Contrast options
 * Version 0.6.9.3
-  - Added framerate and shutterspeed options
+    - Camera GUI and RPiCamera
+    - Added framerate and shutterspeed options
 * Version 0.7.0
-  - Added scipy as dependency
-  - Added show image option for RBG components
-  - Added standard option choices between low light and standard environment, for camera.
-  - Added Auto White Balance options for camera
-  - Added Save Image option
-  - Added Save All option, which saves all images and plot
-  - Added Zoom option, which allows delimitation to Region of Interest
-  - Added and Import Image option, which allows import of existing image
-  - Changed Image display from Show Image option, it now longer shows plot axis
-  - Removed Take Picture Default option, now all pictures are taken with Take Picture option
-  - Added Camera Preview option
+    - Camera GUI and RPiCamera:
+        - Added scipy as dependency
+        - Added show image option for RBG components
+        - Added standard option choices between low light and standard environment, for camera.
+        - Added Auto White Balance options for camera
+        - Added Save Image option
+        - Added Save All option, which saves all images and plot
+        - Added Zoom option, which allows delimitation to Region of Interest
+        - Added and Import Image option, which allows import of existing image
+        - Changed Image display from Show Image option, it now longer shows plot axis
+        - Removed Take Picture Default option, now all pictures are taken with Take Picture option
+      -  Added Camera Preview option
 * Version 0.7.0.1
-  - Removed scipy from setup.py dependencies, now it has to be manually installed before installing this package
+    - Removed scipy from setup.py dependencies, now it has to be manually installed before installing this package
 
 #Usage
 ##Imports
