@@ -33,7 +33,7 @@ def takePictureDefault(iso=100, brightness=50, contrast=0, resolution=(1024,1008
             return rgb_array
 
 
-def takePicture(iso=100, delay=60, exposure='auto', resolution=(1024,1008), brightness=50, contrast=0, shutterspeed=0, framerate=25, zoom=(0.0, 0.0, 1.0, 1.0)):
+def takePicture(iso=100, delay=2, exposure='auto', resolution=(1024,1008), brightness=50, contrast=0, shutterspeed=0, framerate=25, zoom=(0.0, 0.0, 1.0, 1.0), awb_mode='auto'):
     with picamera.PiCamera() as camera:
         with picamera.array.PiYUVArray(camera) as stream:
             camera.resolution = resolution
@@ -43,6 +43,7 @@ def takePicture(iso=100, delay=60, exposure='auto', resolution=(1024,1008), brig
             camera.exposure_mode = exposure
             camera.brightness = brightness
             camera.contrast = contrast
+            camera.awb_mode = awb_mode
             camera.zoom = zoom
             time.sleep(delay)
             camera.capture(stream, 'yuv')
@@ -116,6 +117,7 @@ def showImage(rgb_array, color='true'):
         plt.subplots_adjust(left=0, right=1, bottom=0, top=1)
         plt.show()
 
+
 def setImageColor(rgb_array, color):
     if color in ['b', 'blue']:
         rgb_array[..., 0] *= 0
@@ -155,6 +157,8 @@ def saveAllImages(rgb_array, foldername):
     greenimage = 'green.png'
     blueimage = 'blue.png'
     plotimage = 'plot.png'
+    if not os.path.exists(os.path.join(directory, foldername)):
+        os.mkdir(os.path.join(directory, foldername))
     misc.imsave(os.path.join(directory, foldername, trueimage), rgb_array)
     misc.imsave(os.path.join(directory, foldername, redimage), r_array)
     misc.imsave(os.path.join(directory, foldername, greenimage), g_array)
@@ -162,7 +166,7 @@ def saveAllImages(rgb_array, foldername):
     savePlot(rgb_array, os.path.join(directory, foldername, plotimage))
 
 
-def startPreview(iso=100, timeout=10, exposure='auto', resolution=(1024,1008), brightness=50, contrast=0, shutterspeed=0, framerate=25, zoom=(0.0, 0.0, 1.0, 1.0)):
+def startPreview(iso=100, timeout=10, exposure='auto', resolution=(1024,1008), brightness=50, contrast=0, shutterspeed=0, framerate=25, zoom=(0.0, 0.0, 1.0, 1.0), awb_mode='auto'):
     with picamera.PiCamera() as camera:
         camera.start_preview()
         camera.resolution = resolution
@@ -172,6 +176,7 @@ def startPreview(iso=100, timeout=10, exposure='auto', resolution=(1024,1008), b
         camera.exposure_mode = exposure
         camera.brightness = brightness
         camera.contrast = contrast
+        camera.awb_mode = awb_mode
         camera.zoom = zoom
         camera.start_preview()
         time.sleep(timeout)

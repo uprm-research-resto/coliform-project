@@ -8,14 +8,11 @@
 # Licensed under the GNU General Public License version 3.0 (GPL-3.0)
 from tkinter import *
 from tkinter import ttk
-from tkinter import filedialog
 from tkinter import messagebox
 import os
 import time
 from Coliform import OneWire, MultiPlot, RPiGPIO, RPiCamera
 from fractions import Fraction
-from scipy import misc
-from PIL import Image, ImageTk
 
 
 # from datetime import datetime
@@ -145,12 +142,12 @@ def startGUI():
         except ValueError:
             messagebox.showinfo(message='Please type number from 0-100 into Pump text box.')
 
-    def directorychosen():
-        try:
-            global filepath
-            filepath = filedialog.askdirectory()
-        except ValueError:
-            pass
+    # def directorychosen():
+    #     try:
+    #         global filepath
+    #         filepath = filedialog.askdirectory()
+    #     except ValueError:
+    #         pass
 
     root = Tk()
     root.title("Coliform Control GUI")
@@ -223,48 +220,52 @@ def startCameraGUI():
     tf = 'PlotTextFile.txt'
     if os.path.isfile(tf):
         os.remove(tf)
-    filepath = os.sep.join((os.path.expanduser('~'), 'Desktop'))
+    # filepath = os.sep.join((os.path.expanduser('~'), 'Desktop'))
+
+    def setnormaloptions():
+        try:
+            exposuremode.set('auto')
+            shutterspeedvar.set(0)
+            frameratevar.set('25')
+            isovar.set(100)
+            resolutionvary.set(1944)
+            resolutionvarx.set(2592)
+            delayvar.set(2)
+            brightnessvar.set(50)
+            previewtimeout.set(10)
+            zoomvar.set('0.0,0.0,1.0,1.0')
+            awbvar.set('auto')
+
+        except ValueError:
+            pass
+
+    def setdarkoptions():
+        try:
+            exposuremode.set('off')
+            shutterspeedvar.set(6)
+            frameratevar.set('1/6')
+            isovar.set(100)
+            resolutionvary.set(1944)
+            resolutionvarx.set(2592)
+            delayvar.set(30)
+            brightnessvar.set(50)
+            previewtimeout.set(10)
+            zoomvar.set('0.0,0.0,1.0,1.0')
+            awbvar.set('auto')
+        except ValueError:
+            pass
 
     def picturetaken():
         try:
             # global filename
             # filename = datetime.strftime(datetime.now(),"%Y.%m.%d-%H:%M:%S")+'.jpeg'
             iso = 100
-            brightness = 50
-            contrast = 0
-            resolution = (2592,1944)
-            global rgb_array
-            if isovar.get():
-                iso = isovar.get()
-            if brightnessvar.get():
-                brightness = brightnessvar.get()
-            if contrastvar.get():
-                contrast = contrastvar.get()
-            if resolutionvarx.get() and resolutionvary.get():
-                resolution = (resolutionvarx.get(),resolutionvary.get())
-            rgb_array = RPiCamera.takePictureDefault(iso=iso, brightness=brightness, contrast=contrast, resolution=resolution)
-            red_intensity, green_intensity, blue_intensity, intensity = RPiCamera.returnIntensity(rgb_array)
-            intensity_array = '\n'.join(['R:'+'{:.3f}'.format(red_intensity),
-                                         'G:'+'{:.3f}'.format(green_intensity),
-                                         'B:'+'{:.3f}'.format(blue_intensity),
-                                         'I:'+'{:.3f}'.format(intensity)])
-            intensitylabel.config(text=intensity_array)
-
-            # messagebox.showinfo(message='JPEG created on directory')
-        except (UnboundLocalError, IndexError):
-            # messagebox.showinfo(message='Arduino not found, make sure it is connected to USB port')
-            pass
-
-    def darkpicturetaken():
-        try:
-            # global filename
-            # filename = datetime.strftime(datetime.now(),"%Y.%m.%d-%H:%M:%S")+'.jpeg'
-            iso = 100
-            resolution = (2592,1944)
+            resolution = (2592, 1944)
             delay = 30
             brightness = 50
             contrast = 0
             shutterspeed = 0
+            framerate = 25
 
             global rgb_array
             if isovar.get():
@@ -272,7 +273,7 @@ def startCameraGUI():
             if delayvar.get():
                 delay = delayvar.get()
             if resolutionvarx.get() and resolutionvary.get():
-                resolution = (resolutionvarx.get(),resolutionvary.get())
+                resolution = (resolutionvarx.get(), resolutionvary.get())
             if brightnessvar.get():
                 brightness = brightnessvar.get()
             if contrastvar.get():
@@ -288,7 +289,8 @@ def startCameraGUI():
                     framerate = int(frameratevar.get())
             rgb_array = RPiCamera.takePicture(iso=iso, delay=delay, resolution=resolution, exposure=exposuremode.get(),
                                               brightness=brightness, contrast=contrast, shutterspeed=shutterspeed,
-                                              framerate=framerate)
+                                              framerate=framerate, zoom=tuple(map(float, zoomvar.get().split(','))),
+                                              awb_mode=awbvar.get())
             red_intensity, green_intensity, blue_intensity, intensity = RPiCamera.returnIntensity(rgb_array)
             intensity_array = '\n'.join(['R:'+'{:.3f}'.format(red_intensity),
                                          'G:'+'{:.3f}'.format(green_intensity),
@@ -357,11 +359,13 @@ def startCameraGUI():
         RPiCamera.saveImage(rgb_array)
 
     def saveallimages():
-        foldername = 'ISO:{}-Delay:{}-Resolution:{}x{}-Brightness:{}-Contrast:{}-Framerate:{}-ShutterSpeed:{}' \
-                     '-Exposure:{}'.format(isovar.get(), delayvar.get(), resolutionvarx.get(), resolutionvary.get(),
-                                           brightnessvar.get(), contrastvar.get(), frameratevar.get(),
-                                           shutterspeedvar.get(), exposuremode.get())
+        foldername = 'ISO={}-Delay={}-Resolution={}x{}-Brightness={}-Contrast={}-Framerate={}-ShutterSpeed={}' \
+                     '-Exposure={}-AutoWhiteBalance={}-' \
+                     'Zoom={}'.format(isovar.get(), delayvar.get(), resolutionvarx.get(), resolutionvary.get(),
+                                      brightnessvar.get(), contrastvar.get(), str(frameratevar.get().split('/')),
+                                      shutterspeedvar.get(), exposuremode.get(), awbvar.get(), zoomvar.get())
         RPiCamera.saveAllImages(rgb_array, foldername)
+        messagebox.showinfo(message='Finished Saving to Directory.')
 
     def preview():
         iso = 100
@@ -369,6 +373,8 @@ def startCameraGUI():
         brightness = 50
         contrast = 0
         shutterspeed = 0
+        framerate = 25
+        timeout = 10
 
         global rgb_array
         if isovar.get():
@@ -392,7 +398,8 @@ def startCameraGUI():
                 framerate = int(frameratevar.get())
 
         RPiCamera.startPreview(iso=iso, timeout=timeout, resolution=resolution, exposure=exposuremode.get(),
-                               brightness=brightness, contrast=contrast, shutterspeed=shutterspeed,framerate=framerate)
+                               brightness=brightness, contrast=contrast, shutterspeed=shutterspeed, framerate=framerate,
+                               zoom=tuple(map(float, zoomvar.get().split(','))), awb_mode=awbvar.get())
 
     # def realtimeplot():
     #     MultiPlot.GeneratePlotDataFile(tf, RPiCamera.returnIntensity(rgb_array), start_time)
@@ -415,6 +422,8 @@ def startCameraGUI():
     shutterspeedvar = IntVar()
     frameratevar = StringVar()
     previewtimeout = IntVar()
+    zoomvar = StringVar()
+    awbvar = StringVar()
 
     exposuremode.set('off')
     shutterspeedvar.set(6)
@@ -425,15 +434,19 @@ def startCameraGUI():
     delayvar.set(30)
     brightnessvar.set(50)
     previewtimeout.set(10)
+    zoomvar.set('0.0,0.0,1.0,1.0')
+    awbvar.set('auto')
 
     masterpane = ttk.Panedwindow(mainframe, orient=VERTICAL)
 
     midpane = ttk.Panedwindow(masterpane, orient=VERTICAL)
-    f3 = ttk.Labelframe(midpane, text='More Options:',
+    f3 = ttk.Labelframe(midpane, text='Camera Options:',
                         width=100, height=100)
     f4 = ttk.Labelframe(midpane, text='Exposure Modes:', width=100, height=100)
+    f2 = ttk.Labelframe(midpane, text='Auto White Balance:', width=100, height=100)
     midpane.add(f3)
     midpane.add(f4)
+    midpane.add(f2)
     masterpane.add(midpane)
 
     ttk.Label(f3, text='Delay: ').grid(column=1, row=1, sticky=E)
@@ -452,24 +465,40 @@ def startCameraGUI():
     delay_variable = ttk.Entry(f3, width=4, textvariable=frameratevar)
     delay_variable.grid(column=8, row=1, sticky=W)
 
-    ttk.Label(f3, text='Shutter Speed: ').grid(column=9, row=1, sticky=E)
+    ttk.Label(f3, text='Shutter Speed: ').grid(column=1, row=2, sticky=E)
     delay_variable = ttk.Entry(f3, width=4, textvariable=shutterspeedvar)
-    delay_variable.grid(column=10, row=1, sticky=W)
+    delay_variable.grid(column=2, row=2, sticky=W)
 
-    ttk.Label(f3, text='ISO: (max=1600)').grid(column=1, row=2, sticky=E)
+    ttk.Label(f3, text='ISO: (max=1600)').grid(column=3, row=2, sticky=E)
     iso_variable = ttk.Entry(f3, width=4, textvariable=isovar)
-    iso_variable.grid(column=2, row=2, sticky=W)
+    iso_variable.grid(column=4, row=2, sticky=W)
 
-    ttk.Label(f3, text='Resolution: (max=2592 x 1944)').grid(column=3, row=2, sticky=E)
+    ttk.Label(f3, text='Preview Timeout: ').grid(column=5, row=2, sticky=E)
+    delay_variable = ttk.Entry(f3, width=4, textvariable=previewtimeout)
+    delay_variable.grid(column=6, row=2, sticky=W)
+
+    ttk.Label(f3, text='Resolution:').grid(column=7, row=2, sticky=E)
     xresolution_variable = ttk.Entry(f3, width=4, textvariable=resolutionvarx)
-    xresolution_variable.grid(column=4, row=2, sticky=E)
-    ttk.Label(f3, text='x').grid(column=5, row=2)
+    xresolution_variable.grid(column=8, row=2, sticky=E)
+    ttk.Label(f3, text='x').grid(column=9, row=2)
     yresolution_variable = ttk.Entry(f3, width=4, textvariable=resolutionvary)
-    yresolution_variable.grid(column=6, row=2, sticky=W)
+    yresolution_variable.grid(column=10, row=2, sticky=W)
 
-    ttk.Label(f3, text='Preview Timeout: ').grid(column=7, row=2, sticky=E)
-    delay_variable = ttk.Entry(f3, width=4, textvariable=shutterspeedvar)
-    delay_variable.grid(column=8, row=2, sticky=W)
+    ttk.Label(f3, text='Zoom: ').grid(column=1, row=3, sticky=E)
+    delay_variable = ttk.Entry(f3, width=15, textvariable=zoomvar)
+    delay_variable.grid(column=2, row=3, sticky=W)
+
+    awbmode_auto = ttk.Radiobutton(f2, text='auto', variable=awbvar, value='auto', state=ACTIVE)
+    awbmode_auto.grid(column=1, row=1, sticky=W)
+
+    awbmode_fluorescent = ttk.Radiobutton(f2, text='fluorescent', variable=awbvar, value='fluorescent')
+    awbmode_fluorescent.grid(column=2, row=1, sticky=W)
+
+    awbmode_incandescent = ttk.Radiobutton(f2, text='incandescent', variable=awbvar, value='incandescent')
+    awbmode_incandescent.grid(column=3, row=1, sticky=W)
+
+    awbmode_off = ttk.Radiobutton(f2, text='off', variable=awbvar, value='off')
+    awbmode_off.grid(column=4, row=1, sticky=W)
 
     exposuremode_night = ttk.Radiobutton(f4, text='night', variable=exposuremode, value='night')
     exposuremode_night.grid(column=1, row=1, sticky=W)
@@ -496,17 +525,18 @@ def startCameraGUI():
     bottompane.add(f6)
     masterpane.add(bottompane)
 
-    ttk.Button(f5, text='Take Picture Custom/Dark', command=darkpicturetaken).grid(column=1, row=1, sticky=(W, E))
-    ttk.Button(f5, text="Take Picture Default", command=picturetaken).grid(column=1, row=2, sticky=(W, E))
-    ttk.Button(f5, text="Camera Preview", command=preview).grid(column=1, row=3, sticky=(W, E))
-    ttk.Button(f5, text="Save Image", command=saveimage).grid(column=1, row=4, sticky=(W, E))
+    ttk.Button(f5, text='Take Picture', command=picturetaken).grid(column=1, row=1, sticky=(W, E))
+    ttk.Button(f5, text="Set Normal Options", command=setnormaloptions).grid(column=1, row=2, sticky=(W, E))
+    ttk.Button(f5, text="Set Low Light Options", command=setdarkoptions).grid(column=1, row=3, sticky=(W, E))
+    ttk.Button(f5, text="Camera Preview", command=preview).grid(column=1, row=4, sticky=(W, E))
     ttk.Button(f5, text="Show Plots", command=showimageplot).grid(column=2, row=2, sticky=(W, E))
     ttk.Button(f5, text="Show Image", command=showimage).grid(column=2, row=1, sticky=(W, E))
     ttk.Button(f5, text="Import Image", command=importimage).grid(column=2, row=3, sticky=(W, E))
-    ttk.Button(f5, text="Save All", command=saveimage).grid(column=2, row=4, sticky=(W, E))
+    ttk.Button(f5, text="Save Image", command=saveimage).grid(column=2, row=4, sticky=(W, E))
     ttk.Button(f5, text="Show Red", command=showredimage).grid(column=3, row=1, sticky=(W, E))
     ttk.Button(f5, text="Show Green", command=showgreenimage).grid(column=3, row=2, sticky=(W, E))
     ttk.Button(f5, text="Show Blue", command=showblueimage).grid(column=3, row=3, sticky=(W, E))
+    ttk.Button(f5, text="Save All", command=saveallimages).grid(column=3, row=4, sticky=(W, E))
 
     ttk.Label(f6, text="Intensity: ").grid(column=1, row=1, sticky=(W, E))
     intensitylabel = ttk.Label(f6, text='Not Taken')

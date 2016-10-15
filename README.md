@@ -156,56 +156,42 @@ Additional information on setting up SSH: [Oracle Global Desktop Administration]
 * [matplotlib](https://github.com/matplotlib/matplotlib)
 * [picamera](https://github.com/waveform80/picamera)
 * [RPi.GPIO](https://pypi.python.org/pypi/RPi.GPIO)
+* [scipy](https://github.com/scipy/scipy) (required after version 0.7.0)
 
 #Changelog
 * Version 0.1
   - Initial Build 
 * Version 0.1.1
-  - Minor Update: 
-    - Added install requirements to wheel package
+  - Added install requirements to wheel package
 * Version 0.2
-  - Major Update: 
-    - Added MultiPlot and GPIO
-    - Revamped OneWire and ArduCAM
-    - Added PyPI Classifiers
+  - Added MultiPlot and GPIO
+  - Revamped OneWire and ArduCAM
+  - Added PyPI Classifiers
 * Version 0.2.1
-  - Minor Update:
-    - Transferred Project GUI into Coliform module
+  - Transferred Project GUI into Coliform module
 * Version 0.2.2
-  - Minor Update:
-    - Added GPL License classifiers.
+  - Added GPL License classifiers.
 * Version 0.3
-  - Major Update:
-    - Internal refactoring and cleaning up.
+  - Internal refactoring and cleaning up.
 * Version 0.4
-  - Major Update:
-    - Merged Heater and Pump modules into a generic one called RPiGPIO
-* Version 0.5b0 (Beta Version)
-  - Major Update:
-    - Added support for [picamera](https://github.com/waveform80/picamera), to use with our OV5647
-    - Added corresponding GUI entries in order to get our results from OV5647
-    - Began phasing out ArduCAM code
-* Version 0.5b1 (Beta Version)
-    - Added average intensity display to GUI
-* Version 0.5b2 (Beta Version) (Deleted)
-    - Corrupted package, was deleted.
-* Version 0.5b3 (Beta Version)
-    - Added intensity to location plot.
-* Versions 0.5b4-7 (Beta Versions)
-    - Fixed formatting errors and corrupted releases.
-    - General debugging for new camera features
-* Version 0.5.1b1 (Beta Version)
-    - Stable tested release.
+  - Merged Heater and Pump modules into a generic one called RPiGPIO
+* Version 0.5
+  - Added support for [picamera](https://github.com/waveform80/picamera), to use with our OV5647
+  - Added corresponding GUI entries in order to get our results from OV5647
+  - Began phasing out ArduCAM code
+  - Added average intensity display to GUI
+  - Added intensity to location plot.
+  - General debugging for new camera features
+  - Not Tested on RPi yet!
 * Version 0.5.1
-  - Minor Update:
-    - Fixed minor errors in previous beta version
-    - Has minor GUI formatting errors.
+  - Stable tested release.
+  - Fixed minor errors in previous beta version
+  - Has minor GUI formatting errors.
 * Version 0.5.2
-  - Minor Update:
+  - Hotfix:
     - Fixed formatting errors found in previous version.
 * Version 0.5.3
-  - Minor Update:
-    - Fixed GUI formatting.
+  - Fixed GUI formatting.
 * Version 0.6
   - Major Update:
     - Changed intensity display range to 0-256
@@ -236,6 +222,22 @@ Additional information on setting up SSH: [Oracle Global Desktop Administration]
   - Fixed green scaling and increased camera speed.
 * Version 0.6.8
   - Found and fixed critical GPIO error in RPiGPIO library.
+* Version 0.6.9.1
+  - Added Brightness and Contrast options
+* Version 0.6.9.3
+  - Added framerate and shutterspeed options
+* Version 0.7.0
+  - Added scipy as dependency
+  - Added show image option for RBG components
+  - Added standard option choices between low light and standard environment, for camera.
+  - Added Auto White Balance options for camera
+  - Added Save Image option
+  - Added Save All option, which saves all images and plot
+  - Added Zoom option, which allows delimitation to Region of Interest
+  - Added and Import Image option, which allows import of existing image
+  - Changed Image display from Show Image option, it now longer shows plot axis
+  - Removed Take Picture Default option, now all pictures are taken with Take Picture option
+  - Added Camera Preview option
 
 #Usage
 ##Imports
@@ -317,6 +319,7 @@ Sample Plot, using 3 OneWires:
 ```
 
 ##RPiCamera
+UPDATE IN PROGRESS...
 These functions use [picamera](https://github.com/waveform80/picamera), 
 for more information on how to use the Camera and addtional usage, visit picamera [documentation](https://picamera.readthedocs.io/en/release-1.12/).
 
@@ -412,6 +415,7 @@ PWM.shutdown()
 ```
 
 ##GUI
+UPDATE IN PROGRESS...
 In order to display the project GUI, the following code can be used:
 ```python
 from Coliform import GUI
