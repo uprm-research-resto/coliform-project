@@ -55,11 +55,13 @@ curl -O https://bootstrap.pypa.io/get-pip.py
    
 sudo python3 get-pip.py
 ```
-Before installing this module, you need to install the jpeg library:
+Before installing this module, you need to install the jpeg library and scipy:
 
 In RPi terminal:
 ```bash
-sudo apt install libjpeg-dev
+sudo apt-get update
+sudo apt-get install libjpeg-dev
+sudo apt-get install python3-scipy
 ```
 
 Now to install the module:
@@ -77,7 +79,7 @@ After installing Coliform, type this into terminal:
 ```bash
 sudo apt install python3-cairocffi
 ```
-For matplotlib version higher than 1.5.3:
+For matplotlib version 1.5.3 or higher:
 
 Change matplotlib backend to TkAgg:
 
@@ -238,6 +240,8 @@ Additional information on setting up SSH: [Oracle Global Desktop Administration]
   - Changed Image display from Show Image option, it now longer shows plot axis
   - Removed Take Picture Default option, now all pictures are taken with Take Picture option
   - Added Camera Preview option
+* Version 0.7.0.1
+  - Removed scipy from setup.py dependencies, now it has to be manually installed before installing this package
 
 #Usage
 ##Imports
