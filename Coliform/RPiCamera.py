@@ -18,39 +18,67 @@ from fractions import Fraction
 import os
 
 
-def takePictureDefault(iso=100, brightness=50, contrast=0, resolution=(1024,1008)):
-    with picamera.PiCamera() as camera:
-        with picamera.array.PiYUVArray(camera) as stream:
-            camera.resolution = resolution
-            camera.brightness = brightness
-            camera.contrast = contrast
-            camera.iso = iso
-            time.sleep(2)
-            camera.capture(stream, 'yuv')
-            # print(stream.array.shape)
-            # print(stream.rgb_array.shape)
-            rgb_array = stream.rgb_array
-            return rgb_array
+# def takePictureDefault(iso=100, brightness=50, contrast=0, resolution=(1024,1008)):
+#     with picamera.PiCamera() as camera:
+#         with picamera.array.PiYUVArray(camera) as stream:
+#             camera.resolution = resolution
+#             camera.brightness = brightness
+#             camera.contrast = contrast
+#             camera.iso = iso
+#             time.sleep(2)
+#             camera.capture(stream, 'yuv')
+#             # print(stream.array.shape)
+#             # print(stream.rgb_array.shape)
+#             rgb_array = stream.rgb_array
+#             return rgb_array
 
 
-def takePicture(iso=100, delay=2, exposure='auto', resolution=(1024,1008), brightness=50, contrast=0, shutterspeed=0, framerate=25, zoom=(0.0, 0.0, 1.0, 1.0), awb_mode='auto'):
-    with picamera.PiCamera() as camera:
-        with picamera.array.PiYUVArray(camera) as stream:
-            camera.resolution = resolution
-            camera.framerate = framerate
-            camera.shutter_speed = shutterspeed
-            camera.iso = iso
-            camera.exposure_mode = exposure
-            camera.brightness = brightness
-            camera.contrast = contrast
-            camera.awb_mode = awb_mode
-            camera.zoom = zoom
-            time.sleep(delay)
-            camera.capture(stream, 'yuv')
-            # print(stream.array.shape)
-            # print(stream.rgb_array.shape)
-            rgb_array = stream.rgb_array
-            return rgb_array
+def takePicture(iso=0, preview=0, exposure='default', resolution='2592,1944', brightness=50, contrast=0, shutterspeed=0, timeout=5, zoom='0.0,0.0,1.0,1.0', awb_mode='default'):
+    capture = 'raspistill --raw'
+    if iso != 0: # iso 0 = default
+        capture += ' --ISO ' + str(iso)
+    if preview == 0:
+        capture += ' --nopreview'
+    if exposure != 'default':
+        capture += ' --exposure ' + exposure
+    if resolution != '2592,1944':
+        resolutionx = resolution.split(',')[0]
+        resolutiony = resolution.split(',')[1]
+        capture += ' --width ' + resolutionx + ' --height ' + resolutiony
+    if brightness != 50:
+        capture += ' --brightness ' + str(brightness)
+    if contrast != 0:
+        capture += ' --contrast ' + str(contrast)
+    if shutterspeed != 0:
+        capture += ' -ss ' + str(shutterspeed)
+    if timeout != 5:
+        capture += ' --timeout ' + str(timeout*(10**3))
+    if zoom != '0.0,0.0,1.0,1.0':
+        capture += ' -roi ' + zoom
+    if awb_mode != 'default':
+        capture += ' -awb ' + awb_mode
+
+        # with picamera.PiCamera() as camera:
+    #     with picamera.array.PiYUVArray(camera) as stream:
+    #         camera.resolution = resolution
+    #         camera.framerate = framerate
+    #         camera.shutter_speed = shutterspeed
+    #         camera.iso = iso
+    #         camera.exposure_mode = exposure
+    #         camera.brightness = brightness
+    #         camera.contrast = contrast
+    #         camera.awb_mode = awb_mode
+    #         camera.zoom = zoom
+    #         time.sleep(delay)
+    #         camera.capture(stream, 'yuv')
+    #         # print(stream.array.shape)
+    #         # print(stream.rgb_array.shape)
+    #         rgb_array = stream.rgb_array
+    capture += ' -o output.jpg'
+    os.system(capture)
+    rgb_array = misc.imread('output.jpg')
+
+    return rgb_array
 
 
 def returnIntensity(rgb_array, color='all'):
@@ -166,21 +194,45 @@ def saveAllImages(rgb_array, foldername):
     savePlot(rgb_array, os.path.join(directory, foldername, plotimage))
 
 
-def startPreview(iso=100, timeout=10, exposure='auto', resolution=(1024,1008), brightness=50, contrast=0, shutterspeed=0, framerate=25, zoom=(0.0, 0.0, 1.0, 1.0), awb_mode='auto'):
-    with picamera.PiCamera() as camera:
-        camera.start_preview()
-        camera.resolution = resolution
-        camera.framerate = framerate
-        camera.shutter_speed = shutterspeed
-        camera.iso = iso
-        camera.exposure_mode = exposure
-        camera.brightness = brightness
-        camera.contrast = contrast
-        camera.awb_mode = awb_mode
-        camera.zoom = zoom
-        camera.start_preview()
-        time.sleep(timeout)
-        camera.stop_preview()
+def startPreview(iso=0, timeout=10, exposure='default', resolution='2592,1944', brightness=50, contrast=0, shutterspeed=0, zoom='0.0,0.0,1.0,1.0', awb_mode='default'):
+    capture = 'raspistill --raw'
+    if iso != 0: # iso 0 = auto
+        capture += ' --ISO ' + str(iso)
+    if exposure != 'default':
+        capture += ' --exposure ' + exposure
+    if resolution != '2592,1944':
+        resolutionx = resolution.split(',')[0]
+        resolutiony = resolution.split(',')[1]
+        capture += ' --width ' + resolutionx + ' --height ' + resolutiony
+    if brightness != 50:
+        capture += ' --brightness ' + str(brightness)
+    if contrast != 0:
+        capture += ' --contrast ' + str(contrast)
+    if shutterspeed != 0:
+        capture += ' -ss ' + str(shutterspeed)
+    if timeout != 5:
+        capture += ' --timeout ' + str(timeout*(10**3))
+    if zoom != '0.0,0.0,1.0,1.0':
+        capture += ' -roi ' + zoom
+    if awb_mode != 'default':
+        capture += ' -awb ' + awb_mode
+
+    os.system(capture)
+
+    # with picamera.PiCamera() as camera:
+    #     camera.start_preview()
+    #     camera.resolution = resolution
+    #     camera.framerate = framerate
+    #     camera.shutter_speed = shutterspeed
+    #     camera.iso = iso
+    #     camera.exposure_mode = exposure
+    #     camera.brightness = brightness
+    #     camera.contrast = contrast
+    #     camera.awb_mode = awb_mode
+    #     camera.zoom = zoom
+    #     camera.start_preview()
+    #     time.sleep(timeout)
+    #     camera.stop_preview()
 
 
 def showPlot(rgb_array):

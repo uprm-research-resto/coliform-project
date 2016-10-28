@@ -224,34 +224,34 @@ def startCameraGUI():
 
     def setnormaloptions():
         try:
-            exposuremode.set('auto')
+            exposuremode.set('default')
             shutterspeedvar.set(0)
-            frameratevar.set('25')
-            isovar.set(100)
+            # frameratevar.set('25')
+            isovar.set(0)
             resolutionvary.set(1944)
             resolutionvarx.set(2592)
             delayvar.set(2)
             brightnessvar.set(50)
             previewtimeout.set(10)
             zoomvar.set('0.0,0.0,1.0,1.0')
-            awbvar.set('auto')
+            awbvar.set('default')
 
         except ValueError:
             pass
 
     def setdarkoptions():
         try:
-            exposuremode.set('off')
+            exposuremode.set('default')
             shutterspeedvar.set(6)
-            frameratevar.set('1/6')
-            isovar.set(100)
+            # frameratevar.set('1/6')
+            isovar.set(0)
             resolutionvary.set(1944)
             resolutionvarx.set(2592)
             delayvar.set(30)
             brightnessvar.set(50)
-            previewtimeout.set(10)
+            previewtimeout.set(30)
             zoomvar.set('0.0,0.0,1.0,1.0')
-            awbvar.set('auto')
+            awbvar.set('default')
         except ValueError:
             pass
 
@@ -259,13 +259,12 @@ def startCameraGUI():
         try:
             # global filename
             # filename = datetime.strftime(datetime.now(),"%Y.%m.%d-%H:%M:%S")+'.jpeg'
-            iso = 100
-            resolution = (2592, 1944)
+            iso = 0
+            resolution = '2592, 1944'
             delay = 30
             brightness = 50
             contrast = 0
             shutterspeed = 0
-            framerate = 25
 
             global rgb_array
             if isovar.get():
@@ -273,24 +272,23 @@ def startCameraGUI():
             if delayvar.get():
                 delay = delayvar.get()
             if resolutionvarx.get() and resolutionvary.get():
-                resolution = (resolutionvarx.get(), resolutionvary.get())
+                resolution = str(resolutionvarx.get()) + ',' + str(resolutionvary.get())
             if brightnessvar.get():
                 brightness = brightnessvar.get()
             if contrastvar.get():
                 contrast = contrastvar.get()
             if shutterspeedvar.get():
                 shutterspeed = shutterspeedvar.get() * 10**6
-            if frameratevar.get():
-                if '/' in frameratevar.get():
-                    framelist = frameratevar.get().split('/')
-                    if len(framelist) == 2:
-                        framerate = Fraction(int(framelist[0]), int(framelist[1]))
-                else:
-                    framerate = int(frameratevar.get())
-            rgb_array = RPiCamera.takePicture(iso=iso, delay=delay, resolution=resolution, exposure=exposuremode.get(),
+            # if frameratevar.get():
+            #     if '/' in frameratevar.get():
+            #         framelist = frameratevar.get().split('/')
+            #         if len(framelist) == 2:
+            #             framerate = Fraction(int(framelist[0]), int(framelist[1]))
+            #     else:
+            #         framerate = int(frameratevar.get())
+            rgb_array = RPiCamera.takePicture(iso=iso, timeout=delay, resolution=resolution, exposure=exposuremode.get(),
                                               brightness=brightness, contrast=contrast, shutterspeed=shutterspeed,
-                                              framerate=framerate, zoom=tuple(map(float, zoomvar.get().split(','))),
-                                              awb_mode=awbvar.get())
+                                              zoom=zoomvar.get().replace(' ', ''), awb_mode=awbvar.get())
             red_intensity, green_intensity, blue_intensity, intensity = RPiCamera.returnIntensity(rgb_array)
             intensity_array = '\n'.join(['R:'+'{:.3f}'.format(red_intensity),
                                          'G:'+'{:.3f}'.format(green_intensity),
@@ -359,21 +357,21 @@ def startCameraGUI():
         RPiCamera.saveImage(rgb_array)
 
     def saveallimages():
-        foldername = 'ISO={}-Delay={}-Resolution={}x{}-Brightness={}-Contrast={}-Framerate={}-ShutterSpeed={}' \
+        foldername = 'ISO={}-Delay={}-Resolution={}x{}-Brightness={}-Contrast={}-ShutterSpeed={}' \
                      '-Exposure={}-AutoWhiteBalance={}-' \
                      'Zoom={}'.format(isovar.get(), delayvar.get(), resolutionvarx.get(), resolutionvary.get(),
-                                      brightnessvar.get(), contrastvar.get(), str(frameratevar.get().split('/')),
+                                      brightnessvar.get(), contrastvar.get(),
                                       shutterspeedvar.get(), exposuremode.get(), awbvar.get(), zoomvar.get())
         RPiCamera.saveAllImages(rgb_array, foldername)
         messagebox.showinfo(message='Finished Saving to Directory.')
 
     def preview():
-        iso = 100
-        resolution = (2592, 1944)
+        iso = 0
+        resolution = '2592, 1944'
         brightness = 50
         contrast = 0
         shutterspeed = 0
-        framerate = 25
+        # framerate = 25
         timeout = 10
 
         global rgb_array
@@ -382,24 +380,24 @@ def startCameraGUI():
         if previewtimeout.get():
             timeout = previewtimeout.get()
         if resolutionvarx.get() and resolutionvary.get():
-            resolution = (resolutionvarx.get(), resolutionvary.get())
+            resolution = str(resolutionvarx.get()) + ',' + str(resolutionvary.get())
         if brightnessvar.get():
             brightness = brightnessvar.get()
         if contrastvar.get():
             contrast = contrastvar.get()
         if shutterspeedvar.get():
             shutterspeed = shutterspeedvar.get() * 10 ** 6
-        if frameratevar.get():
-            if '/' in frameratevar.get():
-                framelist = frameratevar.get().split('/')
-                if len(framelist) == 2:
-                    framerate = Fraction(int(framelist[0]), int(framelist[1]))
-            else:
-                framerate = int(frameratevar.get())
-
+        # if frameratevar.get():
+        #     if '/' in frameratevar.get():
+        #         framelist = frameratevar.get().split('/')
+        #         if len(framelist) == 2:
+        #             framerate = Fraction(int(framelist[0]), int(framelist[1]))
+        #     else:
+        #         framerate = int(frameratevar.get())
+        #
         RPiCamera.startPreview(iso=iso, timeout=timeout, resolution=resolution, exposure=exposuremode.get(),
-                               brightness=brightness, contrast=contrast, shutterspeed=shutterspeed, framerate=framerate,
-                               zoom=tuple(map(float, zoomvar.get().split(','))), awb_mode=awbvar.get())
+                               brightness=brightness, contrast=contrast, shutterspeed=shutterspeed,
+                               zoom=zoomvar.get().replace(' ',''), awb_mode=awbvar.get())
 
     # def realtimeplot():
     #     MultiPlot.GeneratePlotDataFile(tf, RPiCamera.returnIntensity(rgb_array), start_time)
@@ -420,22 +418,22 @@ def startCameraGUI():
     contrastvar = IntVar()
     brightnessvar = IntVar()
     shutterspeedvar = IntVar()
-    frameratevar = StringVar()
+    # frameratevar = StringVar()
     previewtimeout = IntVar()
     zoomvar = StringVar()
     awbvar = StringVar()
 
-    exposuremode.set('off')
-    shutterspeedvar.set(6)
-    frameratevar.set('1/6')
-    isovar.set(100)
+    exposuremode.set('default')
+    shutterspeedvar.set(0)
+    # frameratevar.set('1/6')
+    isovar.set(0)
     resolutionvary.set(1944)
     resolutionvarx.set(2592)
-    delayvar.set(30)
+    delayvar.set(5)
     brightnessvar.set(50)
     previewtimeout.set(10)
     zoomvar.set('0.0,0.0,1.0,1.0')
-    awbvar.set('auto')
+    awbvar.set('default')
 
     masterpane = ttk.Panedwindow(mainframe, orient=VERTICAL)
 
@@ -461,15 +459,15 @@ def startCameraGUI():
     delay_variable = ttk.Entry(f3, width=4, textvariable=contrastvar)
     delay_variable.grid(column=6, row=1, sticky=W)
 
-    ttk.Label(f3, text='Framerate: ').grid(column=7, row=1, sticky=E)
-    delay_variable = ttk.Entry(f3, width=4, textvariable=frameratevar)
-    delay_variable.grid(column=8, row=1, sticky=W)
+    # ttk.Label(f3, text='Framerate: ').grid(column=7, row=1, sticky=E)
+    # delay_variable = ttk.Entry(f3, width=4, textvariable=frameratevar)
+    # delay_variable.grid(column=8, row=1, sticky=W)
 
     ttk.Label(f3, text='Shutter Speed: ').grid(column=1, row=2, sticky=E)
     delay_variable = ttk.Entry(f3, width=4, textvariable=shutterspeedvar)
     delay_variable.grid(column=2, row=2, sticky=W)
 
-    ttk.Label(f3, text='ISO: (max=1600)').grid(column=3, row=2, sticky=E)
+    ttk.Label(f3, text='ISO: (max=800)').grid(column=3, row=2, sticky=E)
     iso_variable = ttk.Entry(f3, width=4, textvariable=isovar)
     iso_variable.grid(column=4, row=2, sticky=W)
 
@@ -488,7 +486,7 @@ def startCameraGUI():
     delay_variable = ttk.Entry(f3, width=15, textvariable=zoomvar)
     delay_variable.grid(column=2, row=3, sticky=W)
 
-    awbmode_auto = ttk.Radiobutton(f2, text='auto', variable=awbvar, value='auto', state=ACTIVE)
+    awbmode_auto = ttk.Radiobutton(f2, text='auto', variable=awbvar, value='auto')
     awbmode_auto.grid(column=1, row=1, sticky=W)
 
     awbmode_fluorescent = ttk.Radiobutton(f2, text='fluorescent', variable=awbvar, value='fluorescent')
@@ -500,11 +498,32 @@ def startCameraGUI():
     awbmode_off = ttk.Radiobutton(f2, text='off', variable=awbvar, value='off')
     awbmode_off.grid(column=4, row=1, sticky=W)
 
+    awbmode_default = ttk.Radiobutton(f2, text='default', variable=awbvar, value='default')
+    awbmode_default.grid(column=5, row=1, sticky=W)
+
+    awbmode_sun = ttk.Radiobutton(f2, text='sun', variable=awbvar, value='sun')
+    awbmode_sun.grid(column=6, row=1, sticky=W)
+
+    awbmode_cloud = ttk.Radiobutton(f2, text='cloud', variable=awbvar, value='cloud')
+    awbmode_cloud.grid(column=7, row=1, sticky=W)
+
+    awbmode_shade = ttk.Radiobutton(f2, text='shade', variable=awbvar, value='shade')
+    awbmode_shade.grid(column=1, row=2, sticky=W)
+
+    awbmode_tungsten = ttk.Radiobutton(f2, text='tungsten', variable=awbvar, value='tungsten')
+    awbmode_tungsten.grid(column=2, row=2, sticky=W)
+
+    awbmode_flash = ttk.Radiobutton(f2, text='flash', variable=awbvar, value='flash')
+    awbmode_flash.grid(column=3, row=2, sticky=W)
+
+    awbmode_horizon = ttk.Radiobutton(f2, text='horizon', variable=awbvar, value='horizon')
+    awbmode_horizon.grid(column=4, row=2, sticky=W)
+
     exposuremode_night = ttk.Radiobutton(f4, text='night', variable=exposuremode, value='night')
     exposuremode_night.grid(column=1, row=1, sticky=W)
 
-    exposuremode_backlight = ttk.Radiobutton(f4, text='auto', variable=exposuremode, value='auto')
-    exposuremode_backlight.grid(column=2, row=1, sticky=W)
+    exposuremode_auto = ttk.Radiobutton(f4, text='auto', variable=exposuremode, value='auto')
+    exposuremode_auto.grid(column=2, row=1, sticky=W)
 
     exposuremode_verylong = ttk.Radiobutton(f4, text='verylong', variable=exposuremode, value='verylong')
     exposuremode_verylong.grid(column=3, row=1, sticky=W)
@@ -515,8 +534,32 @@ def startCameraGUI():
     exposuremode_sports = ttk.Radiobutton(f4, text='sports', variable=exposuremode, value='sports')
     exposuremode_sports.grid(column=5, row=1, sticky=W)
 
-    exposuremode_off = ttk.Radiobutton(f4, text='off', variable=exposuremode, state=ACTIVE, value='off')
+    exposuremode_off = ttk.Radiobutton(f4, text='off', variable=exposuremode, value='off')
     exposuremode_off.grid(column=6, row=1, sticky=W)
+
+    exposuremode_default = ttk.Radiobutton(f4, text='default', variable=exposuremode, value='default')
+    exposuremode_default.grid(column=7, row=1, sticky=W)
+
+    exposuremode_backlight = ttk.Radiobutton(f4, text='backlight', variable=exposuremode, value='backlight')
+    exposuremode_backlight.grid(column=1, row=2, sticky=W)
+
+    exposuremode_fireworks = ttk.Radiobutton(f4, text='fireworks', variable=exposuremode, value='fireworks')
+    exposuremode_fireworks.grid(column=2, row=2, sticky=W)
+
+    exposuremode_antishake = ttk.Radiobutton(f4, text='antishake', variable=exposuremode, value='antishake')
+    exposuremode_antishake.grid(column=3, row=2, sticky=W)
+
+    exposuremode_fixedfps = ttk.Radiobutton(f4, text='fixedfps', variable=exposuremode, value='fixedfps')
+    exposuremode_fixedfps.grid(column=4, row=2, sticky=W)
+
+    exposuremode_beach = ttk.Radiobutton(f4, text='beach', variable=exposuremode, value='beach')
+    exposuremode_beach.grid(column=5, row=2, sticky=W)
+
+    exposuremode_snow = ttk.Radiobutton(f4, text='snow', variable=exposuremode, value='snow')
+    exposuremode_snow.grid(column=6, row=2, sticky=W)
+
+    exposuremode_nightpreview = ttk.Radiobutton(f4, text='nightpreview', variable=exposuremode, value='nightpreview')
+    exposuremode_nightpreview.grid(column=7, row=2, sticky=W)
 
     bottompane = ttk.Panedwindow(masterpane, orient=HORIZONTAL)
     f5 = ttk.Labelframe(bottompane, text='Camera Options:', width=100, height=100)

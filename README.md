@@ -245,12 +245,23 @@ Additional information on setting up SSH: [Oracle Global Desktop Administration]
       -  Added Camera Preview option
 * Version 0.7.0.1
     - Removed scipy from setup.py dependencies, now it has to be manually installed before installing this package
+* Version 0.7.1
+    - Camera GUI, RPiCamera:
+        - Changed protocol used to take pictures from picamera to raspistill because of green cast issues.
+        - Found bug while testing, fails to take picture or show preview
+* Version 0.7.1.1
+    - Camera GUI, RPiCamera:
+        - Fixed bug that prevented picture from being taken
+        - Still can't show preview
+* Version 0.7.1.2
+    - Camera GUI, RPiCamera:
+        - Fixed bug that prevented preview from being shown.
 
 #Usage
 ##Imports
-The following imports are used:
+Imports from module can be done as shown here:
 ```python
-from Coliform import OneWire, Pump, ArduCAM, MultiPlot, Heater
+from Coliform import OneWire, Pump, ArduCAM, MultiPlot, Heater, RPiCamera
 from Coliform import GUI
 ```
 The first is for all functions, but the GUI, and the second is to import the GUI function.
