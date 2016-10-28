@@ -256,6 +256,10 @@ Additional information on setting up SSH: [Oracle Global Desktop Administration]
 * Version 0.7.1.2
     - Camera GUI, RPiCamera:
         - Fixed bug that prevented preview from being shown.
+* Version 0.7.2
+    - Camera GUI, RPiCamera:
+        - Internal refactoring
+        - changed shutter speed to microseconds
 
 #Usage
 ##Imports

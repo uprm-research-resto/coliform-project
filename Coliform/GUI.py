@@ -224,7 +224,7 @@ def startCameraGUI():
 
     def setnormaloptions():
         try:
-            exposuremode.set('default')
+            exposuremode.set('')
             shutterspeedvar.set(0)
             # frameratevar.set('25')
             isovar.set(0)
@@ -234,14 +234,14 @@ def startCameraGUI():
             brightnessvar.set(50)
             previewtimeout.set(10)
             zoomvar.set('0.0,0.0,1.0,1.0')
-            awbvar.set('default')
+            awbvar.set('')
 
         except ValueError:
             pass
 
     def setdarkoptions():
         try:
-            exposuremode.set('default')
+            exposuremode.set('')
             shutterspeedvar.set(6)
             # frameratevar.set('1/6')
             isovar.set(0)
@@ -251,7 +251,7 @@ def startCameraGUI():
             brightnessvar.set(50)
             previewtimeout.set(30)
             zoomvar.set('0.0,0.0,1.0,1.0')
-            awbvar.set('default')
+            awbvar.set('')
         except ValueError:
             pass
 
@@ -272,7 +272,7 @@ def startCameraGUI():
             if delayvar.get():
                 delay = delayvar.get()
             if resolutionvarx.get() and resolutionvary.get():
-                resolution = str(resolutionvarx.get()) + ',' + str(resolutionvary.get())
+                resolution = (resolutionvarx.get(), resolutionvary.get())
             if brightnessvar.get():
                 brightness = brightnessvar.get()
             if contrastvar.get():
@@ -288,7 +288,7 @@ def startCameraGUI():
             #         framerate = int(frameratevar.get())
             rgb_array = RPiCamera.takePicture(iso=iso, timeout=delay, resolution=resolution, exposure=exposuremode.get(),
                                               brightness=brightness, contrast=contrast, shutterspeed=shutterspeed,
-                                              zoom=zoomvar.get().replace(' ', ''), awb_mode=awbvar.get())
+                                              zoom=tuple(map(float, zoomvar.get().split(','))), awb_mode=awbvar.get())
             red_intensity, green_intensity, blue_intensity, intensity = RPiCamera.returnIntensity(rgb_array)
             intensity_array = '\n'.join(['R:'+'{:.3f}'.format(red_intensity),
                                          'G:'+'{:.3f}'.format(green_intensity),
@@ -380,13 +380,13 @@ def startCameraGUI():
         if previewtimeout.get():
             timeout = previewtimeout.get()
         if resolutionvarx.get() and resolutionvary.get():
-            resolution = str(resolutionvarx.get()) + ',' + str(resolutionvary.get())
+            resolution = (resolutionvarx.get(), resolutionvary.get())
         if brightnessvar.get():
             brightness = brightnessvar.get()
         if contrastvar.get():
             contrast = contrastvar.get()
         if shutterspeedvar.get():
-            shutterspeed = shutterspeedvar.get() * 10 ** 6
+            shutterspeed = shutterspeedvar.get()
         # if frameratevar.get():
         #     if '/' in frameratevar.get():
         #         framelist = frameratevar.get().split('/')
@@ -397,7 +397,7 @@ def startCameraGUI():
         #
         RPiCamera.startPreview(iso=iso, timeout=timeout, resolution=resolution, exposure=exposuremode.get(),
                                brightness=brightness, contrast=contrast, shutterspeed=shutterspeed,
-                               zoom=zoomvar.get().replace(' ',''), awb_mode=awbvar.get())
+                               zoom=tuple(map(float, zoomvar.get().split(','))), awb_mode=awbvar.get())
 
     # def realtimeplot():
     #     MultiPlot.GeneratePlotDataFile(tf, RPiCamera.returnIntensity(rgb_array), start_time)
@@ -423,7 +423,7 @@ def startCameraGUI():
     zoomvar = StringVar()
     awbvar = StringVar()
 
-    exposuremode.set('default')
+    exposuremode.set('')
     shutterspeedvar.set(0)
     # frameratevar.set('1/6')
     isovar.set(0)
@@ -433,7 +433,7 @@ def startCameraGUI():
     brightnessvar.set(50)
     previewtimeout.set(10)
     zoomvar.set('0.0,0.0,1.0,1.0')
-    awbvar.set('default')
+    awbvar.set('')
 
     masterpane = ttk.Panedwindow(mainframe, orient=VERTICAL)
 
@@ -463,8 +463,8 @@ def startCameraGUI():
     # delay_variable = ttk.Entry(f3, width=4, textvariable=frameratevar)
     # delay_variable.grid(column=8, row=1, sticky=W)
 
-    ttk.Label(f3, text='Shutter Speed: ').grid(column=1, row=2, sticky=E)
-    delay_variable = ttk.Entry(f3, width=4, textvariable=shutterspeedvar)
+    ttk.Label(f3, text='Shutter Speed(μs): ').grid(column=1, row=2, sticky=E)
+    delay_variable = ttk.Entry(f3, width=6, textvariable=shutterspeedvar)
     delay_variable.grid(column=2, row=2, sticky=W)
 
     ttk.Label(f3, text='ISO: (max=800)').grid(column=3, row=2, sticky=E)
@@ -498,7 +498,7 @@ def startCameraGUI():
     awbmode_off = ttk.Radiobutton(f2, text='off', variable=awbvar, value='off')
     awbmode_off.grid(column=4, row=1, sticky=W)
 
-    awbmode_default = ttk.Radiobutton(f2, text='default', variable=awbvar, value='default')
+    awbmode_default = ttk.Radiobutton(f2, text='default', variable=awbvar, value='')
     awbmode_default.grid(column=5, row=1, sticky=W)
 
     awbmode_sun = ttk.Radiobutton(f2, text='sun', variable=awbvar, value='sun')
@@ -537,7 +537,7 @@ def startCameraGUI():
     exposuremode_off = ttk.Radiobutton(f4, text='off', variable=exposuremode, value='off')
     exposuremode_off.grid(column=6, row=1, sticky=W)
 
-    exposuremode_default = ttk.Radiobutton(f4, text='default', variable=exposuremode, value='default')
+    exposuremode_default = ttk.Radiobutton(f4, text='default', variable=exposuremode, value='')
     exposuremode_default.grid(column=7, row=1, sticky=W)
 
     exposuremode_backlight = ttk.Radiobutton(f4, text='backlight', variable=exposuremode, value='backlight')
