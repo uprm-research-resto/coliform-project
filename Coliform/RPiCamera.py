@@ -148,7 +148,7 @@ def saveAllImages(rgb_array, foldername):
 def startPreview(iso=0, timeout=10, exposure='', resolution=(2592, 1944), brightness=50, contrast=0, shutterspeed=0, zoom=(0.0, 0.0, 1.0, 1.0), awb_mode=''):
     camera = RPiCameraBackend.PiCamera()
     camera.resolution = resolution
-    camera.shutter_speed = shutterspeed
+    camera.shutterspeed = shutterspeed
     camera.iso = iso
     camera.exposure_mode = exposure
     camera.brightness = brightness
