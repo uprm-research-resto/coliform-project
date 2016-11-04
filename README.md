@@ -89,6 +89,8 @@ From the Desktop:
 * Interfaces
 * Enable Camera, 1-wire, SSH, I2C, and Remote GPIO, then click OK
 
+Note: In order to obtain temperature data from onewires, you need to complete some extra steps. These steps are shown in the [OneWire](#onewire) section of this document along with a schematic on how to connect to RPi.
+
 #Requirements
 * [pyserial](https://github.com/pyserial/pyserial) (only required if you need to use Arduino/ArduCAM)
 * [Pillow](https://github.com/python-pillow/Pillow) (not required after version 0.5.3)
