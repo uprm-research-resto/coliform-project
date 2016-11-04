@@ -159,6 +159,7 @@ Additional information on setting up SSH: [Oracle Global Desktop Administration]
 * [picamera](https://github.com/waveform80/picamera)
 * [RPi.GPIO](https://pypi.python.org/pypi/RPi.GPIO)
 * [scipy](https://github.com/scipy/scipy) (required after version 0.7.0)
+* [Adafruit_TCS34725](https://github.com/adafruit/Adafruit_Python_TCS34725) (required after version 0.7.3)
 
 #Changelog
 * Version 0.1
