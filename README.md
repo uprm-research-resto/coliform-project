@@ -19,11 +19,11 @@ For information about packaging and distributing your library to PyPi: [Packagin
   * [Changelog](#changelog)
   * [Usage](#usage)
     * [Imports](#imports)
+    * [GUI](#gui)
     * [OneWire](#onewire)
     * [MultiPlot](#multiplot)
     * [RPiCamera](#rpicamera)
     * [RPiGPIO](#rpigpio)
-    * [GUI](#gui)
   * [Contact](#contact)
 
 #Setting up your IDE
@@ -93,7 +93,7 @@ Change matplotlib backend to TkAgg:
   - Look for: ```backend: gtk3agg``` and change to: ```backend: Tkagg```
   - Press: ```Ctrl + X``` followed by ```y``` and ```ENTER``` or ```RETURN```
 
-If you still have the error after this:
+If you still have the error after this, install matplotlib using aptitude from terminal:
 ```bash
 sudo apt install python3-matplotlib
 ```
@@ -278,6 +278,107 @@ from Coliform import GUI
 ```
 The first is for all functions, but the GUI, and the second is to import the GUI function.
 
+##GUI
+###Image Processing GUI
+In order to display the project GUI, the following code can be used:
+```python
+from Coliform import GUI
+
+GUI.startCameraGUI()
+```
+The GUI displayed should look like this:
+
+[![Image_Processing_GUI](https://s15.postimg.org/lukk7d53v/image_processing_gui.png)](https://postimg.org/image/nmdj29ogn/)
+
+####Description
+Image parameters
+
+- Resolution          : Set image resolution ```width``` x ```height```
+- Delay               : Time (in s) before takes picture and shuts down (if not specified, set to 5s)
+- Preview Timeout     : Same as Delay, but for preview.
+- Contrast            : Set image contrast (-100 to 100)
+- Brightness          : Set image brightness (0 to 100)
+- ISO                 : Set capture ISO (100 to 800)
+- Exposure            : Select exposure mode from those available. (default automatically tries to choose the best for the environment)
+- Auto White Balance  : Select Auto Whte Balance from those available. (default automatically tires to choose the best for the environment)
+- Zoom                : Set region of interest (x,y,width,height as normalised coordinates [0.0-1.0])
+- Shutter Speed       : Set shutter speed in microseconds
+
+Camera Buttons
+
+- Take Picture         : Captures image with selected parameters, saves rgb array and displays the intensity values in the Image Data section
+- Set Normal Options   : Set normal environment values to image parameters.
+- Set Low Light Options: Set Low Light environment values to image parameters.
+- Camera Preview       : Starts preview of the capture using selected parameters for the duration stated at Preview Timeout box.
+- Show Image           : Displays last captured image.
+- Save Image           : Save last captured or imported image.
+- Save All             : Saves image, plots, red, blue, and green components for last captured or imported image in a folder which name is the current selected image parameters 
+- Show Plots           : Displays red, green, and blue image components and their corresponding histograms for last captured or imported image
+- Import Image         : Imports selected image, saves rgb array and displays the intensity values in the Image Data section.
+- Show Red             : Displays red component of last captured or imported image.
+- Show Green           : Displays green component of last captured or imported image.
+- Show Blue            : Displays blue component of last captured or imported image.
+
+Image Data
+
+- R                    : Red intensity value from last captured or imported image
+- G                    : Green intensity value from last captured or imported image
+- B                    : Blue intensity value from last captured or imported image
+- I                    : Overall intensity value form last captured or imported image
+
+
+###Control GUI
+In order to display the project GUI, the following code can be used:
+```python
+from Coliform import GUI
+
+GUI.startGUI()
+```
+The GUI displayed should look like this:
+
+[![Control_GUI](https://s15.postimg.org/c8qzr2dy3/control_gui.png)](https://postimg.org/image/swihtk8pj/)
+
+####Description
+
+Temperature Sensor
+
+- Temperature         : (in C) Displays temperature values for onewires connected.
+- Show Plot           : Displays real-time temperature vs time plot for onewires connected.
+- Save Data File      : Saves plot data to a csv file.
+
+Heater
+
+- Target Temperature  : Temperature to be maintained by the control loop.
+- Heater ON           : Turns on Heater and begins control loop using temperature values obtained from the sensor.
+
+Pump
+
+- Power ON            : Starts pump PWM at 100 Hz
+- Submit              : Changes pump PWM value to the one typed into the text box above. (0 to 100 Hz)
+
+###RGB Sensor GUI
+In order to display the project GUI, the following code can be used:
+```python
+from Coliform import GUI
+
+GUI.startRGBSensorGUI()
+```
+The GUI displayed should look like this:
+
+[![RGB_Sensor_GUI](https://s15.postimg.org/p2p1kerdn/rgb_sensor_gui.png)](https://postimg.org/image/w5wx00wt3/)
+
+####Description
+
+- Integration Time    : Select between available integration times, this is the time which the sensor remains open to integrate data.
+- Gain                : Select between available gains, this multiplies data by selected gain value.
+
+RGB Sensor Buttons
+
+- Capture Data          : Captures sensor data and displays it in the RGB Data section
+- Set Normal Options    : Set well lit environment integration and gain parameters.
+- Set Low Light Options : Set low light integration and gain parameters.
+- Save Data             : Saves data to text file.
+
 ##OneWire
 ###Setup
 These group of functions allow you to detect one or multiple OneWires, get their address and display their respective temperature. This code was written and tested for [DS18B20](https://www.maximintegrated.com/en/products/analog/sensors-and-sensor-interface/DS18B20.html/tb_tab0) OneWires.
@@ -444,104 +545,4 @@ PWM.setIntensity(freq)
 PWM.shutdown()
 ```
 
-##GUI
-###Image Processing GUI
-In order to display the project GUI, the following code can be used:
-```python
-from Coliform import GUI
-
-GUI.startCameraGUI()
-```
-The GUI displayed should look like this:
-
-[![Image_Processing_GUI](https://s15.postimg.org/lukk7d53v/image_processing_gui.png)](https://postimg.org/image/nmdj29ogn/)
-
-####Description
-Image parameters
-
-- Resolution          : Set image resolution ```width``` x ```height```
-- Delay               : Time (in s) before takes picture and shuts down (if not specified, set to 5s)
-- Preview Timeout     : Same as Delay, but for preview.
-- Contrast            : Set image contrast (-100 to 100)
-- Brightness          : Set image brightness (0 to 100)
-- ISO                 : Set capture ISO (100 to 800)
-- Exposure            : Select exposure mode from those available. (default automatically tries to choose the best for the environment)
-- Auto White Balance  : Select Auto Whte Balance from those available. (default automatically tires to choose the best for the environment)
-- Zoom                : Set region of interest (x,y,width,height as normalised coordinates [0.0-1.0])
-- Shutter Speed       : Set shutter speed in microseconds
-
-Camera Buttons
-
-- Take Picture         : Captures image with selected parameters, saves rgb array and displays the intensity values in the Image Data section
-- Set Normal Options   : Set normal environment values to image parameters.
-- Set Low Light Options: Set Low Light environment values to image parameters.
-- Camera Preview       : Starts preview of the capture using selected parameters for the duration stated at Preview Timeout box.
-- Show Image           : Displays last captured image.
-- Save Image           : Save last captured or imported image.
-- Save All             : Saves image, plots, red, blue, and green components for last captured or imported image in a folder which name is the current selected image parameters 
-- Show Plots           : Displays red, green, and blue image components and their corresponding histograms for last captured or imported image
-- Import Image         : Imports selected image, saves rgb array and displays the intensity values in the Image Data section.
-- Show Red             : Displays red component of last captured or imported image.
-- Show Green           : Displays green component of last captured or imported image.
-- Show Blue            : Displays blue component of last captured or imported image.
-
-Image Data
-
-- R                    : Red intensity value from last captured or imported image
-- G                    : Green intensity value from last captured or imported image
-- B                    : Blue intensity value from last captured or imported image
-- I                    : Overall intensity value form last captured or imported image
-
-
-###Control GUI
-In order to display the project GUI, the following code can be used:
-```python
-from Coliform import GUI
-
-GUI.startGUI()
-```
-The GUI displayed should look like this:
-
-[![Control_GUI](https://s15.postimg.org/c8qzr2dy3/control_gui.png)](https://postimg.org/image/swihtk8pj/)
-
-####Description
-
-Temperature Sensor
-
-- Temperature         : (in C) Displays temperature values for onewires connected.
-- Show Plot           : Displays real-time temperature vs time plot for onewires connected.
-- Save Data File      : Saves plot data to a csv file.
-
-Heater
-
-- Target Temperature  : Temperature to be maintained by the control loop.
-- Heater ON           : Turns on Heater and begins control loop using temperature values obtained from the sensor.
-
-Pump
-
-- Power ON            : Starts pump PWM at 100 Hz
-- Submit              : Changes pump PWM value to the one typed into the text box above. (0 to 100 Hz)
-
-###RGB Sensor GUI
-In order to display the project GUI, the following code can be used:
-```python
-from Coliform import GUI
-
-GUI.startRGBSensorGUI()
-```
-The GUI displayed should look like this:
-
-[![RGB_Sensor_GUI](https://s15.postimg.org/p2p1kerdn/rgb_sensor_gui.png)](https://postimg.org/image/w5wx00wt3/)
-
-####Description
-
-- Integration Time    : Select between available integration times, this is the time which the sensor remains open to integrate data.
-- Gain                : Select between available gains, this multiplies data by selected gain value.
-
-RGB Sensor Buttons
-
-- Capture Data          : Captures sensor data and displays it in the RGB Data section
-- Set Normal Options    : Set well lit environment integration and gain parameters.
-- Set Low Light Options : Set low light integration and gain parameters.
-- Save Data             : Saves data to text file.
 
