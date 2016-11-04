@@ -11,7 +11,6 @@ For information about packaging and distributing your library to PyPi: [Packagin
 
 * [Coliform Project](#coliform-project)
   * [Table of contents](#table-of-contents)
-  * [Setting up your IDE](#setting-up-your-ide)
   * [Installation](#installation)
     * [Setup RPi and install Coliform library](#setup-rpi-and-install-coliform-library)
   * [Requirements](#requirements)
@@ -23,26 +22,9 @@ For information about packaging and distributing your library to PyPi: [Packagin
     * [MultiPlot](#multiplot)
     * [RPiCamera](#rpicamera)
     * [RPiGPIO](#rpigpio)
+  * [Setting up your IDE](#setting-up-your-ide)
   * [Remote programming using PC](#remote-programming-using-pc)
   * [Contact](#contact)
-
-#Setting up your IDE
-Download [Python 3](https://www.python.org/downloads/)
-
-Important Note: When installing python 3, please click on Add to PATH, before continuing with install.
-
-If you wish to install a python IDE on your computer, install PyCharm, for more information follow: 
-
-* [Get PyCharm Pro](https://www.jetbrains.com/shop/eform/students) (For Students and Professors)
-* [Getting Started with PyCharm](https://www.youtube.com/watch?v=BPC-bGdBSM8&list=PLQ176FUIyIUZ1mwB-uImQE-gmkwzjNLjP)
-
-Learn Python: 
-
-* [SoloLearn Python Course](https://www.sololearn.com/Course/Python/)
-* [Python 3 Programming Introduction](https://pythonprogramming.net/introduction-to-python-programming/)
-* [Non-Programmers Tutorial for Python 3](https://en.wikibooks.org/wiki/Non-Programmer%27s_Tutorial_for_Python_3)
-* [List of Python Tutorials](http://docs.python-guide.org/en/latest/intro/learning/)
-* [Official Python Tutorial](https://docs.python.org/3/tutorial/index.html)
 
 #Installation
 ## Setup RPi and install Coliform library
@@ -51,7 +33,7 @@ For instructions on how to setup RPi watch: [Getting started with NOOBS](https:/
 Before installing, you need to make sure you have pip installed, as it is required in order to install this module.
 To install pip you can type the following into terminal:
 ```bash
-curl -O https://bootstrap.pypa.io/get-pip.py
+curl -o https://bootstrap.pypa.io/get-pip.py
    
 sudo python3 get-pip.py
 ```
@@ -500,6 +482,24 @@ PWM.setIntensity(freq)
 #Stop PWM
 PWM.shutdown()
 ```
+
+#Setting up your IDE
+Download [Python 3](https://www.python.org/downloads/)
+
+Important Note: When installing python 3, please click on Add to PATH, before continuing with install.
+
+If you wish to install a python IDE on your computer, install PyCharm, for more information follow: 
+
+* [Get PyCharm Pro](https://www.jetbrains.com/shop/eform/students) (For Students and Professors)
+* [Getting Started with PyCharm](https://www.youtube.com/watch?v=BPC-bGdBSM8&list=PLQ176FUIyIUZ1mwB-uImQE-gmkwzjNLjP)
+
+Learn Python: 
+
+* [SoloLearn Python Course](https://www.sololearn.com/Course/Python/)
+* [Python 3 Programming Introduction](https://pythonprogramming.net/introduction-to-python-programming/)
+* [Non-Programmers Tutorial for Python 3](https://en.wikibooks.org/wiki/Non-Programmer%27s_Tutorial_for_Python_3)
+* [List of Python Tutorials](http://docs.python-guide.org/en/latest/intro/learning/)
+* [Official Python Tutorial](https://docs.python.org/3/tutorial/index.html)
 
 #Remote Programming using PC
 ##Remote Desktop
