@@ -445,7 +445,6 @@ PWM.shutdown()
 ```
 
 ##GUI
-UPDATE IN PROGRESS...
 ###Image Processing GUI
 In order to display the project GUI, the following code can be used:
 ```python
@@ -460,7 +459,7 @@ The GUI displayed should look like this:
 ####Description
 Image parameters
 
-- Resolution          : Set image resolution '<width>' x '<height>'
+- Resolution          : Set image resolution ```width``` x ```height```
 - Delay               : Time (in s) before takes picture and shuts down (if not specified, set to 5s)
 - Preview Timeout     : Same as Delay, but for preview.
 - Contrast            : Set image contrast (-100 to 100)
@@ -509,19 +508,19 @@ The GUI displayed should look like this:
 
 Temperature Sensor
 
-Temperature         : (in C) Displays temperature values for onewires connected.
-Show Plot           : Displays real-time temperature vs time plot for onewires connected.
-Save Data File      : Saves plot data to a csv file.
+- Temperature         : (in C) Displays temperature values for onewires connected.
+- Show Plot           : Displays real-time temperature vs time plot for onewires connected.
+- Save Data File      : Saves plot data to a csv file.
 
 Heater
 
-Target Temperature  : Temperature to be maintained by the control loop.
-Heater ON           : Turns on Heater and begins control loop using temperature values obtained from the sensor.
+- Target Temperature  : Temperature to be maintained by the control loop.
+- Heater ON           : Turns on Heater and begins control loop using temperature values obtained from the sensor.
 
 Pump
 
-Power ON            : Starts pump PWM at 100 Hz
-Submit              : Changes pump PWM value to the one typed into the text box above. (0 to 100 Hz)
+- Power ON            : Starts pump PWM at 100 Hz
+- Submit              : Changes pump PWM value to the one typed into the text box above. (0 to 100 Hz)
 
 ###RGB Sensor GUI
 In order to display the project GUI, the following code can be used:
@@ -536,13 +535,13 @@ The GUI displayed should look like this:
 
 ####Description
 
-Integration Time    : Select between available integration times, this is the time which the sensor remains open to integrate data.
-Gain                : Select between available gains, this multiplies data by selected gain value.
+- Integration Time    : Select between available integration times, this is the time which the sensor remains open to integrate data.
+- Gain                : Select between available gains, this multiplies data by selected gain value.
 
 RGB Sensor Buttons
 
-Capture Data          : Captures sensor data and displays it in the RGB Data section
-Set Normal Options    : Set well lit environment integration and gain parameters.
-Set Low Light Options : Set low light integration and gain parameters.
-Save Data             : Saves data to text file.
+- Capture Data          : Captures sensor data and displays it in the RGB Data section
+- Set Normal Options    : Set well lit environment integration and gain parameters.
+- Set Low Light Options : Set low light integration and gain parameters.
+- Save Data             : Saves data to text file.
 
