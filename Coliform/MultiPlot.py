@@ -4,7 +4,7 @@
 #
 # This file is part of Coliform. https://github.com/Regendor/coliform-project
 # (C) 2016
-#
+# Author: Osvaldo E Duran
 # Licensed under the GNU General Public License version 3.0 (GPL-3.0)
 
 import time

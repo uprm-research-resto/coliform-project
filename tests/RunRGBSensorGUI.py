@@ -2,4 +2,4 @@
 
 from Coliform import GUI
 
-GUI.startGUI()
+GUI.startRGBSensorGUI()

@@ -8,7 +8,7 @@ class BinaryDistribution(Distribution):
 
 setup(
     name='Coliform',
-    version='0.7.2.1',
+    version='0.7.3.2',
     description='Coliform UPRM Project Library, Written for Raspberry Pi',
     packages=['Coliform'],
     author='Osvaldo E Duran',
@@ -17,6 +17,6 @@ setup(
     classifiers=['Programming Language :: Python :: 3', 'Intended Audience :: Education',
                  'Intended Audience :: Science/Research',
                  'License :: OSI Approved :: GNU General Public License v3 (GPLv3)'],
-    install_requires=['RPi.GPIO', 'pyserial', 'picamera', 'matplotlib'],
+    install_requires=['RPi.GPIO', 'pyserial', 'picamera', 'matplotlib','Adafruit_TCS34725'],
     distclass=BinaryDistribution
 )

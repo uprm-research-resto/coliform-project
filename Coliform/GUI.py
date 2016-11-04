@@ -4,14 +4,14 @@
 #
 # This file is part of Coliform. https://github.com/Regendor/coliform-project
 # (C) 2016
-#
+# Author: Osvaldo E Duran
 # Licensed under the GNU General Public License version 3.0 (GPL-3.0)
 from tkinter import *
 from tkinter import ttk
 from tkinter import messagebox
 import os
 import time
-from Coliform import OneWire, MultiPlot, RPiGPIO, RPiCamera
+from Coliform import OneWire, MultiPlot, RPiGPIO, RPiCamera, RGBSensor
 from fractions import Fraction
 
 
@@ -588,5 +588,149 @@ def startCameraGUI():
     for child in mainframe.winfo_children():
         child.grid_configure(padx=5, pady=5)
 
-    start_time = time.time()
+    # start_time = time.time()
+    root.mainloop()
+
+
+def startRGBSensorGUI():
+    tf = 'PlotTextFile.txt'
+    if os.path.isfile(tf):
+        os.remove(tf)
+    # filepath = os.sep.join((os.path.expanduser('~'), 'Desktop'))
+
+    def setnormaloptions():
+        try:
+            integrationvar.set('2.4')
+            gainvar.set(1)
+
+        except ValueError:
+            pass
+
+    def setdarkoptions():
+        try:
+            integrationvar.set('700')
+            gainvar.set(60)
+        except ValueError:
+            pass
+
+    def capturedata():
+        try:
+            global red_intensity, green_intensity, blue_intensity, clear_unfiltered, lux, color_temperature
+            red_intensity, green_intensity, blue_intensity, clear_unfiltered, lux, color_temperature = RGBSensor.Capture(integrationtime=float(integrationvar.get()), gain=gainvar.get())
+            intensity_array = '\n'.join(['R:'+'{}'.format(red_intensity),
+                                         'G:'+'{}'.format(green_intensity),
+                                         'B:'+'{}'.format(blue_intensity),
+                                         'Clear:'+'{}'.format(clear_unfiltered),
+                                         'Luminosity:{} lux'.format(lux),
+                                         'Color Temperature:{} K'.format(color_temperature)])
+            intensitylabel.config(text=intensity_array)
+
+        except AttributeError:
+            messagebox.showinfo(message='Too dark to determine color temperature.')
+
+
+    # def directorychosen():
+    #     try:
+    #         global filepath
+    #         filepath = filedialog.askdirectory()
+    #     except ValueError:
+    #         pass
+
+    # def importimage():
+    #     global rgb_array
+    #     rgb_array = RPiCamera.importImage()
+    #
+    #     red_intensity, green_intensity, blue_intensity, intensity = RPiCamera.returnIntensity(rgb_array)
+    #     intensity_array = '\n'.join(['R:' + '{:.3f}'.format(red_intensity),
+    #                                  'G:' + '{:.3f}'.format(green_intensity),
+    #                                  'B:' + '{:.3f}'.format(blue_intensity),
+    #                                  'I:' + '{:.3f}'.format(intensity)])
+    #     intensitylabel.config(text=intensity_array)
+
+    def savedata():
+        # foldername = 'ISO={}-Delay={}-Resolution={}x{}-Brightness={}-Contrast={}-ShutterSpeed={}' \
+        #              '-Exposure={}-AutoWhiteBalance={}-' \
+        #              'Zoom={}'.format(isovar.get(), delayvar.get(), resolutionvarx.get(), resolutionvary.get(),
+        #                               brightnessvar.get(), contrastvar.get(),
+        #                               shutterspeedvar.get(), exposuremode.get(), awbvar.get(), zoomvar.get())
+        RGBSensor.saveData(red_intensity, green_intensity, blue_intensity, clear_unfiltered, lux, color_temperature)
+        messagebox.showinfo(message='Finished Saving to Directory.')
+
+
+    # def realtimeplot():
+    #     MultiPlot.GeneratePlotDataFile(tf, RPiCamera.returnIntensity(rgb_array), start_time)
+
+    root = Tk()
+    root.title("RGB Sensor GUI")
+
+    mainframe = ttk.Frame(root, padding="3 3 12 12")
+    mainframe.grid(column=0, row=0, sticky=(N, W, E, S))
+    mainframe.columnconfigure(0, weight=1)
+    mainframe.rowconfigure(0, weight=1)
+
+    gainvar = IntVar()
+    integrationvar = StringVar()
+
+    gainvar.set(1)
+    integrationvar.set('2.4')
+
+    masterpane = ttk.Panedwindow(mainframe, orient=VERTICAL)
+
+    midpane = ttk.Panedwindow(masterpane, orient=VERTICAL)
+    f4 = ttk.Labelframe(midpane, text='Gain:', width=100, height=100)
+    f2 = ttk.Labelframe(midpane, text='Integration Time:', width=100, height=100)
+    midpane.add(f2)
+    midpane.add(f4)
+    masterpane.add(midpane)
+
+    integration2_4 = ttk.Radiobutton(f2, text='2.4ms', variable=integrationvar, value='2.4')
+    integration2_4.grid(column=1, row=1, sticky=W)
+
+    integration24 = ttk.Radiobutton(f2, text='24ms', variable=integrationvar, value='24')
+    integration24.grid(column=2, row=1, sticky=W)
+
+    integration50 = ttk.Radiobutton(f2, text='50ms', variable=integrationvar, value='50')
+    integration50.grid(column=3, row=1, sticky=W)
+
+    integration101 = ttk.Radiobutton(f2, text='101ms', variable=integrationvar, value='101')
+    integration101.grid(column=4, row=1, sticky=W)
+
+    integration154 = ttk.Radiobutton(f2, text='154ms', variable=integrationvar, value='154')
+    integration154.grid(column=5, row=1, sticky=W)
+
+    integration700 = ttk.Radiobutton(f2, text='700ms', variable=integrationvar, value='700')
+    integration700.grid(column=6, row=1, sticky=W)
+
+    gain1 = ttk.Radiobutton(f4, text='1X', variable=gainvar, value=1)
+    gain1.grid(column=1, row=1, sticky=W)
+
+    gain4 = ttk.Radiobutton(f4, text='4X', variable=gainvar, value=4)
+    gain4.grid(column=2, row=1, sticky=W)
+
+    gain16 = ttk.Radiobutton(f4, text='16X', variable=gainvar, value=16)
+    gain16.grid(column=3, row=1, sticky=W)
+
+    gain60 = ttk.Radiobutton(f4, text='60X', variable=gainvar, value=60)
+    gain60.grid(column=4, row=1, sticky=W)
+
+    bottompane = ttk.Panedwindow(masterpane, orient=HORIZONTAL)
+    f5 = ttk.Labelframe(bottompane, text='Sensor Options:', width=100, height=100)
+    f6 = ttk.Labelframe(bottompane, text='RGB Data:', width=100, height=100)
+    bottompane.add(f5)
+    bottompane.add(f6)
+    masterpane.add(bottompane)
+
+    ttk.Button(f5, text='Capture Data', command=capturedata).grid(column=1, row=1, sticky=(W, E))
+    ttk.Button(f5, text="Set Normal Options", command=setnormaloptions).grid(column=1, row=2, sticky=(W, E))
+    ttk.Button(f5, text="Set Low Light Options", command=setdarkoptions).grid(column=1, row=3, sticky=(W, E))
+    # ttk.Button(f5, text="Show Plots", command=showimageplot).grid(column=2, row=2, sticky=(W, E))
+    ttk.Button(f5, text="Save Data", command=savedata).grid(column=1, row=4, sticky=(W, E))
+
+    intensitylabel = ttk.Label(f6, text='Not Taken')
+    intensitylabel.grid(column=1, row=1, sticky=(W, E))
+
+    for child in mainframe.winfo_children():
+        child.grid_configure(padx=5, pady=5)
+
+    # start_time = time.time()
     root.mainloop()
