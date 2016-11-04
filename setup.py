@@ -17,6 +17,6 @@ setup(
     classifiers=['Programming Language :: Python :: 3', 'Intended Audience :: Education',
                  'Intended Audience :: Science/Research',
                  'License :: OSI Approved :: GNU General Public License v3 (GPLv3)'],
-    install_requires=['RPi.GPIO', 'pyserial', 'picamera', 'matplotlib','Adafruit_TCS34725'],
+    install_requires=['RPi.GPIO', 'pyserial', 'matplotlib', 'Adafruit_TCS34725'],
     distclass=BinaryDistribution
 )

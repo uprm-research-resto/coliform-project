@@ -95,7 +95,7 @@ Note: In order to obtain temperature data from onewires, you need to complete so
 * [pyserial](https://github.com/pyserial/pyserial) (only required if you need to use Arduino/ArduCAM)
 * [Pillow](https://github.com/python-pillow/Pillow) (not required after version 0.5.3)
 * [matplotlib](https://github.com/matplotlib/matplotlib)
-* [picamera](https://github.com/waveform80/picamera)
+* [picamera](https://github.com/waveform80/picamera) (not required after version 0.7.1)
 * [RPi.GPIO](https://pypi.python.org/pypi/RPi.GPIO)
 * [scipy](https://github.com/scipy/scipy) (required after version 0.7.0)
 * [Adafruit_TCS34725](https://github.com/adafruit/Adafruit_Python_TCS34725) (required after version 0.7.3)
@@ -238,11 +238,11 @@ Image parameters
 - Preview Timeout     : Same as Delay, but for preview.
 - Contrast            : Set image contrast (-100 to 100)
 - Brightness          : Set image brightness (0 to 100)
-- ISO                 : Set capture ISO (100 to 800)
+- ISO                 : Set capture ISO (100 to 800) (if set to 0, it will automatically try to choose best ISO for the environment.)
 - Exposure            : Select exposure mode from those available. (default automatically tries to choose the best for the environment)
 - Auto White Balance  : Select Auto Whte Balance from those available. (default automatically tires to choose the best for the environment)
 - Zoom                : Set region of interest (x,y,width,height as normalised coordinates [0.0-1.0])
-- Shutter Speed       : Set shutter speed in microseconds
+- Shutter Speed       : Set shutter speed in microseconds (if set to 0 it will automatically try to choose best shutter speed for the environment)
 
 Camera Buttons
 
