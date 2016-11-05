@@ -8,3 +8,5 @@
 #
 # NOTE: if not running on Raspberry Pi, and are testing on your PC, you will need to download fakeRPiGPIO module:
 # pip3 install fakeRPiGPIO
+
+from .GUI import *
