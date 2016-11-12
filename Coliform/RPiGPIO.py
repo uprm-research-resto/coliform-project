@@ -22,13 +22,13 @@ VAR.shutdown()
 
 class Controller(object):
     def __init__(self, channel, frequency):
-        GPIO.setmode(GPIO.BOARD)
         self.channel = channel
-        GPIO.setup(self.channel, GPIO.OUT)
         self.frequency = float(frequency)
-        self.pwm = GPIO.PWM(channel, self.frequency)
 
     def startup(self):
+        GPIO.setmode(GPIO.BOARD)
+        GPIO.setup(self.channel, GPIO.OUT)
+        self.pwm = GPIO.PWM(self.channel, self.frequency)
         self.pwm.start(self.frequency)
 
     def HeaterPID(self, targetvalue, currentvalue):

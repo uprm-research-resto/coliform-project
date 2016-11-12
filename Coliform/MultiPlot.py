@@ -8,6 +8,8 @@
 # Licensed under the GNU General Public License version 3.0 (GPL-3.0)
 
 import time
+import matplotlib
+matplotlib.use('Qt5Agg')
 from matplotlib.pylab import *
 from mpl_toolkits.axes_grid1 import host_subplot
 import matplotlib.animation as animation

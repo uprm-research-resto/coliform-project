@@ -6,14 +6,20 @@
 # (C) 2016
 # Author: Osvaldo E Duran
 # Licensed under the GNU General Public License version 3.0 (GPL-3.0)
-from tkinter import filedialog
+# import matplotlib
+# matplotlib.use('Qt5Agg')
+import os
 from Coliform import RPiCameraBackend
 import matplotlib.pyplot as plt
-from scipy import misc
 import matplotlib.colors as colors
 import numpy as np
-from fractions import Fraction
-import os
+try:
+    from scipy import misc
+except ImportError:
+    from tkinter import messagebox
+    messagebox.showinfo(message='Please wait a 5-10 minutes while dependencies are installed.')
+    os.system('sudo apt-get -y install python3-scipy')
+# from fractions import Fraction
 
 
 def takePicture(iso=0, exposure='', resolution=(2592, 1944), brightness=50, contrast=0, shutterspeed=0, timeout=5, zoom=(0.0, 0.0, 1.0, 1.0), awb_mode=''):
@@ -112,19 +118,16 @@ def setImageColor(rgb_array, color):
     return rgb_array
 
 
-def importImage():
-    image = filedialog.askopenfilename(filetypes=[('Image Files', '*.png *.jpg *.jpeg')])
-    rgb_array = misc.imread(image)
+def importImage(imagepath):
+    rgb_array = misc.imread(imagepath)
     return rgb_array
 
 
-def saveImage(rgb_array):
-    filename = filedialog.asksaveasfilename(filetypes=[('Image Files', '*.png *.jpg *.jpeg')])
-    misc.imsave(filename, rgb_array)
+def saveImage(rgb_array, savepath):
+    misc.imsave(savepath, rgb_array)
 
 
-def saveAllImages(rgb_array, foldername):
-    directory = filedialog.askdirectory()
+def saveAllImages(rgb_array, directory, foldername):
     rgb_array_red = rgb_array * 1
     r_array = setImageColor(rgb_array_red, 'r')
     rgb_array_green = rgb_array * 1
