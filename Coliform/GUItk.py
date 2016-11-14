@@ -613,7 +613,6 @@ def startRGBSensorGUI():
         except AttributeError:
             messagebox.showinfo(message='Too dark to determine color temperature.')
 
-
     # def directorychosen():
     #     try:
     #         global filepath
@@ -640,7 +639,6 @@ def startRGBSensorGUI():
         #                               shutterspeedvar.get(), exposuremode.get(), awbvar.get(), zoomvar.get())
         RGBSensor.saveData(red_intensity, green_intensity, blue_intensity, clear_unfiltered, lux, color_temperature)
         messagebox.showinfo(message='Finished Saving to Directory.')
-
 
     # def realtimeplot():
     #     MultiPlot.GeneratePlotDataFile(tf, RPiCamera.returnIntensity(rgb_array), start_time)

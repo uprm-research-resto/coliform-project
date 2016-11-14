@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 #
-# This is the main GUI function for Coliform Project
+# This is raspistill frontend for Coliform Project
 #
 # This file is part of Coliform. https://github.com/Regendor/coliform-project
 # (C) 2016
@@ -23,7 +23,7 @@ class PiCamera(object):
         self.zoom = (0.0, 0.0, 1.0, 1.0)
         self.resolution = (2952, 1944)
 
-    def capture(self, mode='JPG',filename='output.jpg'):
+    def capture(self, mode='JPG', filename='output.jpg'):
         if self.iso:
             iso = ' --ISO ' + str(self.iso)
         else:
@@ -140,6 +140,4 @@ class PiCamera(object):
             resolution = ''
 
         os.system('raspistill --raw{}{}{}{}{}{}{}{}{}'.format(iso, brightness, contrast, shutterspeed,
-                                                        exposure, awb, timeout, zoom, resolution))
-
-
+                                                              exposure, awb, timeout, zoom, resolution))

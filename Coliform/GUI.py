@@ -892,18 +892,289 @@ class CameraMainWindow(QMainWindow):
     # def quitApp(self):
     #     QCoreApplication.instance().quit()
 
+
+class RGBCenterWidget(QWidget):
+    def __init__(self):
+        super(RGBCenterWidget, self).__init__()
+        self.initUI()
+        # self.start_time = time.time()
+
+    def initUI(self):
+        self.tf = 'PlotTextFile.txt'
+
+        self.statusbar = 'Ready'
+        self.createTopGroupBox()
+        self.createMidGroupBox()
+        self.createBottomLeftGroupBox()
+        self.createBottomRightGroupBox()
+
+        topLayout = QVBoxLayout()
+        topLayout.addWidget(self.topGroupBox)
+        topLayout.addWidget(self.midGroupBox)
+
+        bottomLayout = QHBoxLayout()
+        bottomLayout.addWidget(self.bottomLeftGroupBox)
+        bottomLayout.addWidget(self.bottomRightGroupBox)
+
+        mainLayout = QVBoxLayout()
+        mainLayout.addLayout(topLayout)
+        mainLayout.addLayout(bottomLayout)
+        mainLayout.addStretch(1)
+
+        self.setLayout(mainLayout)
+
+        self.show()
+
+    def createTopGroupBox(self):
+        self.topGroupBox = QGroupBox('Integration Time')
+
+        self.it2_4ms = QRadioButton()
+        self.it2_4ms.setText('2.4ms')
+        self.it2_4ms.toggled.connect(lambda: self.itstate(self.it2_4ms))
+
+        self.it24ms = QRadioButton()
+        self.it24ms.setText('24ms')
+        self.it24ms.toggled.connect(lambda: self.itstate(self.it24ms))
+
+        self.it50ms = QRadioButton()
+        self.it50ms.setText('50ms')
+        self.it50ms.toggled.connect(lambda: self.itstate(self.it50ms))
+
+        self.it101ms = QRadioButton()
+        self.it101ms.setText('101ms')
+        self.it101ms.toggled.connect(lambda: self.itstate(self.it101ms))
+
+        self.it154ms = QRadioButton()
+        self.it154ms.setText('154ms')
+        self.it154ms.toggled.connect(lambda: self.itstate(self.it154ms))
+
+        self.it700ms = QRadioButton()
+        self.it700ms.setText('700ms')
+        self.it700ms.toggled.connect(lambda: self.itstate(self.it700ms))
+
+        self.it2_4ms.setChecked(True)
+
+        layout = QHBoxLayout()
+        layout.addWidget(self.it2_4ms)
+        layout.addWidget(self.it24ms)
+        layout.addWidget(self.it50ms)
+        layout.addWidget(self.it101ms)
+        layout.addWidget(self.it154ms)
+        layout.addWidget(self.it700ms)
+        layout.addStretch(1)
+
+        self.topGroupBox.setLayout(layout)
+
+    def createMidGroupBox(self):
+        self.midGroupBox = QGroupBox('Gain')
+
+        self.gain1 = QRadioButton()
+        self.gain1.setText('1X')
+        self.gain1.toggled.connect(lambda: self.gnstate(self.gain1))
+
+        self.gain4 = QRadioButton()
+        self.gain4.setText('4X')
+        self.gain4.toggled.connect(lambda: self.gnstate(self.gain4))
+
+        self.gain16 = QRadioButton()
+        self.gain16.setText('16X')
+        self.gain16.toggled.connect(lambda: self.gnstate(self.gain16))
+
+        self.gain60 = QRadioButton()
+        self.gain60.setText('60X')
+        self.gain60.toggled.connect(lambda: self.gnstate(self.gain60))
+
+        self.gain1.setChecked(True)
+
+        layout = QHBoxLayout()
+        layout.addWidget(self.gain1)
+        layout.addWidget(self.gain4)
+        layout.addWidget(self.gain16)
+        layout.addWidget(self.gain60)
+        layout.addStretch(1)
+        self.midGroupBox.setLayout(layout)
+
+    def itstate(self, state):
+        if state.text() == '2.4ms':
+            if state.isChecked():
+                self.itvar = '2.4'
+        elif state.text() == '24ms':
+            if state.isChecked():
+                self.itvar = '24'
+        elif state.text() == '50ms':
+            if state.isChecked():
+                self.itvar = '50'
+        elif state.text() == '101ms':
+            if state.isChecked():
+                self.itvar = '101'
+        elif state.text() == '154ms':
+            if state.isChecked():
+                self.itvar = '154'
+        elif state.text() == '700ms':
+            if state.isChecked():
+                self.itvar = '700'
+
+    def gnstate(self, state):
+        if state.text() == '1X':
+            if state.isChecked():
+                self.gainvar = '1'
+        elif state.text() == '4X':
+            if state.isChecked():
+                self.gainvar = '4'
+        elif state.text() == '16X':
+            if state.isChecked():
+                self.gainvar = '16'
+        elif state.text() == '60X':
+            if state.isChecked():
+                self.gainvar = '60'
+
+    def createBottomLeftGroupBox(self):
+        self.bottomLeftGroupBox = QGroupBox('Sensor Options')
+
+        captureBtn = QPushButton('Capture Data')
+        captureBtn.clicked.connect(self.captureDataThread)
+
+        setNormOptionsBtn = QPushButton('Set Normal Options')
+        setNormOptionsBtn.clicked.connect(self.normalSettings)
+
+        setDarkOptionsBtn = QPushButton('Set Low Light Options')
+        setDarkOptionsBtn.clicked.connect(self.darkSettings)
+
+        saveBtn = QPushButton('Save Data')
+        saveBtn.clicked.connect(self.saveData)
+
+        layout = QVBoxLayout()
+        layout.addWidget(captureBtn)
+        layout.addWidget(setNormOptionsBtn)
+        layout.addWidget(setDarkOptionsBtn)
+        layout.addWidget(saveBtn)
+        layout.addStretch(1)
+        self.bottomLeftGroupBox.setLayout(layout)
+
+    def captureDataThread(self):
+        self.statusbar = 'Capturing Data...'
+
+        captureThread = threading.Thread(target=self.captureData)
+        captureThread.start()
+
+    def captureData(self):
+        self.red_intensity, self.green_intensity, self.blue_intensity, self.clear_unfiltered, self.lux,\
+        self.color_temperature = RGBSensor.Capture(integrationtime=float(self.itvar), gain=int(self.gainvar))
+        intensity_array = '\n'.join(['R:' + '{}'.format(self.red_intensity),
+                                     'G:' + '{}'.format(self.green_intensity),
+                                     'B:' + '{}'.format(self.blue_intensity),
+                                     'Clear:' + '{}'.format(self.clear_unfiltered),
+                                     'Luminosity:{} lux'.format(self.lux),
+                                     'Color Temperature:{} K'.format(self.color_temperature)])
+        self.intensityLbl.setText(intensity_array)
+        self.intensityLbl.adjustSize()
+        self.statusbar = 'Ready'
+
+    def normalSettings(self):
+        self.gain1.setChecked(True)
+        self.it2_4ms.setChecked(True)
+
+    def darkSettings(self):
+        self.gain60.setChecked(True)
+        self.it700ms.setChecked(True)
+
+    def saveData(self):
+        RGBSensor.saveData(self.red_intensity, self.green_intensity, self.blue_intensity, self.clear_unfiltered,
+                           self.lux, self.color_temperature)
+        self.statusbar = 'Ready'
+
+    def createBottomRightGroupBox(self):
+        self.bottomRightGroupBox = QGroupBox('Sensor Data')
+
+        self.intensityLbl = QLabel('Not Taken')
+
+        layout = QHBoxLayout()
+        layout.addWidget(self.intensityLbl)
+        layout.addStretch(1)
+
+        self.bottomRightGroupBox.setLayout(layout)
+
+
+class RGBMainWindow(QMainWindow):
+    def __init__(self):
+        super(RGBMainWindow, self).__init__()
+        self.initUI()
+
+    def initUI(self):
+
+        # QToolTip.setFont(QFont('SansSerif', 9))
+
+        self.cwidget = RGBCenterWidget()
+        self.setCentralWidget(self.cwidget)
+
+        # self.setToolTip('This is a <b>QWidget</b> widget')
+
+        self.center()
+        self.setWindowTitle('RGB Sensor GUI')
+
+        self.statusBarTimer = QTimer(self)
+        self.statusBarTimer.timeout.connect(self.statusUpdate)
+        self.statusBarTimer.start(100)
+
+        # self.p = QPalette(self.palette())
+        # self.p.setColor(QPalette.Window, QColor(53, 53, 53))
+        # self.p.setColor(QPalette.WindowText, Qt.white)
+        # self.p.setColor(QPalette.AlternateBase, QColor(53, 53, 53))
+        # self.p.setColor(QPalette.ToolTipBase, Qt.white)
+        # self.p.setColor(QPalette.ToolTipText, Qt.white)
+        # self.p.setColor(QPalette.Button, QColor(53, 53, 53))
+        # self.p.setColor(QPalette.ButtonText, Qt.white)
+        # self.p.setColor(QPalette.BrightText, Qt.red)
+        # self.p.setColor(QPalette.Highlight, QColor(142, 45, 197).lighter())
+        # self.p.setColor(QPalette.HighlightedText, Qt.black)
+        # self.setPalette(self.p)
+
+        self.show()
+
+    def statusUpdate(self):
+        self.statusBar().showMessage(self.cwidget.statusbar)
+
+    def center(self):
+
+        qr = self.frameGeometry()
+        cp = QDesktopWidget().availableGeometry().center()
+        qr.moveCenter(cp)
+        self.move(qr.topLeft())
+
+    def closeEvent(self, event):
+        reply = QMessageBox.question(self, 'Message', 'Are you sure you want to quit?',
+                                     QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
+        if reply == QMessageBox.Yes:
+            event.accept()
+        else:
+            event.ignore()
+
+    # def quitApp(self):
+    #     QCoreApplication.instance().quit()
+
+
 def startGUI():
-        app = QApplication(sys.argv)
-        mw = GUIMainWindow()
-        # cw = GUICenterWidget()
-        rc = app.exec_()
-        del app
-        sys.exit(rc)
+    app = QApplication(sys.argv)
+    mw = GUIMainWindow()
+    # cw = GUICenterWidget()
+    rc = app.exec_()
+    del app
+    sys.exit(rc)
+
 
 def startCameraGUI():
     app = QApplication(sys.argv)
     mw = CameraMainWindow()
     # cw = CameraCenterWidget()
+    rc = app.exec_()
+    del app
+    sys.exit(rc)
+
+
+def startRGBSensorGUI():
+    app = QApplication(sys.argv)
+    mw = RGBMainWindow()
+    # cw = RGBCenterWidget()
     rc = app.exec_()
     del app
     sys.exit(rc)

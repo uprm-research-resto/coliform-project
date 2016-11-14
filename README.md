@@ -37,14 +37,6 @@ curl -o https://bootstrap.pypa.io/get-pip.py
    
 sudo python3 get-pip.py
 ```
-Before installing this module, you need to install the jpeg library and scipy:
-
-In RPi terminal:
-```bash
-sudo apt-get update
-sudo apt-get install libjpeg-dev
-sudo apt-get install python3-scipy
-```
 
 Now to install the module:
 
@@ -59,9 +51,20 @@ sudo pip3 install -U Coliform
 
 After installing Coliform, type this into terminal:
 ```bash
-sudo apt install python3-cairocffi
+python3
+from Coliform import InitialSetup
+InitialSetup.addShortcuts()
+InitialSetup.installDependencies()
 ```
-For matplotlib version 1.5.3 or higher:
+
+This will update your RPi and install all dependencies used in the Coliform package, it is recommended to install them this way because if they are installed from pip,
+it would take a very long time to unpack sources and make the .whl packages required to install.
+
+Be sure to answer all prompts during the install of the packages.
+
+Additionally this command also adds all GUI application shortcuts to your desktop.
+
+If you have a matplotlib error, try this:
 
 Change matplotlib backend to TkAgg:
 
@@ -75,10 +78,6 @@ Change matplotlib backend to TkAgg:
   - Look for: ```backend: gtk3agg``` and change to: ```backend: Tkagg```
   - Press: ```Ctrl + X``` followed by ```y``` and ```ENTER``` or ```RETURN```
 
-If you still have the error after this, install matplotlib using aptitude from terminal:
-```bash
-sudo apt install python3-matplotlib
-```
 Now we need to enable Camera, 1-wire, SSH, and Remote GPIO:
 
 From the Desktop:
@@ -208,6 +207,12 @@ Note: In order to obtain temperature data from onewires, you need to complete so
 * Version 0.7.3.2
     - GUI:
         - Fixed GUI formatting error in RGBSensor GUI
+* Version 0.7.4
+    - GUI:
+        - Changed backend from tkinter to qt5, using pyqt5
+        - added pyqt5 to dependencies.
+    - Created InitialSetup module, in order to ease the dependencies install process.
+    - Removed most dependencies from pip packages, so they don't auto install, because they were causing problems.
 
 #Usage
 ##Imports

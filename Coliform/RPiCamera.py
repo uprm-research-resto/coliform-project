@@ -22,7 +22,8 @@ except ImportError:
 # from fractions import Fraction
 
 
-def takePicture(iso=0, exposure='', resolution=(2592, 1944), brightness=50, contrast=0, shutterspeed=0, timeout=5, zoom=(0.0, 0.0, 1.0, 1.0), awb_mode=''):
+def takePicture(iso=0, exposure='', resolution=(2592, 1944), brightness=50, contrast=0, shutterspeed=0,
+                timeout=5, zoom=(0.0, 0.0, 1.0, 1.0), awb_mode=''):
     camera = RPiCameraBackend.PiCamera()
     camera.resolution = resolution
     camera.shutterspeed = shutterspeed
@@ -148,7 +149,8 @@ def saveAllImages(rgb_array, directory, foldername):
     savePlot(rgb_array, os.path.join(directory, foldername, plotimage))
 
 
-def startPreview(iso=0, timeout=10, exposure='', resolution=(2592, 1944), brightness=50, contrast=0, shutterspeed=0, zoom=(0.0, 0.0, 1.0, 1.0), awb_mode=''):
+def startPreview(iso=0, timeout=10, exposure='', resolution=(2592, 1944), brightness=50, contrast=0,
+                 shutterspeed=0, zoom=(0.0, 0.0, 1.0, 1.0), awb_mode=''):
     camera = RPiCameraBackend.PiCamera()
     camera.resolution = resolution
     camera.shutterspeed = shutterspeed

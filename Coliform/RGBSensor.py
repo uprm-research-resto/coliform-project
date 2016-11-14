@@ -14,7 +14,7 @@ import time
 import smbus
 
 
-def Capture(integrationtime=2.4,gain=1,output='all'):
+def Capture(integrationtime=2.4, gain=1, output='all'):
     try:
         # Dictionary for possible integration time values:
         dict = {}
