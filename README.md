@@ -50,7 +50,7 @@ sudo pip3 install -U Coliform
 ```
 
 After installing Coliform, type this into terminal:
-```python3
+```python
 python3
 from Coliform import InitialSetup
 InitialSetup.addShortcuts()
