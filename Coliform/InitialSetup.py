@@ -71,10 +71,12 @@ def installDependencies():
             os.system('sudo apt-get --yes --force-yes install python3-scipy')
 
     print('Finished installing dependencies!')
+
     print('Removing temporary files...')
     os.remove(os.path.join(os.path.expanduser('~pi'), 'installed-packages.txt'))
     os.remove(os.path.join(os.path.expanduser('~pi'), 'pip-installed-packages.txt'))
     os.remove(os.path.join(os.path.expanduser('~pi'), 'linux-release.txt'))
+
     print('System will now attempt ot reboot, if its stuck on reboot, please disconnect and reconnect to power soruce.')
     print('System will reboot in 5 seconds...')
     sleep(5)

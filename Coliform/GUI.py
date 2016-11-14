@@ -173,8 +173,10 @@ class GUICenterWidget(QWidget):
             if not self.ids:
                 self.tempSensorLbl.setText('Temp. Sensor OFF')
                 self.tempValLabel.setText('NULL')
+                self.tempValLabel.adjustSize()
             else:
                 self.tempSensorLbl.setText('Temp. Sensor ON')
+                self.tempValLabel.adjustSize()
         except IndexError:
             pass
 
