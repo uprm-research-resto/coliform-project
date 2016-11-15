@@ -9,17 +9,20 @@
 import os
 import time
 import sys
-
 try:
+    import matplotlib
+    matplotlib.use('Qt5Agg')
     from PyQt5.QtCore import QTimer, Qt, QCoreApplication, QObject, pyqtSignal
     from PyQt5.QtGui import QColor, QPalette
     from PyQt5.QtWidgets import QApplication, QDesktopWidget, QMessageBox, QVBoxLayout, QHBoxLayout
     from PyQt5.QtWidgets import QLabel, QMainWindow, QWidget, QGroupBox, QPushButton, QRadioButton, QLineEdit, QFileDialog
 except ImportError:
     from tkinter import messagebox
-    messagebox.showinfo(message='Please wait a 5-10 minutes while dependencies are installed.')
-    os.system('sudo apt-get -y install python-pyqt5')
-
+    messagebox.showinfo(message='Please close this dialog and install dependencies typing the following in terminal:\n'
+                                'python3\n'
+                                'from Coliform import InitialSetup\n'
+                                'InitialSetup.addShortcuts()\n'
+                                'InitialSetup.installDependencies()\n')
 from Coliform import OneWire, MultiPlot, RPiGPIO, RPiCamera, RGBSensor
 import threading
 

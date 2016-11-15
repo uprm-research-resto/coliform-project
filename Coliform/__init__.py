@@ -6,7 +6,5 @@
 #
 # Licensed under the GNU General Public License version 3.0 (GPL-3.0)
 #
-# NOTE: if not running on Raspberry Pi, and are testing on your PC, you will need to download fakeRPiGPIO module:
-# pip3 install fakeRPiGPIO
 
-from .GUI import *
+# from .GUI import *

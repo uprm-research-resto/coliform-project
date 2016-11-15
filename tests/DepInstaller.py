@@ -1,3 +1,3 @@
 from Coliform import InitialSetup
 
-InitialSetup.runInstaller()
+InitialSetup.installDependencies()
