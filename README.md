@@ -213,6 +213,8 @@ Note: In order to obtain temperature data from onewires, you need to complete so
         - added pyqt5 to dependencies.
     - Created InitialSetup module, in order to ease the dependencies install process.
     - Removed most dependencies from pip packages, so they don't auto install, because they were causing problems.
+* Version 0.7.4.1
+    - Fixed error when installing dependencies.
 
 #Usage
 ##Imports
