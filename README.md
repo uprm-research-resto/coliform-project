@@ -217,6 +217,10 @@ Note: In order to obtain temperature data from onewires, you need to complete so
     - Fixed error when installing dependencies.
 * Version 0.7.4.2
     - Added more functionality to RPiCameraBackend, based on raspistill options.
+* Version 0.7.5
+    - Diversified MultiPlot library to easily modify variable names and axis names.
+    - Fixed error with preview in the new RPiCameraBackend
+    - Fully tested and debugged the build.
 
 #Usage
 ##Imports
