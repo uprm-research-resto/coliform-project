@@ -24,7 +24,7 @@ class PiCamera(object):
         self.zoom = (0.0, 0.0, 1.0, 1.0)
         self.resolution = (2952, 1944) # image resolution (width, height)
         self.quality = 75 # jpeg compression indicator, where quality 100 is almost completely uncompressed
-        self.preview = 'n' # preview settings: n = no preview, f = full screen preview. You can also choose to display preview at a specific location on the screen. This is done by typing 'x,y,w,h' where x and y are the location on screen and w and h are the height and width of the image.
+        self.preview = 'n' # preview settings: n = no preview, f = full screen preview. You can also choose to display preview at a specific location on the screen. This is done by typing (x,y,w,h) where x and y are the location on screen and w and h are the height and width of the image.
 
     def capture(self, mode='JPG', filename='output.jpg'): # Note: remember, if you have a non zero timelapse, you have include %04d in filename. Example: image%04d.jpg
         if self.iso:
@@ -91,7 +91,7 @@ class PiCamera(object):
         elif self.preview == 'f':
             preview = ''
         else:
-            preview = '-p ' + str(self.preview)
+            preview = ' -p ' + str(self.preview).replace('(', '').replace(')', '').replace(' ', '')
 
         if mode in ['PNG', 'png']:
             encode = ' --encoding png'

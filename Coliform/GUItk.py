@@ -80,13 +80,15 @@ def startGUI():
 
     def tempplot():
         try:
-            MultiPlot.Plot(tf, len(ids))
+            y_title_axis = ['Temperature Plot', 'Temperature vs Time', 't(s)', 'T(C)', 'Sensor']
+            MultiPlot.Plot(tf, len(ids), y_title_axis)
         except KeyError:
             messagebox.showinfo(message='No temperature sensor connected.')
 
     def savefile():
         tempfilename = 'TemperatureData.csv'
-        MultiPlot.SaveToCsv(tf, tempfilename, filepath, len(ids))
+        y_variablename = 'TemperatureSensor'
+        MultiPlot.SaveToCsv(tf, tempfilename, filepath, len(ids), y_variablename)
         messagebox.showinfo(message='File saved to directory.')
 
     def pumppoweron():

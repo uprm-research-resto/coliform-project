@@ -31,7 +31,7 @@ def GeneratePlotDataFile(textfile, y_values, start_time):
     f.close()
 
 
-def SaveToCsv(fileinput, fileoutput, filepath, y_amount):
+def SaveToCsv(fileinput, fileoutput, filepath, y_amount, y_variablename):
     if os.path.isfile(os.path.join(filepath, fileoutput)):
         os.remove(os.path.join(filepath, fileoutput))
     tempfile = 'UnformattedData.txt'
@@ -40,9 +40,9 @@ def SaveToCsv(fileinput, fileoutput, filepath, y_amount):
     fi.write('Time(s),')
     for i in range(0, y_amount):
         if i + 1 != y_amount:
-            fi.write('TemperatureSensor{}'.format(i + 1) + ',')
+            fi.write(y_variablename + '{}'.format(i + 1) + ',')
         else:
-            fi.write('TemperatureSensor{}'.format(i + 1) + '\n')
+            fi.write(y_variablename + '{}'.format(i + 1) + '\n')
     fileData = open(tempfile, 'r').read()
     dataList = fileData.split('\n')
     for eachLine in dataList:
@@ -53,23 +53,23 @@ def SaveToCsv(fileinput, fileoutput, filepath, y_amount):
     fi.close()
 
 
-def Plot(textfile, y_amount):
+def Plot(textfile, y_amount, y_title_axis):
     # Source File
     tf = textfile
     # Setup figure and subplots
     f = figure(num=0, figsize=(12, 8))  # , dpi = 100)
-    f.suptitle("Temperature Plot", fontsize=12)
+    f.suptitle(y_title_axis[0], fontsize=12)
     a = subplot2grid((1, 1), (0, 0))
 
     # Set titles of subplots
-    a.set_title('Temperature vs Time')
+    a.set_title(y_title_axis[1])
 
     # Turn on grids
     a.grid(True)
 
     # set label names
-    a.set_xlabel("t(s)")
-    a.set_ylabel("Temperature(C)")
+    a.set_xlabel(y_title_axis[2])
+    a.set_ylabel(y_title_axis[3])
 
     # set y limits
     a.set_ylim(0, 50)
@@ -82,7 +82,7 @@ def Plot(textfile, y_amount):
     lph1 = []
     lph2 = []
     for i in range(0, y_amount):
-        plots['plt{}'.format(i)], = a.plot(dph, dph, label="Sensor{}".format(i + 1))
+        plots['plt{}'.format(i)], = a.plot(dph, dph, label=y_title_axis[4] + "{}".format(i + 1))
         lph1.append(plots['plt{}'.format(i)])
         lph2.append(plots['plt{}'.format(i)].get_label())
         # set legends

@@ -185,7 +185,8 @@ class GUICenterWidget(QWidget):
 
     def tempPlot(self):
         try:
-            MultiPlot.Plot(self.tf, len(self.ids))
+            self.y_title_axis = ['Temperature Plot', 'Temperature vs Time', 't(s)', 'T(C)', 'Sensor']
+            MultiPlot.Plot(self.tf, len(self.ids), self.y_title_axis)
         except KeyError:
             mb = QMessageBox()
             mb.setIcon(QMessageBox.Information)
@@ -208,7 +209,8 @@ class GUICenterWidget(QWidget):
     def savefile(self):
         tempfilename = 'TemperatureData.csv'
         filepath = QFileDialog.getExistingDirectory(self, 'Choose Directory', os.sep.join((os.path.expanduser('~'), 'Desktop')))
-        MultiPlot.SaveToCsv(self.tf, tempfilename, filepath, len(self.ids))
+        self.y_variablename = 'TemperatureSensor'
+        MultiPlot.SaveToCsv(self.tf, tempfilename, filepath, len(self.ids), self.y_variablename)
         mb = QMessageBox()
         mb.setIcon(QMessageBox.Information)
         mb.setWindowTitle('Information')
