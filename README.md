@@ -481,7 +481,6 @@ In order to display plots containing histograms of red, green, blue raw data, al
 # Continuing from low light example
 # Shows histograms and colorscaled images
 RPiCamera.showPlot(rgb_array_lowlight)
-
 ```
 
 For further image processing and display, consider using [scipy](https://github.com/scipy/scipy), [numpy](https://github.com/numpy/numpy), and [matplotlib](https://github.com/matplotlib/matplotlib) python libraries, for image manipulation and display as described here:
