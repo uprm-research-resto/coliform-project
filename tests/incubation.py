@@ -77,7 +77,7 @@ led_run_time_start = 0  # time counter for led run time
 LEDStatus = 0  # led status indicator 0 = off, 1 = on
 
 while elapsed_time < (3600*24)+60:
-
+    # LED control loops:
     if elapsed_time >= i:
         GPIO.output(LEDSignalPin, GPIO.HIGH)  # sends LED on signal to arduino
         LEDStatus = 1  # sets LED status as ON
@@ -89,27 +89,34 @@ while elapsed_time < (3600*24)+60:
             GPIO.output(LEDSignalPin, GPIO.LOW)  # after 5 minutes of ON time, if led is on, it is turned OFF
             LEDStatus = 0  # sets LED status to OFF
 
+    # Image Intensity Data Recording Loops:
     if elapsed_time >= k:
         intensityDataThread = threading.Thread(target=intensityDataGeneration)  # sets up new thread to run intensityDataGeneration function
         intensityDataThread.start()  # start the thread that was setup in the previous line
         k += 3600  # adds an hour to image counter, in order to wait for next image capture
+    if elapsed_time >= 3621:
+        intensityPlotThread = threading.Thread(target=startIntensityPlot)  # sets up new thread to run startTemperaturePlot function
+        intensityPlotThread.start()  # start the thread that was setup in the previous line
 
+    # Temperature Data Recording and Heater Control Loops:
     TemperatureString, TemperatureFloat = OneWire.getTempList()  # gets temperature values from onewires
     MultiPlot.GeneratePlotDataFile(tf, TemperatureFloat, start_time)  # create temperature plot data file
     if elapsed_time == 0:
         temperaturePlotThread = threading.Thread(target=startTemperaturePlot)  # sets up new thread to run startTemperaturePlot function
         temperaturePlotThread.start()  # start the thread that was setup in the previous line
-    if elapsed_time >= 3621:
-        intensityPlotThread = threading.Thread(target=startIntensityPlot)  # sets up new thread to run startTemperaturePlot function
-        intensityPlotThread.start()  # start the thread that was setup in the previous line
     if float(TemperatureFloat[1]) < 41.0:  # if temp is lower than 41 C
-        GPIO.output(HeatSignalPin, GPIO.HIGH)  # sends high signal to heatsignalpin, which is sent to arduino. HIGH = 3.3V
+        GPIO.output(HeatSignalPin, GPIO.HIGH)  # sends high signal to heatsignalpin, which is sent to arduino. HIGH = ~3.3V
     elif float(TemperatureFloat[1]) >= 41.0:  # if temp is higher or equal to 41 C
         GPIO.output(HeatSignalPin, GPIO.LOW)  # sends low signal to heatsignalpin, which is sent to arduino. LOW = ~0V
     print(TemperatureString)  # print temperature values, for debugging purposes
+
+    # Timekeeping Loops:
     sleep(1)  # sets code to wait 1 second before running again
     elapsed_time = int(time() - start_time)  # calculates elapsed time from difference with start time
+
 GPIO.cleanup()  # cleans GPIO bus
+
+# Save Data to Permanent Files
 tempfilename = 'TemperatureData.csv'  # sets filename for temperature data csv
 y_variablename = 'TemperatureSensor'  # sets variable name for temperature data csv
 MultiPlot.SaveToCsv(tf, tempfilename, filepath, len(ids), y_variablename)  # saves temperature data to csv file
