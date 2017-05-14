@@ -70,6 +70,15 @@ def installDependencies():
             print('Installing scipy...')
             os.system('sudo apt-get --yes --force-yes install python3-scipy')
 
+    if 'pyserial' not in flist:
+        if 'pyserial' not in fpiplist:
+            print('Installing pyserial...')
+            os.system('sudo apt-get --yes --force-yes install python3-serial')
+    if 'Adafruit_TCS34725' not in flist:
+        if 'Adafruit_TCS34725' not in fpiplist:
+            print('Installing Adafruit_TCS34725...')
+            os.system('sudo pip3 install Adafruit_TCS34725')
+
     print('Finished installing dependencies!')
 
     print('Removing temporary files...')
