@@ -352,7 +352,7 @@ RGB Sensor Buttons
 These group of functions allow you to detect one or multiple OneWires, get their address and display their respective temperature. This code was written and tested for [DS18B20](https://www.maximintegrated.com/en/products/analog/sensors-and-sensor-interface/DS18B20.html/tb_tab0) OneWires.
 
 If multiple OneWires are connected, they need to be in the following configuration:
-![OneWire Connection](https://camo.githubusercontent.com/99c16972ad946ec3d40c29d4999fdc90600728ac/68747470733a2f2f7570726d7265736561726368726573746f2e66696c65732e776f726470726573732e636f6d2f323031362f30392f6f6e657769726572706973657475702e706e673f773d34383326683d363431)
+[![OneWire Connection](https://s24.postimg.org/8q8w2p9dh/onewirerpisetup.png)](https://postimg.org/image/kfcvqo0c1/)
 
 Where black, is ground, red is power (3.3V), and yellow is the digital signal. You also need a 4.7kΩ resistor connected as shown. All yellow (signal) cables send their signal to the GPIO4 pin of the RPi.
 
