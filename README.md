@@ -1,4 +1,4 @@
-#Coliform Project [![Build Status](https://travis-ci.org/Regendor/coliform-project.svg?branch=master)](https://travis-ci.org/Regendor/coliform-project) [![License](https://img.shields.io/badge/license-GPL--3.0-blue.svg)](https://spdx.org/licenses/GPL-3.0.html)
+# Coliform Project [![Build Status](https://travis-ci.org/Regendor/coliform-project.svg?branch=master)](https://travis-ci.org/Regendor/coliform-project) [![License](https://img.shields.io/badge/license-GPL--3.0-blue.svg)](https://spdx.org/licenses/GPL-3.0.html)
 
 Python module for the UPRM BioMEMS Research Laboratory water quality project.
 
@@ -8,7 +8,7 @@ Download page: [![PyPI Version](https://img.shields.io/pypi/v/coliform.svg)](htt
 
 For information about packaging and distributing your library to PyPi: [Packaging and Distributing Guide](https://packaging.python.org/distributing/)
 
-#Table of contents
+# Table of contents
 
 * [Coliform Project](#coliform-project)
   * [Table of contents](#table-of-contents)
@@ -27,7 +27,7 @@ For information about packaging and distributing your library to PyPi: [Packagin
   * [Remote programming using PC](#remote-programming-using-pc)
   * [Contact](#contact)
 
-#Installation
+# Installation
 
 ## Setup RPi and install Coliform library
 For instructions on how to setup RPi watch: [Getting started with NOOBS](https://youtu.be/-6OGuhLtKbU?t=684)
@@ -92,7 +92,7 @@ From the Desktop:
 
 Note: In order to obtain temperature data from onewires, you need to complete some extra steps. These steps are shown in the [OneWire](#onewire) section of this document along with a schematic on how to connect to RPi.
 
-#Requirements
+# Requirements
 
 * [pyserial](https://github.com/pyserial/pyserial) (only required if you need to use Arduino/ArduCAM)
 * [Pillow](https://github.com/python-pillow/Pillow) (not required after version 0.5.3)
@@ -102,7 +102,7 @@ Note: In order to obtain temperature data from onewires, you need to complete so
 * [scipy](https://github.com/scipy/scipy) (required after version 0.7.0)
 * [Adafruit_TCS34725](https://github.com/adafruit/Adafruit_Python_TCS34725) (required after version 0.7.3)
 
-#Changelog
+# Changelog
 
 * Version 0.1
     - Initial Build 
@@ -226,9 +226,9 @@ Note: In order to obtain temperature data from onewires, you need to complete so
     - Fixed error with preview in the new RPiCameraBackend
     - Fully tested and debugged the build.
 
-#Usage
+# Usage
 
-##Imports
+## Imports
 
 Imports from module can be done as shown here:
 ```python
@@ -237,9 +237,9 @@ from Coliform import GUI
 ```
 The first is for all functions, but the GUI, and the second is to import the GUI function.
 
-##GUI
+## GUI
 
-###Image Processing GUI
+### Image Processing GUI
 
 In order to display the project GUI, the following code can be used:
 ```python
@@ -251,7 +251,7 @@ The GUI displayed should look like this:
 
 [![Image_Processing_GUI](https://s15.postimg.org/lukk7d53v/image_processing_gui.png)](https://postimg.org/image/nmdj29ogn/)
 
-####Description
+#### Description
 
 Image parameters
 
@@ -289,7 +289,7 @@ Image Data
 - I                    : Overall intensity value form last captured or imported image
 
 
-###Control GUI
+### Control GUI
 
 In order to display the project GUI, the following code can be used:
 ```python
@@ -301,7 +301,7 @@ The GUI displayed should look like this:
 
 [![Control_GUI](https://s15.postimg.org/c8qzr2dy3/control_gui.png)](https://postimg.org/image/swihtk8pj/)
 
-####Description
+#### Description
 
 Temperature Sensor
 
@@ -319,7 +319,7 @@ Pump
 - Power ON            : Starts pump PWM at 100 Hz
 - Submit              : Changes pump PWM value to the one typed into the text box above. (0 to 100 Hz)
 
-###RGB Sensor GUI
+### RGB Sensor GUI
 
 In order to display the project GUI, the following code can be used:
 ```python
@@ -331,7 +331,7 @@ The GUI displayed should look like this:
 
 [![RGB_Sensor_GUI](https://s15.postimg.org/p2p1kerdn/rgb_sensor_gui.png)](https://postimg.org/image/w5wx00wt3/)
 
-####Description
+#### Description
 
 - Integration Time    : Select between available integration times, this is the time which the sensor remains open to integrate data.
 - Gain                : Select between available gains, this multiplies data by selected gain value.
@@ -343,9 +343,9 @@ RGB Sensor Buttons
 - Set Low Light Options : Set low light integration and gain parameters.
 - Save Data             : Saves data to text file.
 
-##OneWire
+## OneWire
 
-###Setup
+### Setup
 
 These group of functions allow you to detect one or multiple OneWires, get their address and display their respective temperature. This code was written and tested for [DS18B20](https://www.maximintegrated.com/en/products/analog/sensors-and-sensor-interface/DS18B20.html/tb_tab0) OneWires.
 
@@ -361,7 +361,7 @@ In order to detect OneWires, using the w1-gpio kernel driver, the GPIO4 pin has 
 * Press: ```Ctrl + X``` followed by ```y``` and ```ENTER``` or ```RETURN```
 * After this, type: ```sudo reboot``` and wait for RPi to reboot, for changes to be applied.
 
-###Code
+### Code
 
 In order to get OneWire address, use the following function:
 ```python
@@ -395,7 +395,7 @@ The second value ```TemperatureRawNumbers``` gives a list of temperature numbers
 ```python
 ['21.312','32.321','43.232']
 ```
-##MultiPlot
+## MultiPlot
 ```python
 from Coliform import MultiPlot
 
@@ -408,7 +408,7 @@ Sample Plot, using 3 OneWires:
 
 [![tempplot.png](https://s22.postimg.org/b529vo7fl/tempplot.png)](https://postimg.org/image/5gvz4s331/)
 
-##ArduCAM
+## ArduCAM
 
 ```python
    from Coliform Import ArduCAM
@@ -418,7 +418,7 @@ Sample Plot, using 3 OneWires:
    ArduCAM.TakePicture(path, portid[0], filename)
 ```
 
-##RPiCamera
+## RPiCamera
 
 UPDATE IN PROGRESS...
 These functions use [picamera](https://github.com/waveform80/picamera), 
@@ -515,7 +515,7 @@ PWM.setIntensity(freq)
 PWM.shutdown()
 ```
 
-#Setting up your IDE
+# Setting up your IDE
 
 Download [Python 3](https://www.python.org/downloads/)
 
@@ -534,9 +534,9 @@ Learn Python:
 * [List of Python Tutorials](http://docs.python-guide.org/en/latest/intro/learning/)
 * [Official Python Tutorial](https://docs.python.org/3/tutorial/index.html)
 
-#Remote Programming using PC
+# Remote Programming using PC
 
-##Remote Desktop
+## Remote Desktop
 
 RPi default login:
 ```bash
@@ -550,7 +550,7 @@ Connect Remotely to RPi using Windows: [Connect wirelessly to Raspberry Pi](http
 
 Connect Remotely to RPi desktop using Windows: [Access Raspberry Pi Desktop (Windows)](https://www.youtube.com/watch?v=OE2FC1aSAqM)
 
-##Using Pycharm (Harder)
+## Using Pycharm (Harder)
 
 This section is still in progress...
 
