@@ -7,6 +7,14 @@ from time import sleep, time
 import threading
 import os
 
+# Setup Counters:
+j = 0  # image counter
+i = 0  # hour counter for led
+k = 3620  # time counter for image loading and processing into array
+
+# global variable placeholder list:
+intensity_array = []
+
 OneHourMilliseconds = 60*60*1000  # one hour in milliseconds
 filepath = os.sep.join((os.path.expanduser('~'), 'Desktop'))  # set filepath to desktop
 tf = 'PlotTextFile.txt'  # temporary plot text file
@@ -25,7 +33,7 @@ def takePicture():
     camera.contrast = 0  # image contrast 0-100
     camera.iso = 0  # camera iso 0-800
     camera.zoom = (0.0, 0.0, 1.0, 1.0)  # set image region of interest
-    camera.timeout = 24*OneHourMilliseconds  # time for camera to shutdown in milliseconds
+    camera.timeout = 23*OneHourMilliseconds  # time for camera to shutdown in milliseconds
     camera.timelapse = OneHourMilliseconds  # time in between each image capture in milliseconds
     camera.quality = 75  # image quality 0-100, the higher the quality, less compression
     camera.exposure_mode = ''  # exposure mode set, default is auto
@@ -39,9 +47,20 @@ def startTemperaturePlot():
     MultiPlot.Plot(tf, len(ids), y_title_axis)  # start plot
 
 
+def intensityDataGeneration():
+    global j  # references global j variable (counter)
+    global intensity_array  # references global intensity_array variable
+    rgb_array = RPiCamera.importImage('image{:04d}.jpg'.format(j))  # imports previously taken image as rgb array
+    red_avg, green_avg, blue_avg, intensity_avg = RPiCamera.returnIntensity(rgb_array)  # takes average values for rgb found in the array
+    intensity_array = [red_avg, green_avg, blue_avg, intensity_avg]  # adds previous values to a list
+    MultiPlot.GeneratePlotDataFile(itf, intensity_array, start_time)  # create image intensity data file
+    j += 1  # adds to counter, to process next image
+
+
 def startIntensityPlot():
+    global intensity_array  # references global intensity array variable
     y_title_axis = ['Light Intensity Plot', 'Intensity vs Time', 't(s)', 'I(RGB Value)', 'Color']  # plot title and axis labels
-    MultiPlot.Plot(itf, 4, y_title_axis)  # start plot
+    MultiPlot.Plot(itf, len(intensity_array), y_title_axis)  # start plot
 
 HeatSignalPin = 8  # pin that sends heat signal to arduino
 LEDSignalPin = 10  # pin that sends led control signal to arduino
@@ -54,9 +73,6 @@ captureThread.start()  # start the thread that was setup in the previous line
 
 start_time = time()  # save initial run time, for reference
 elapsed_time = 0  # time elapsed since start_time value
-i = 0  # hour counter for led
-j = 0  # image counter
-k = 3650  # time counter for image loading and processing into array
 led_run_time_start = 0  # time counter for led run time
 LEDStatus = 0  # led status indicator 0 = off, 1 = on
 
@@ -74,11 +90,8 @@ while elapsed_time < (3600*24)+60:
             LEDStatus = 0  # sets LED status to OFF
 
     if elapsed_time >= k:
-        rgb_array = RPiCamera.importImage('image{:04d}.jpg'.format(j))  # imports previously taken image as rgb array
-        red_avg, green_avg, blue_avg, intensity_avg = RPiCamera.returnIntensity(rgb_array)  # takes average values for rgb found in the array
-        intensity_array = [red_avg, green_avg, blue_avg, intensity_avg]  # adds previous values to a list
-        MultiPlot.GeneratePlotDataFile(itf, intensity_array, start_time)  # create image intensity data file
-        j += 1  # adds to counter, to process next image
+        intensityDataThread = threading.Thread(target=intensityDataGeneration)  # sets up new thread to run intensityDataGeneration function
+        intensityDataThread.start()  # start the thread that was setup in the previous line
         k += 3600  # adds an hour to image counter, in order to wait for next image capture
 
     TemperatureString, TemperatureFloat = OneWire.getTempList()  # gets temperature values from onewires
@@ -86,7 +99,7 @@ while elapsed_time < (3600*24)+60:
     if elapsed_time == 0:
         temperaturePlotThread = threading.Thread(target=startTemperaturePlot)  # sets up new thread to run startTemperaturePlot function
         temperaturePlotThread.start()  # start the thread that was setup in the previous line
-    if elapsed_time >= 3651:
+    if elapsed_time >= 3621:
         intensityPlotThread = threading.Thread(target=startIntensityPlot)  # sets up new thread to run startTemperaturePlot function
         intensityPlotThread.start()  # start the thread that was setup in the previous line
     if float(TemperatureFloat[1]) < 41.0:  # if temp is lower than 41 C
@@ -101,6 +114,7 @@ tempfilename = 'TemperatureData.csv'  # sets filename for temperature data csv
 y_variablename = 'TemperatureSensor'  # sets variable name for temperature data csv
 MultiPlot.SaveToCsv(tf, tempfilename, filepath, len(ids), y_variablename)  # saves temperature data to csv file
 
-itempfilename = 'IntensityData.csv'  # sets file name for intensity data csv
+ifilename = 'IntensityData.csv'  # sets file name for intensity data csv
 iy_variablename = 'Intensity'  # sets variable name for intensity data csv
-MultiPlot.SaveToCsv(itf, itempfilename, filepath, 4, iy_variablename)  # saves temperature data to csv file
+intensityDataGeneration()  # adds data from last image to file before saving as csv
+MultiPlot.SaveToCsv(itf, ifilename, filepath, len(intensity_array), iy_variablename)  # saves temperature data to csv file
