@@ -225,6 +225,8 @@ Note: In order to obtain temperature data from onewires, you need to complete so
     - Diversified MultiPlot library to easily modify variable names and axis names.
     - Fixed error with preview in the new RPiCameraBackend
     - Fully tested and debugged the build.
+* Version 0.7.5.1
+    - Removed dependencies from pypi and added all to InitialSetup module included in package.
 
 # Usage
 
