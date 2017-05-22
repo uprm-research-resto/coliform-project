@@ -11,7 +11,7 @@ import os
 j = -1  # image counter
 i = 0  # hour counter for led
 k = 0  # time counter for image loading and processing into array
-imagePlotInstanceIndicator = 0
+imagePlotInstanceIndicator = 0  # Used to initialize plot only once, so as to not try to call plot multiple times.
 
 # global variable placeholder list:
 intensity_array = []
@@ -39,7 +39,7 @@ def firstPicture():
     camera.brightness = 50  # image brightness 0-100
     camera.contrast = 0  # image contrast 0-100
     camera.iso = 0  # camera iso 0-800
-    camera.zoom = (0.0, 0.0, 1.0, 1.0)  # set image region of interest
+    camera.zoom = (0.0, 0.0, 1.0, 1.0)  # set image region of interest. all values are normalized, ranges are 0.0 - 1.0
     camera.timeout = 2  # time for camera to shutdown in milliseconds
     camera.quality = 75  # image quality 0-100, the higher the quality, less compression
     camera.exposure_mode = ''  # exposure mode set, default is auto
@@ -58,7 +58,7 @@ def takePicture():
     camera.brightness = 50  # image brightness 0-100
     camera.contrast = 0  # image contrast 0-100
     camera.iso = 0  # camera iso 0-800
-    camera.zoom = (0.0, 0.0, 1.0, 1.0)  # set image region of interest
+    camera.zoom = (0.0, 0.0, 1.0, 1.0)  # set image region of interest. all values are normalized, ranges are 0.0 - 1.0
     camera.timeout = 23*OneHourMilliseconds  # time for camera to shutdown in milliseconds
     camera.timelapse = OneHourMilliseconds  # time in between each image capture in milliseconds
     camera.quality = 75  # image quality 0-100, the higher the quality, less compression
@@ -139,7 +139,7 @@ while elapsed_time < (3600*24)+60:  # starts loop for an hour and one minute
    # if elapsed_time == 0:
    #     temperaturePlotThread = threading.Thread(target=startTemperaturePlot)  # sets up new thread to run startTemperaturePlot function
    #     temperaturePlotThread.start()  # start the thread that was setup in the previous line
-    if float(TemperatureFloat[1]) < 41.0:  # if temp is lower than 41 C
+    if float(TemperatureFloat[1]) < 41.0:  # if temp is lower than 41 C NOTE: the number between the [] in Temperature float is the OneWire it will be reading the data from. 0 being the one in the first position, 1 the second position, et cetera...
         GPIO.output(HeatSignalPin, GPIO.HIGH)  # sends high signal to heatsignalpin, which is sent to arduino. HIGH = ~3.3V
     elif float(TemperatureFloat[1]) >= 41.0:  # if temp is higher or equal to 41 C
         GPIO.output(HeatSignalPin, GPIO.LOW)  # sends low signal to heatsignalpin, which is sent to arduino. LOW = ~0V
