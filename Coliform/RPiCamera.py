@@ -6,8 +6,16 @@
 # (C) 2016
 # Author: Osvaldo E Duran
 # Licensed under the GNU General Public License version 3.0 (GPL-3.0)
-# import matplotlib
-# matplotlib.use('Qt5Agg')
+
+
+# Import:
+# from Coliform import RPiCamera
+# Usage:
+# rgb_array1 = RPiCamera.takePicture() # takes picture with default parameters and returns rgb_array
+# rgb_array2 = RPiCamera.takePicture(exposure='night', shutterspeed='6000000')  # takes picture with night exposure and 6 second shutter speed, all other values are default
+
+
+# Imports:
 import os
 from Coliform import RPiCameraBackend
 import matplotlib.pyplot as plt
@@ -19,32 +27,94 @@ except ImportError:
     from tkinter import messagebox
     messagebox.showinfo(message='Please wait a 5-10 minutes while dependencies are installed.')
     os.system('sudo apt-get -y install python3-scipy')
-# from fractions import Fraction
+
+# Function that takes pictures:
 
 
 def takePicture(iso=0, exposure='', resolution=(2592, 1944), brightness=50, contrast=0, shutterspeed=0,
                 timeout=5, zoom=(0.0, 0.0, 1.0, 1.0), awb_mode=''):
+    """
+    Takes image capture and returns rgb array
+
+    :param iso: camera iso, values 0 to 800
+    :param exposure: see exposure options
+    :param resolution: max resolution (2592, 1944)
+    :param brightness: image brightness, 0 to 100
+    :param contrast: image contrast 0 to 100
+    :param shutterspeed: image sutterspeed 0 to 6000000 ( in microseconds)
+    :param timeout: in miliseconds
+    :param zoom: selects region of interest. format: (0.0,0.0,1.0,1.0) where (x position, y position, relative lenght from xposition, relative length form y position). All values are normalized from 0.0 to 1.0
+    :param awb_mode: see auto white balance options
+    :return: returns rgb array
+
+    Exposure options:
+        '': uses default exposure mode
+        auto: use automatic exposure mode
+        night: select setting for night shooting
+        nightpreview:
+        backlight: select setting for backlit subject
+        spotlight:
+        sports: select setting for sports (fast shutter etc.)
+        snow: select setting optimised for snowy scenery
+        beach: select setting optimised for beach
+        verylong: select setting for long exposures
+        fixedfps: constrain fps to a fixed value
+        antishake: antishake mode
+        fireworks: select setting optimised for fireworks
+
+    Auto White Balance Options:
+        '': uses default auto white balance
+        off: turn off white balance calculation
+        auto: automatic mode (default)
+        sun: sunny mode (between 5000K and 6500K)
+        cloud: cloudy mode (between 6500K and 12000K)
+        shade: shade mode
+        tungsten: tungsten lighting mode (between 2500K and 3500K)
+        fluorescent: fluorescent lighting mode (between 2500K and 4500K)
+        incandescent: incandescent lighting mode
+        flash: flash mode
+        horizon: horizon mode
+    """
+
     camera = RPiCameraBackend.PiCamera()
-    camera.resolution = resolution
-    camera.shutterspeed = shutterspeed
-    camera.iso = iso
-    camera.exposure_mode = exposure
-    camera.brightness = brightness
-    camera.contrast = contrast
-    camera.awb_mode = awb_mode
+    camera.resolution = resolution  # max resolution (2592, 1944)
+    camera.shutterspeed = shutterspeed # camera shutterspeed, in microseconds. the higher it is the longer exposure time to light
+    camera.iso = iso  # camera iso (max 800)
+    camera.exposure_mode = exposure # options given at line 17 through 30
+    camera.brightness = brightness  # 0 - 100
+    camera.contrast = contrast  # 0 - 100
+    camera.awb_mode = awb_mode  # options given at line 32 to 33
     camera.zoom = zoom
     camera.timeout = timeout * 10**3  # convert to milliseconds
-    rgb_array = camera.capture(mode='rgb')
+    rgb_array = camera.capture(mode='rgb')  # sets camera capture mode as rgb, as oposed to 'jpeg' or other file format and adds to variable
 
-    return rgb_array
+    return rgb_array  # returns rgb array
 
 
 def returnIntensity(rgb_array, color='all'):
-    red_avg = np.mean(rgb_array[..., 0].flatten())
-    green_avg = np.mean(rgb_array[..., 1].flatten())
-    blue_avg = np.mean(rgb_array[..., 2].flatten())
-    img_hsv = colors.rgb_to_hsv(rgb_array[..., :3])
-    intensity_avg = np.mean(img_hsv[..., 2].flatten())
+    """
+    Returns average intensity for selected color values
+
+    :param rgb_array: rgb array to be analyzed
+    :param color: desired color outputs, see color options
+    :return: returns desire color outputs
+
+    Color Options:
+    'a' or 'all': returns all colors
+    'r' or 'red': returns red value only
+    'g' or 'green': returns green value only
+    'b' or 'blue': returns blue value only
+    'rgb' or 'red, green, blue': returns red green blue values only
+    'int' or 'intensity': returns overall intensity value only
+    """
+
+    red_avg = np.mean(rgb_array[..., 0].flatten())  # gets mean red intensity from array
+    green_avg = np.mean(rgb_array[..., 1].flatten())  # gets mean green intensity from array
+    blue_avg = np.mean(rgb_array[..., 2].flatten())  # gets mean blue intensity from array
+    img_hsv = colors.rgb_to_hsv(rgb_array[..., :3])  # converts rgb array to hsv
+    intensity_avg = np.mean(img_hsv[..., 2].flatten())  # get mean image intensity from hsv file
+
+    # set all parameters that choose desired color output:
     if color in ['all', 'a']:
         return red_avg, green_avg, blue_avg, intensity_avg
     elif color in ['r', 'red']:
@@ -63,6 +133,18 @@ def returnIntensity(rgb_array, color='all'):
 
 
 def showImage(rgb_array, color='true'):
+    """
+    Displays image from array
+
+    :param rgb_array: rgb array to be analyzed
+    :param color: displays image with selected color filter. see color options
+
+    Color options:
+    'true' : displays image with no filter
+    'r' : displays only red values from image
+    'g' :  displays only green values from image
+    'b' : displays only blue values from image
+    """
     if color == 'true':
         f1 = plt.figure()
         f1.canvas.set_window_title('Image Capture')
@@ -105,6 +187,17 @@ def showImage(rgb_array, color='true'):
 
 
 def setImageColor(rgb_array, color):
+    """
+    Manually filter out colors not desired from an image rgb array.
+    :param rgb_array: image array to be analyzed
+    :param color: color to remain in array, see color options
+    :return: returns image rgb array after filtering
+
+    Color Options:
+    'b': only keep blue color
+    'r': only keep red color
+    'g': only keep green color
+    """
     if color in ['b', 'blue']:
         rgb_array[..., 0] *= 0
         rgb_array[..., 1] *= 0
@@ -120,15 +213,33 @@ def setImageColor(rgb_array, color):
 
 
 def importImage(imagepath):
+    """
+    Convert an image to array.
+
+    :param imagepath: file path to image location. for example /pi/image.jpeg
+    :return: returns image array
+    """
     rgb_array = misc.imread(imagepath)
     return rgb_array
 
 
 def saveImage(rgb_array, savepath):
+    """
+    Converts image array to file
+    :param rgb_array: input rgb array
+    :param savepath: save file location
+    """
     misc.imsave(savepath, rgb_array)
 
 
 def saveAllImages(rgb_array, directory, foldername):
+    """
+    Saves unfiltered and filtered images to a file directory
+    :param rgb_array: image rgb array
+    :param directory: image directory name
+    :param foldername: name of the folder that will contain saved files
+    :return:
+    """
     rgb_array_red = rgb_array * 1
     r_array = setImageColor(rgb_array_red, 'r')
     rgb_array_green = rgb_array * 1
@@ -165,6 +276,10 @@ def startPreview(iso=0, timeout=10, exposure='', resolution=(2592, 1944), bright
 
 
 def showPlot(rgb_array):
+    """
+    Shows rgb array plots for image
+    :param rgb_array: rgb array to be analyzed
+    """
     rgb_array_red = rgb_array * 1
     rgb_array_green = rgb_array * 1
     rgb_array_blue = rgb_array * 1
@@ -214,6 +329,11 @@ def showPlot(rgb_array):
 
 
 def savePlot(rgb_array, filename):
+    """
+    Saves plot data for rgb array
+    :param rgb_array: array to be analyzed
+    :param filename: file path with filename to save the image. example /pi/plot.jpg
+    """
     rgb_array_red = rgb_array * 1
     rgb_array_green = rgb_array * 1
     rgb_array_blue = rgb_array * 1

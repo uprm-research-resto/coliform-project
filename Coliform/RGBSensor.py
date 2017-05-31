@@ -5,7 +5,8 @@
 #
 # Author: Osvaldo E Duran
 # Licensed under the GNU General Public License version 3.0 (GPL-3.0)
-
+#
+# IMPORTANT: connection to pi > https://s21.postimg.org/m477wo9uf/Screenshot_20170531_143543.png
 # Import the TCS34725 module.
 import Adafruit_TCS34725
 import os
@@ -14,10 +15,11 @@ import time
 import smbus
 
 
-def Capture(integrationtime=2.4, gain=1, output='all'):
+def Capture(integrationtime=2.4, gain=1, output='all'):  # Capture function for RGB sensor
     try:
         # Dictionary for possible integration time values:
-        dict = {}
+        dict = {}  # creates a variable dictionary, for information about dictionaries: https://www.programiz.com/python-programming/dictionary
+        # Add all integration time values to dictionary
         dict[2.4] = Adafruit_TCS34725.TCS34725_INTEGRATIONTIME_2_4MS  # (2.4ms, default)
         dict[24] = Adafruit_TCS34725.TCS34725_INTEGRATIONTIME_24MS
         dict[50] = Adafruit_TCS34725.TCS34725_INTEGRATIONTIME_50MS
@@ -59,7 +61,7 @@ def Capture(integrationtime=2.4, gain=1, output='all'):
 
         tcs.set_interrupt(True)
         tcs.disable()
-
+        # Determines outputs depending on function parameters:
         if output == 'all':
             return r, g, b, c, lux, color_temp
         elif output == 'rgbc':
@@ -73,14 +75,15 @@ def Capture(integrationtime=2.4, gain=1, output='all'):
         raise ValueError('No such integration time or gain, refer to coliform-project guide in github for possible options.')
 
 
-def saveData(red=0, green=0, blue=0, clear=0, lux='0', colortemp='0'):
-    filename = filedialog.asksaveasfilename(filetypes=[('Text File', '*.txt')])
-    if os.path.isfile(filename):
-        os.remove(filename)
-    file = open(filename, 'a+')
+def saveData(red=0, green=0, blue=0, clear=0, lux='0', colortemp='0'):  # function used to save data taken by the sensor
+    filename = filedialog.asksaveasfilename(filetypes=[('Text File', '*.txt')])  # asks for save file locatoin
+    if os.path.isfile(filename):  # checks if file exists
+        os.remove(filename)  # if it exists it is removed.
+    file = open(filename, 'a+')  # creates new file
+    # writes to new file all data from sensor
     file.write(','.join(['Red: ' + str(red), 'Green: ' + str(green), 'Blue: ' + str(blue), 'Clear:' + str(clear),
                          'Luminosity: ' + lux, 'Color Temperature: ' + colortemp]))
-    file.close()
+    file.close()  # closes file created
 
     # Enable interrupts and put the chip back to low power sleep/disabled.
 
